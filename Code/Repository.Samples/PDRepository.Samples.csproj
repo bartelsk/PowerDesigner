@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ED4D5095-77B9-4E89-B4C7-720975012FF4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>PDRepository</RootNamespace>
-    <AssemblyName>PDRepository</AssemblyName>
+    <ProjectGuid>{4B92916B-661E-46D7-B53A-B8F207217EA6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PDRepository.Samples</RootNamespace>
+    <AssemblyName>PDRepository.Samples</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,8 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\PDRepository.xml</DocumentationFile>
-    <NoWarn>1701;1702</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,11 +31,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\PDRepository.xml</DocumentationFile>
-    <NoWarn>1701;1702</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,22 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Branches\BranchClient.cs" />
-    <Compile Include="Branches\IBranchClient.cs" />
-    <Compile Include="Documents\DocumentClient.cs" />
-    <Compile Include="Documents\IDocumentClient.cs" />
-    <Compile Include="Models\IModelClient.cs" />
-    <Compile Include="Models\ModelClient.cs" />
-    <Compile Include="Repository.cs" />
-    <Compile Include="RepositoryException.cs" />
-    <Compile Include="RepositorySettings.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoryClient.cs" />
-    <Compile Include="Users\IUserClient.cs" />
-    <Compile Include="Users\UserClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.md" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Repository\PDRepository.csproj">
+      <Project>{ed4d5095-77b9-4e89-b4c7-720975012ff4}</Project>
+      <Name>PDRepository</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

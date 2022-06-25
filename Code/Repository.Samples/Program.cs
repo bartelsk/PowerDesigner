@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PDRepository.Samples
+{
+   internal class Program
+   {
+      static void Main(string[] args)
+      {
+         try
+         {
+            Console.WriteLine("Creating client");
+
+            RepositorySettings settings = new RepositorySettings() {
+               Password = "1234",
+               User = "john"
+            };
+
+            using (var client = RepositoryClient.CreateClient(settings))
+            {
+               BranchTests(client);
+            }
+         }
+         catch (Exception ex)
+         {
+            Console.Error.WriteLine($"Exception: {ex.Message}");
+         }
+         finally
+         {
+            Console.WriteLine("Press enter to exit");
+            Console.ReadLine();
+         }
+      }
+
+      private static void BranchTests(RepositoryClient client)
+      {
+         Console.WriteLine("Starting branch test");
+
+         string repoPath = "hello";
+         List<string> branches = client.BranchClient.ListBranches(repoPath);
+         branches.ForEach(b => Console.WriteLine($"\r\nName: { b }"));
+
+      }
+   }
+}

@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDRepository
+namespace PDRepository.Documents
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-        }
-    }
+   public interface IDocumentClient : IDisposable
+   {
+   }
 }

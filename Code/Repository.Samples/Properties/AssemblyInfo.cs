@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PDRepository")]
+[assembly: AssemblyTitle("PDRepository.Samples")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PDRepository")]
-[assembly: AssemblyCopyright("Copyright Karlo Bartels © 2022")]
+[assembly: AssemblyProduct("PDRepository.Samples")]
+[assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ed4d5095-77b9-4e89-b4c7-720975012ff4")]
+[assembly: Guid("4b92916b-661e-46d7-b53a-b8f207217ea6")]
 
 // Version information for an assembly consists of the following four values:
 //
