@@ -57,6 +57,7 @@
     <Compile Include="Models\IModelClient.cs" />
     <Compile Include="Models\ModelClient.cs" />
     <Compile Include="Repository.cs" />
+    <Compile Include="RepositoryConnection.cs" />
     <Compile Include="RepositoryException.cs" />
     <Compile Include="RepositorySettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -15,16 +15,20 @@ namespace PDRepository
    public abstract class Repository : IDisposable
    {
       private bool disposedValue;
+      
+      protected readonly List<string> _refToCOMRepositoryObject;      
 
-      protected readonly List<string> _refToCOMRepositoryObject;
-      protected readonly RepositorySettings repositorySettings;
+      internal readonly RepositoryConnection _con;
 
       #region Constructor / Destructor
 
       protected Repository(RepositorySettings settings)
       {
-         _refToCOMRepositoryObject = new List<string>(); // Instantiate only once!
-         repositorySettings = settings;
+         _con = RepositoryConnection.Instance;
+         _con.Settings = settings;
+
+         //_refToCOMRepositoryObject = new List<string>();
+        // repositorySettings = settings;
       }
       
       ~Repository()
@@ -37,8 +41,8 @@ namespace PDRepository
          if (!disposedValue)
          {
             if (disposing)
-            {
-               // TODO: dispose managed state (managed objects)
+            {               
+               _con.Dispose();
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer
@@ -76,19 +80,21 @@ namespace PDRepository
 
       protected void Connect()
       {
-         _refToCOMRepositoryObject.Add("one");
+         _con.Connect();         
       }
 
       protected bool IsConnected 
       {
          get 
          {
-            return _refToCOMRepositoryObject.Count > 0;
+            return _con.IsConnected;
          }          
       }
 
       protected List<string> GetBranches(string path)
       {
+         // using the _con, write repo code to get branches
+
          List<string> result = new List<string>
          {
             "One"
