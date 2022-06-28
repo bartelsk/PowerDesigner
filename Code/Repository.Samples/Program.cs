@@ -13,6 +13,9 @@ namespace PDRepository.Samples
             RepositoryClient client = null;
             try
             {
+                Console.WriteLine("PowerDesigner Repository Client");
+                Console.WriteLine("===============================\r\n");
+
                 Console.WriteLine("Creating client");
 
                 RepositorySettings settings = new RepositorySettings()

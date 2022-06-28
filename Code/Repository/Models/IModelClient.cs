@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace PDRepository.Models
 {
-   public interface IModelClient : IDisposable
-   {
-   }
+    /// <summary>
+    /// Defines the interface for the <see cref="ModelClient"/> class.
+    /// </summary>
+    public interface IModelClient : IDisposable
+    {
+    }
 }

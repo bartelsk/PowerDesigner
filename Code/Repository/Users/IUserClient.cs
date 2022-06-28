@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace PDRepository.Users
 {
-   public interface IUserClient : IDisposable
-   {
-   }
+    /// <summary>
+    /// Defines the interface for the <see cref="UserClient"/> class.
+    /// </summary>
+    public interface IUserClient : IDisposable
+    {
+    }
 }

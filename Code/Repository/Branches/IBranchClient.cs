@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace PDRepository.Branches
 {
-   public interface IBranchClient : IDisposable
-   {
+    /// <summary>
+    /// Defines the interface for the <see cref="BranchClient"/> class.
+    /// </summary>
+    public interface IBranchClient : IDisposable
+    {
         List<string> ListBranches(string path);
-   }
+    }
 }

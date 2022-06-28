@@ -1,7 +1,7 @@
 ﻿namespace PDRepository
 {
    /// <summary>
-   /// This class represents repository settings.
+   /// This class represents the settings used to connect with the repository.
    /// </summary>
    public class RepositorySettings
    {

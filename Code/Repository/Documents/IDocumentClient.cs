@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace PDRepository.Documents
 {
-   public interface IDocumentClient : IDisposable
-   {
-   }
+    /// <summary>
+    /// Defines the interface for the <see cref="DocumentClient"/> class.
+    /// </summary>
+    public interface IDocumentClient : IDisposable
+    {
+    }
 }
