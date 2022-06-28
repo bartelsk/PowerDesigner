@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +17,12 @@ namespace PDRepository.Samples
                 Console.WriteLine("PowerDesigner Repository Client");
                 Console.WriteLine("===============================\r\n");
 
-                Console.WriteLine("Creating client");
+                Console.WriteLine("Connecting...");
 
                 RepositorySettings settings = new RepositorySettings()
                 {
-                    Password = "Rabobank2345",
-                    User = "ReadOnlyWRR"
+                    Password = ConfigurationManager.AppSettings["PDRepoPassword"],
+                    User = ConfigurationManager.AppSettings["PDRepoUser"]
                 };
 
                 // Start PD and connect to repo
