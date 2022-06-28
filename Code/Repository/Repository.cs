@@ -13,7 +13,7 @@ namespace PDRepository
 #pragma warning disable CS1591
 
     /// <summary>
-    /// Class that provides methods to interact with the PowerDesigner repository.
+    /// Abstract class that provides methods to interact with the PowerDesigner repository.
     /// </summary>
     public abstract class Repository : IDisposable
     {

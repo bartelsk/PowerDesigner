@@ -3,7 +3,7 @@
 namespace PDRepository
 {
     /// <summary>
-    /// This class starts PdShell16.exe and connects to the PowerDesigner repository.     
+    /// Internal class that starts PdShell16.exe and connects to the PowerDesigner repository.     
     /// </summary>
     internal sealed class RepositoryConnection : IDisposable
     {
