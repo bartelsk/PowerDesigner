@@ -15,9 +15,6 @@ namespace PDRepository
    public abstract class Repository : IDisposable
    {
       private bool disposedValue;
-      
-      protected readonly List<string> _refToCOMRepositoryObject;      
-
       internal readonly RepositoryConnection _con;
 
       #region Constructor / Destructor
@@ -25,10 +22,7 @@ namespace PDRepository
       protected Repository(RepositorySettings settings)
       {
          _con = RepositoryConnection.Instance;
-         _con.Settings = settings;
-
-         //_refToCOMRepositoryObject = new List<string>();
-        // repositorySettings = settings;
+         _con.Settings = settings;       
       }
       
       ~Repository()
@@ -43,10 +37,7 @@ namespace PDRepository
             if (disposing)
             {               
                _con.Dispose();
-            }
-
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
+            }            
             disposedValue = true;
          }
       }     
@@ -78,12 +69,12 @@ namespace PDRepository
 
       #region Repository actions
 
-      protected void Connect()
+      public async Task ConnectAsync()
       {
-         _con.Connect();         
+         await _con.ConnectAsync();         
       }
 
-      protected bool IsConnected 
+      public bool IsConnected 
       {
          get 
          {

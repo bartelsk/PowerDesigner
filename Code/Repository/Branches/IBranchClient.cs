@@ -8,6 +8,6 @@ namespace PDRepository.Branches
 {
    public interface IBranchClient : IDisposable
    {
-      List<string> ListBranches(string path);
+        Task<List<string>> ListBranches(string path);
    }
 }
