@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace PDRepository.Documents
 {
-   public class DocumentClient : Repository, IDocumentClient
-   {
-      public DocumentClient(RepositorySettings settings) : base(settings)
-      { }
-   }
+    public class DocumentClient : Repository, IDocumentClient
+    {
+        public DocumentClient(RepositorySettings settings) : base(settings)
+        {
+            Connect();
+        }
+    }
 }

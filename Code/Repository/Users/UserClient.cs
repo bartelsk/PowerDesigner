@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace PDRepository.Users
 {
-   public class UserClient : Repository, IUserClient
-   {
-      public UserClient(RepositorySettings settings) : base(settings)
-      { }
-   }
+    public class UserClient : Repository, IUserClient
+    {
+        public UserClient(RepositorySettings settings) : base(settings)
+        {
+            Connect();
+        }
+    }
 }

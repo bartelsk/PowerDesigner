@@ -8,41 +8,44 @@ namespace PDRepository.Samples
 {
     internal class Program
     {
-        static async void Main(string[] args)
+        static void Main(string[] args)
         {
+            RepositoryClient client = null;
             try
             {
                 Console.WriteLine("Creating client");
 
                 RepositorySettings settings = new RepositorySettings()
                 {
-                    Password = "1234",
-                    User = "john"
+                    Password = "Rabobank2345",
+                    User = "ReadOnlyWRR"
                 };
 
-                using (var client = RepositoryClient.CreateClient(settings))
-                {
-                    //client.connect
-                    await BranchTests(client);
-                }
+                // Start PD and connect to repo
+                client = RepositoryClient.CreateClient(settings);
+                                    
+                // Run branch test
+                BranchTests(client);
+                
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Exception: {ex.Message}");
             }
             finally
-            {
+            {              
+                client?.Dispose();
                 Console.WriteLine("Press enter to exit");
                 Console.ReadLine();
             }
         }
 
-        private static async Task BranchTests(RepositoryClient client)
+        private static void BranchTests(RepositoryClient client)
         {
             Console.WriteLine("Starting branch test");
 
             string repoPath = "hello";
-            List<string> branches = await client.BranchClient.ListBranches(repoPath);
+            List<string> branches = client.BranchClient.ListBranches(repoPath);
             branches.ForEach(b => Console.WriteLine($"\r\nName: { b }"));
 
         }

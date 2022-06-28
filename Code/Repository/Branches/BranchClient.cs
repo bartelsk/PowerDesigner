@@ -9,14 +9,16 @@ namespace PDRepository.Branches
     public class BranchClient : Repository, IBranchClient
     {
         public BranchClient(RepositorySettings settings) : base(settings)
-        { }
+        {
+            Connect();
+        }
 
-        public async Task<List<string>> ListBranches(string path)
-        {           
+        public List<string> ListBranches(string path)
+        {
             var branches = new List<string>();
             if (IsConnected)
             {
-                branches = GetBranches(path);
+                branches.Add("hi");
             }
             else
             {

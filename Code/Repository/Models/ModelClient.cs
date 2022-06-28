@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace PDRepository.Models
 {
-   public class ModelClient : Repository, IModelClient
-   {
-      public ModelClient(RepositorySettings settings) : base(settings)
-      { }
-   }
+    public class ModelClient : Repository, IModelClient
+    {
+        public ModelClient(RepositorySettings settings) : base(settings)
+        {
+            Connect();
+        }
+    }
 }
