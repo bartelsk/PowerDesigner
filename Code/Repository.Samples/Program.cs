@@ -51,7 +51,7 @@ namespace PDRepository.Samples
 
             string rootFolder = "Wholesale&Rural";
             List<Branch> branches = client.BranchClient.ListBranches(rootFolder);
-            branches.ForEach(b => Console.WriteLine($"Branch: { b.Name } - Path: { b.FullPath }"));
+            branches.ForEach(b => Console.WriteLine($"Branch: { b.Name } - Relative path: { b.RelativePath }"));
 
         }
     }

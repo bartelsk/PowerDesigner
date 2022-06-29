@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PDRepository.LibraryModels
+﻿namespace PDRepository.LibraryModels
 {
+    /// <summary>
+    /// Branch class.
+    /// </summary>
     public class Branch
     {
+        /// <summary>
+        /// The name of the branch.
+        /// </summary>
         public string Name { get; set; }
         
-        public string FullPath { get; set; }
+        /// <summary>
+        /// The location of the branch relative to the specified root path.
+        /// </summary>
+        public string RelativePath { get; set; }
     }
 }

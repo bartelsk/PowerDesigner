@@ -105,30 +105,39 @@ namespace PDRepository
             }
         }
 
-        public RepositoryFolder GetRepositoryFolder(string path)
+        /// <summary>
+        /// Returns a <see cref="RepositoryFolder"/> instance.
+        /// </summary>
+        /// <param name="folderPath">The location of the folder in the repository.</param>
+        /// <returns>A <see cref="RepositoryFolder"/> type.</returns>
+        public RepositoryFolder GetRepositoryFolder(string folderPath)
         {
             RepositoryFolder folder = null;
-            BaseObject baseFolder = _con.Connection.FindChildByPath(path, (int)PdRMG_Classes.cls_RepositoryFolder);
+            BaseObject baseFolder = _con.Connection.FindChildByPath(folderPath, (int)PdRMG_Classes.cls_RepositoryFolder);
             if (baseFolder != null)
             {
-                folder = (RepositoryFolder)baseFolder;
-                int childCount = folder.RetrievedChildObjects.Count;
+                folder = (RepositoryFolder)baseFolder;                
             }
             return folder;
         }
 
-        public List<Branch> GetBranchFolders(string rootFolderPath)
+        /// <summary>
+        /// Returns a list of <see cref="Branch"/> objects, relative to the specified root folder.
+        /// </summary>
+        /// <param name="rootFolder">The repository folder from which to start the search.</param>
+        /// <returns>A List with <see cref="Branch"/> objects.</returns>
+        public List<Branch> GetBranchFolders(string rootFolder)
         {
             List<Branch> branches = new List<Branch>();
-
-            RepositoryFolder rootFolder = GetRepositoryFolder(rootFolderPath);
-            if (rootFolder != null)
+            RepositoryFolder respositoryFolder = GetRepositoryFolder(rootFolder);
+            if (respositoryFolder != null)
             {
-                ListBranches(rootFolder, ref branches, string.Empty);
+                ListBranches(respositoryFolder, ref branches, string.Empty);
             }
-
             return branches;            
         }
+
+        #region Private methods
 
         private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location)
         {
@@ -151,7 +160,7 @@ namespace PDRepository
                             RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;
                             Branch branch = new Branch()
                             {                                
-                                FullPath = location + "/" + rootFolder.Name,
+                                RelativePath = (string.IsNullOrEmpty(location) ? rootFolder.Name : location + "/" + rootFolder.Name),
                                 Name = branchFolder.DisplayName
                             };
                             branches.Add(branch);                            
@@ -164,12 +173,14 @@ namespace PDRepository
                 RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)rootFolder;
                 Branch branch = new Branch()
                 {                    
-                    FullPath = location,
+                    RelativePath = location,
                     Name = branchFolder.DisplayName
                 };
                 branches.Add(branch);                
             }
         }
+
+        #endregion
 
         #endregion
     }

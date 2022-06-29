@@ -21,6 +21,11 @@ namespace PDRepository.Branches
             Connect();
         }
 
+        /// <summary>
+        /// Returns a list of <see cref="Branch"/> objects, relative to the specified path.
+        /// </summary>
+        /// <param name="path">The repository folder from which to start the search.</param>
+        /// <returns>A List with <see cref="Branch"/> objects.</returns>       
         public List<Branch> ListBranches(string path)
         {            
             var branches = new List<Branch>();
