@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDRepository.LibraryModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,12 +21,12 @@ namespace PDRepository.Branches
             Connect();
         }
 
-        public List<string> ListBranches(string path)
+        public List<Branch> ListBranches(string path)
         {            
-            var branches = new List<string>();
+            var branches = new List<Branch>();
             if (IsConnected)
             {
-                branches.Add("hi");
+                branches = GetBranchFolders(path);
             }
             else
             {

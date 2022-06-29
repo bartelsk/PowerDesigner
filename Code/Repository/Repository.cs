@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PdRMG;
+using PDRepository.LibraryModels;
 
 namespace PDRepository
 {
@@ -100,6 +102,72 @@ namespace PDRepository
             get
             {
                 return _con.IsConnected;
+            }
+        }
+
+        public RepositoryFolder GetRepositoryFolder(string path)
+        {
+            RepositoryFolder folder = null;
+            BaseObject baseFolder = _con.Connection.FindChildByPath(path, (int)PdRMG_Classes.cls_RepositoryFolder);
+            if (baseFolder != null)
+            {
+                folder = (RepositoryFolder)baseFolder;
+                int childCount = folder.RetrievedChildObjects.Count;
+            }
+            return folder;
+        }
+
+        public List<Branch> GetBranchFolders(string rootFolderPath)
+        {
+            List<Branch> branches = new List<Branch>();
+
+            RepositoryFolder rootFolder = GetRepositoryFolder(rootFolderPath);
+            if (rootFolder != null)
+            {
+                ListBranches(rootFolder, ref branches, string.Empty);
+            }
+
+            return branches;            
+        }
+
+        private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location)
+        {
+            if (rootFolder.ClassKind != (int)PdRMG_Classes.cls_RepositoryBranchFolder)
+            {
+                foreach (var item in rootFolder.ChildObjects.Cast<StoredObject>())
+                {
+                    switch (item.ClassKind)
+                    {
+                        case (int)PdRMG_Classes.cls_RepositoryFolder:
+                            RepositoryFolder folder = (RepositoryFolder)item;                            
+
+                            // Continue search through child folders
+                            foreach (var child in folder.ChildObjects.Cast<StoredObject>())
+                            {
+                                ListBranches(child, ref branches, (string.IsNullOrEmpty(location) ? rootFolder.Name + "/" + folder.Name : location + "/" + rootFolder.Name + "/" + folder.Name));
+                            }
+                            break;
+                        case (int)PdRMG_Classes.cls_RepositoryBranchFolder:
+                            RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;
+                            Branch branch = new Branch()
+                            {                                
+                                FullPath = location + "/" + rootFolder.Name,
+                                Name = branchFolder.DisplayName
+                            };
+                            branches.Add(branch);                            
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)rootFolder;
+                Branch branch = new Branch()
+                {                    
+                    FullPath = location,
+                    Name = branchFolder.DisplayName
+                };
+                branches.Add(branch);                
             }
         }
 

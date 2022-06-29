@@ -92,6 +92,7 @@
     <Compile Include="Branches\IBranchClient.cs" />
     <Compile Include="Documents\DocumentClient.cs" />
     <Compile Include="Documents\IDocumentClient.cs" />
+    <Compile Include="LibraryModels\Branch.cs" />
     <Compile Include="Models\IModelClient.cs" />
     <Compile Include="Models\ModelClient.cs" />
     <Compile Include="Repository.cs" />

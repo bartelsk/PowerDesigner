@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDRepository.LibraryModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace PDRepository.Branches
     /// </summary>
     public interface IBranchClient : IDisposable
     {
-        List<string> ListBranches(string path);
+        List<Branch> ListBranches(string path);
     }
 }

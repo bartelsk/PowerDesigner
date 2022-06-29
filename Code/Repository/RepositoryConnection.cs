@@ -67,6 +67,17 @@ namespace PDRepository
         #endregion
 
         /// <summary>
+        /// Returns the active repository connection.
+        /// </summary>
+        public PdRMG.RepositoryConnection Connection
+        {
+            get
+            {
+                return _pdRepoCon;
+            }
+        }
+
+        /// <summary>
         /// Sets the current <see cref="RepositorySettings"/>.
         /// </summary>
         public RepositorySettings Settings

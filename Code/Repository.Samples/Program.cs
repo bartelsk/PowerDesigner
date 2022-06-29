@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDRepository.LibraryModels;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -48,9 +49,9 @@ namespace PDRepository.Samples
         {
             Console.WriteLine("Starting branch test");
 
-            string repoPath = "hello";
-            List<string> branches = client.BranchClient.ListBranches(repoPath);
-            branches.ForEach(b => Console.WriteLine($"\r\nName: { b }"));
+            string rootFolder = "Wholesale&Rural";
+            List<Branch> branches = client.BranchClient.ListBranches(rootFolder);
+            branches.ForEach(b => Console.WriteLine($"Branch: { b.Name } - Path: { b.FullPath }"));
 
         }
     }
