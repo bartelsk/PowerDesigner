@@ -104,12 +104,14 @@ namespace PDRepository
             }
         }
 
-        /// <summary>
-        /// Returns a <see cref="RepositoryFolder"/> instance.
-        /// </summary>
-        /// <param name="folderPath">The location of the folder in the repository.</param>
-        /// <returns>A <see cref="RepositoryFolder"/> type.</returns>
-        public RepositoryFolder GetRepositoryFolder(string folderPath)
+      #region Folders
+
+      /// <summary>
+      /// Returns a <see cref="RepositoryFolder"/> instance.
+      /// </summary>
+      /// <param name="folderPath">The location of the folder in the repository.</param>
+      /// <returns>A <see cref="RepositoryFolder"/> type.</returns>
+      public RepositoryFolder GetRepositoryFolder(string folderPath)
         {
             RepositoryFolder folder = null;
             BaseObject baseFolder = _con.Connection.FindChildByPath(folderPath, (int)PdRMG_Classes.cls_RepositoryFolder);
@@ -136,13 +138,17 @@ namespace PDRepository
             return branches;            
         }
 
-        /// <summary>
-        /// Returns a list of <see cref="Document"/> objects in the specified path.
-        /// Does not recurse sub-folders.
-        /// </summary>
-        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
-        /// <returns>A List with <see cref="Document"/> objects.</returns> 
-        public List<Document> GetFolderDocuments(string folderPath)
+      #endregion
+
+      #region Documents
+
+      /// <summary>
+      /// Returns a list of <see cref="Document"/> objects in the specified path.
+      /// Does not recurse sub-folders.
+      /// </summary>
+      /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+      /// <returns>A List with <see cref="Document"/> objects.</returns> 
+      public List<Document> GetFolderDocuments(string folderPath)
         {
             List<Document> documents = new List<Document>();
             RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
@@ -151,35 +157,41 @@ namespace PDRepository
                 foreach (var item in repositoryFolder.ChildObjects.Cast<StoredObject>())
                 {
                     RepositoryDocument repoDocument = (RepositoryDocument)item;
-                    documents.Add(new Document() 
-                    { 
-                        ClassName = repoDocument.ClassName,
-                        Location = repoDocument.Location,
-                        Name = repoDocument.Name,
-                        Version = repoDocument.Version,
-                        VersionComment = repoDocument.VersionComment
-                    });
+                    documents.Add(CreateDocument(repoDocument));
                 }
             }
             return documents;
         }
 
-        public Document GetGetDocumentInfo(string folderPath, string documentName)
+        public Document GetInfo(string folderPath, string documentName)
         {
-            return null;
+            Document document = null;
+            RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
+            if (repositoryFolder != null)
+            {
+               BaseObject baseDocument = _con.Connection.FindChildByPath(documentName, (int)PdRMG_Classes.cls_RepositoryDocument);
+               if (baseDocument != null)
+               {
+                  RepositoryDocument doc = (RepositoryDocument)baseDocument;
+                  document = CreateDocument(doc);
+               }
+            }
+            return document;
         }
 
-        #endregion
+      #endregion
 
-        #region Private methods
+      #endregion
 
-        /// <summary>
-        /// Recursively retrieves branch folders from the repository starting at the specified root folder.
-        /// </summary>
-        /// <param name="rootFolder">The repository folder from which to start the search.</param>
-        /// <param name="branches">A List type that will contain the encountered branch folders.</param>
-        /// <param name="location">Used to track the current folder location in the recursion process.</param>
-        private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location)
+      #region Private methods
+
+      /// <summary>
+      /// Recursively retrieves branch folders from the repository starting at the specified root folder.
+      /// </summary>
+      /// <param name="rootFolder">The repository folder from which to start the search.</param>
+      /// <param name="branches">A List type that will contain the encountered branch folders.</param>
+      /// <param name="location">Used to track the current folder location in the recursion process.</param>
+      private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location)
         {
             if (rootFolder.ClassKind != (int)PdRMG_Classes.cls_RepositoryBranchFolder)
             {
@@ -219,6 +231,18 @@ namespace PDRepository
                 branches.Add(branch);                
             }
         }
+
+        private static Document CreateDocument(RepositoryDocument doc)
+      {
+         return new Document()
+         {
+            ClassName = doc.ClassName,
+            Location = doc.Location,
+            Name = doc.Name,
+            Version = doc.Version,
+            VersionComment = doc.VersionComment
+         };
+      }
 
         #endregion       
     }

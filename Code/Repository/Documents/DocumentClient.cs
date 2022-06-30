@@ -50,8 +50,9 @@ namespace PDRepository.Documents
         /// <returns></returns>
         public Document GetDocumentInfo(string repoFolderPath, string documentName)
         {
-            throw new NotImplementedException();
-        }
+         if (!IsConnected) ThrowNoRepositoryConnectionException();
+         return GetInfo(repoFolderPath, documentName);
+      }
 
         /// <summary>
         /// Returns a list of <see cref="Document"/> objects in the specified path.

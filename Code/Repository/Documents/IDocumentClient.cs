@@ -42,5 +42,8 @@ namespace PDRepository.Documents
         /// <param name="documentName">The name of the document.</param>
         /// <returns></returns>
         Document GetDocumentInfo(string repoFolderPath, string documentName);
+
+      // lock status? maybe in doc info?
+      // get / set permissions
     }
 }
