@@ -1,7 +1,7 @@
 ﻿namespace PDRepository.LibraryModels
 {
     /// <summary>
-    /// Branch class.
+    /// Represents a repository branch.
     /// </summary>
     public class Branch
     {

@@ -128,12 +128,45 @@ namespace PDRepository
         public List<Branch> GetBranchFolders(string rootFolder)
         {
             List<Branch> branches = new List<Branch>();
-            RepositoryFolder respositoryFolder = GetRepositoryFolder(rootFolder);
-            if (respositoryFolder != null)
+            RepositoryFolder repositoryFolder = GetRepositoryFolder(rootFolder);
+            if (repositoryFolder != null)
             {
-                ListBranches(respositoryFolder, ref branches, string.Empty);
+                ListBranches(repositoryFolder, ref branches, string.Empty);
             }
             return branches;            
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Document"/> objects in the specified path.
+        /// Does not recurse sub-folders.
+        /// </summary>
+        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <returns>A List with <see cref="Document"/> objects.</returns> 
+        public List<Document> GetFolderDocuments(string folderPath)
+        {
+            List<Document> documents = new List<Document>();
+            RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
+            if (repositoryFolder != null)
+            {
+                foreach (var item in repositoryFolder.ChildObjects.Cast<StoredObject>())
+                {
+                    RepositoryDocument repoDocument = (RepositoryDocument)item;
+                    documents.Add(new Document() 
+                    { 
+                        ClassName = repoDocument.ClassName,
+                        Location = repoDocument.Location,
+                        Name = repoDocument.Name,
+                        Version = repoDocument.Version,
+                        VersionComment = repoDocument.VersionComment
+                    });
+                }
+            }
+            return documents;
+        }
+
+        public Document GetGetDocumentInfo(string folderPath, string documentName)
+        {
+            return null;
         }
 
         #endregion

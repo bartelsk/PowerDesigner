@@ -1,10 +1,5 @@
-﻿using PDRepository.LibraryModels;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDRepository.Samples
 {
@@ -30,7 +25,10 @@ namespace PDRepository.Samples
                 client = RepositoryClient.CreateClient(settings);
 
                 // Run branch samples
-                BranchSamples.ListBranches(client);
+                //BranchSamples.ListBranches(client);
+
+                // Run document samples
+                DocumentSamples.ListDocuments(client);
                 
             }
             catch (Exception ex)
