@@ -28,9 +28,9 @@ namespace PDRepository.Samples
 
                 // Start PD and connect to repo
                 client = RepositoryClient.CreateClient(settings);
-                                    
-                // Run branch test
-                BranchTests(client);
+
+                // Run branch samples
+                BranchSamples.ListBranches(client);
                 
             }
             catch (Exception ex)
@@ -43,16 +43,6 @@ namespace PDRepository.Samples
                 Console.WriteLine("Press enter to exit");
                 Console.ReadLine();
             }
-        }
-
-        private static void BranchTests(RepositoryClient client)
-        {
-            Console.WriteLine("Starting branch test");
-
-            string rootFolder = "Wholesale&Rural";
-            List<Branch> branches = client.BranchClient.ListBranches(rootFolder);
-            branches.ForEach(b => Console.WriteLine($"Branch: { b.Name } - Relative path: { b.RelativePath }"));
-
         }
     }
 }

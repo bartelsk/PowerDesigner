@@ -1,14 +1,8 @@
-﻿using PDRepository.Branches;
-using PDRepository.Documents;
-using PDRepository.Models;
-using PDRepository.Users;
+﻿using PDRepository.LibraryModels;
+using PdRMG;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PdRMG;
-using PDRepository.LibraryModels;
 
 namespace PDRepository
 {
@@ -60,6 +54,11 @@ namespace PDRepository
 
         #region Exceptions
 
+        protected static void ThrowNoRepositoryConnectionException()
+        {
+            CreateRepositoryException("No repository connection.");
+        }
+
         protected static RepositoryException CreateRepositoryException(string message)
         {
             throw new RepositoryException(message);
@@ -72,7 +71,7 @@ namespace PDRepository
 
         #endregion
 
-        #region Repository actions
+        #region Public methods
 
         /// <summary>
         /// Creates a repository connection with the current <see cref="RepositorySettings"/>.
@@ -137,8 +136,16 @@ namespace PDRepository
             return branches;            
         }
 
+        #endregion
+
         #region Private methods
 
+        /// <summary>
+        /// Recursively retrieves branch folders from the repository starting at the specified root folder.
+        /// </summary>
+        /// <param name="rootFolder">The repository folder from which to start the search.</param>
+        /// <param name="branches">A List type that will contain the encountered branch folders.</param>
+        /// <param name="location">Used to track the current folder location in the recursion process.</param>
         private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location)
         {
             if (rootFolder.ClassKind != (int)PdRMG_Classes.cls_RepositoryBranchFolder)
@@ -180,9 +187,7 @@ namespace PDRepository
             }
         }
 
-        #endregion
-
-        #endregion
+        #endregion       
     }
 
 #pragma warning restore CS1591

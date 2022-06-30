@@ -1,9 +1,5 @@
 ﻿using PDRepository.LibraryModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDRepository.Branches
 {
@@ -24,20 +20,12 @@ namespace PDRepository.Branches
         /// <summary>
         /// Returns a list of <see cref="Branch"/> objects, relative to the specified path.
         /// </summary>
-        /// <param name="path">The repository folder from which to start the search.</param>
+        /// <param name="rootFolderPath">The repository folder from which to start the search.</param>
         /// <returns>A List with <see cref="Branch"/> objects.</returns>       
-        public List<Branch> ListBranches(string path)
-        {            
-            var branches = new List<Branch>();
-            if (IsConnected)
-            {
-                branches = GetBranchFolders(path);
-            }
-            else
-            {
-                CreateRepositoryException("No repository connection.");
-            }
-            return branches;
+        public List<Branch> ListBranches(string rootFolderPath)
+        {   
+            if (!IsConnected) ThrowNoRepositoryConnectionException();  
+            return GetBranchFolders(rootFolderPath);
         }
     }
 }
