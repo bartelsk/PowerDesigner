@@ -19,6 +19,30 @@ namespace PDRepository.Documents
         public DocumentClient(RepositorySettings settings) : base(settings)
         {
             Connect();
+        }      
+
+        /// <summary>
+        /// Returns a list of <see cref="Document"/> objects in the specified repository folder.
+        /// Does not recurse sub-folders.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
+        /// <returns>A List with <see cref="Document"/> objects.</returns> 
+        public List<Document> ListDocuments(string repoFolderPath)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            return GetFolderDocuments(repoFolderPath);
+        }
+
+        /// <summary>
+        /// Retrieves information on a document in the specified repository folder.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <returns>A <see cref="Document"/> type.</returns>
+        public Document GetDocumentInfo(string repoFolderPath, string documentName)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            return GetFolderDocumentInfo(repoFolderPath, documentName);
         }
 
         /// <summary>
@@ -40,30 +64,6 @@ namespace PDRepository.Documents
         public void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Retrieves information on a document in the specified repository folder.
-        /// </summary>
-        /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
-        /// <param name="documentName">The name of the document.</param>
-        /// <returns></returns>
-        public Document GetDocumentInfo(string repoFolderPath, string documentName)
-        {
-         if (!IsConnected) ThrowNoRepositoryConnectionException();
-         return GetInfo(repoFolderPath, documentName);
-      }
-
-        /// <summary>
-        /// Returns a list of <see cref="Document"/> objects in the specified path.
-        /// Does not recurse sub-folders.
-        /// </summary>
-        /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
-        /// <returns>A List with <see cref="Document"/> objects.</returns> 
-        public List<Document> ListDocuments(string repoFolderPath)
-        {
-            if (!IsConnected) ThrowNoRepositoryConnectionException();
-            return GetFolderDocuments(repoFolderPath);
         }
     }
 }

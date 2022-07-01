@@ -29,6 +29,7 @@ namespace PDRepository.Samples
 
                 // Run document samples
                 DocumentSamples.ListDocuments(client);
+                DocumentSamples.GetDocumentInfo(client);
                 
             }
             catch (Exception ex)

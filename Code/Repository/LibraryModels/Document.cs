@@ -11,15 +11,24 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// The document type.
+        /// The class name of the document.
         /// </summary>
         public string ClassName { get; set; }
+
+        /// <summary>
+        /// Determines whether the document is frozen or not.
+        /// </summary>
+        public bool IsFrozen { get; set; }
 
         /// <summary>
         /// The location of the document in the repository.
         /// </summary>
         public string Location { get; set; }
 
+        /// <summary>
+        /// The object type of the document.
+        /// </summary>
+        public string ObjectType { get; set; }
         /// <summary>
         /// The document version.
         /// </summary>

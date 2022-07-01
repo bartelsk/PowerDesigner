@@ -3,6 +3,7 @@ using PdRMG;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace PDRepository
 {
@@ -90,7 +91,7 @@ namespace PDRepository
                 _con.Dispose();
                 // Rethrow to notify clients
                 throw;
-            }            
+            }
         }
 
         /// <summary>
@@ -104,20 +105,20 @@ namespace PDRepository
             }
         }
 
-      #region Folders
+        #region Folders
 
-      /// <summary>
-      /// Returns a <see cref="RepositoryFolder"/> instance.
-      /// </summary>
-      /// <param name="folderPath">The location of the folder in the repository.</param>
-      /// <returns>A <see cref="RepositoryFolder"/> type.</returns>
-      public RepositoryFolder GetRepositoryFolder(string folderPath)
+        /// <summary>
+        /// Returns a <see cref="RepositoryFolder"/> instance.
+        /// </summary>
+        /// <param name="folderPath">The location of the folder in the repository.</param>
+        /// <returns>A <see cref="RepositoryFolder"/> type.</returns>
+        public RepositoryFolder GetRepositoryFolder(string folderPath)
         {
             RepositoryFolder folder = null;
             BaseObject baseFolder = _con.Connection.FindChildByPath(folderPath, (int)PdRMG_Classes.cls_RepositoryFolder);
             if (baseFolder != null)
             {
-                folder = (RepositoryFolder)baseFolder;                
+                folder = (RepositoryFolder)baseFolder;
             }
             return folder;
         }
@@ -135,63 +136,71 @@ namespace PDRepository
             {
                 ListBranches(repositoryFolder, ref branches, string.Empty);
             }
-            return branches;            
+            return branches;
         }
 
-      #endregion
+        #endregion
 
-      #region Documents
+        #region Documents
 
-      /// <summary>
-      /// Returns a list of <see cref="Document"/> objects in the specified path.
-      /// Does not recurse sub-folders.
-      /// </summary>
-      /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
-      /// <returns>A List with <see cref="Document"/> objects.</returns> 
-      public List<Document> GetFolderDocuments(string folderPath)
+        /// <summary>
+        /// Returns a list of <see cref="Document"/> objects in the specified path.
+        /// Does not recurse sub-folders.
+        /// </summary>
+        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <returns>A List with <see cref="Document"/> objects.</returns> 
+        public List<Document> GetFolderDocuments(string folderPath)
         {
             List<Document> documents = new List<Document>();
             RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
             if (repositoryFolder != null)
             {
-                foreach (var item in repositoryFolder.ChildObjects.Cast<StoredObject>())
+                foreach (StoredObject item in repositoryFolder.ChildObjects.Cast<StoredObject>())
                 {
-                    RepositoryDocument repoDocument = (RepositoryDocument)item;
-                    documents.Add(CreateDocument(repoDocument));
+                    Document document = ParseStoredObjectInfo(item);
+                    if (document != null)
+                    {
+                        documents.Add(document);
+                    }                    
                 }
             }
             return documents;
         }
 
-        public Document GetInfo(string folderPath, string documentName)
+        /// <summary>
+        /// Retrieves information on a document in the specified repository folder.
+        /// </summary>
+        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <returns>A <see cref="Document"/> type.</returns>
+        public Document GetFolderDocumentInfo(string folderPath, string documentName)
         {
             Document document = null;
             RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
             if (repositoryFolder != null)
-            {
-               BaseObject baseDocument = _con.Connection.FindChildByPath(documentName, (int)PdRMG_Classes.cls_RepositoryDocument);
-               if (baseDocument != null)
-               {
-                  RepositoryDocument doc = (RepositoryDocument)baseDocument;
-                  document = CreateDocument(doc);
-               }
+            {                
+                StoredObject item = (StoredObject)repositoryFolder.FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
+                if (item != null)
+                {                    
+                    document = ParseStoredObjectInfo(item);
+                }
             }
             return document;
         }
 
-      #endregion
+        #endregion
 
-      #endregion
+        #endregion
 
-      #region Private methods
+        #region Private methods
 
-      /// <summary>
-      /// Recursively retrieves branch folders from the repository starting at the specified root folder.
-      /// </summary>
-      /// <param name="rootFolder">The repository folder from which to start the search.</param>
-      /// <param name="branches">A List type that will contain the encountered branch folders.</param>
-      /// <param name="location">Used to track the current folder location in the recursion process.</param>
-      private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location)
+        /// <summary>
+        /// Recursively retrieves branch folders from the repository starting at the specified root folder.
+        /// </summary>
+        /// <param name="rootFolder">The repository folder from which to start the search.</param>
+        /// <param name="branches">A List type that will contain the encountered branch folders.</param>
+        /// <param name="location">Used to track the current folder location in the recursion process.</param>
+        private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location)
         {
             if (rootFolder.ClassKind != (int)PdRMG_Classes.cls_RepositoryBranchFolder)
             {
@@ -200,7 +209,7 @@ namespace PDRepository
                     switch (item.ClassKind)
                     {
                         case (int)PdRMG_Classes.cls_RepositoryFolder:
-                            RepositoryFolder folder = (RepositoryFolder)item;                            
+                            RepositoryFolder folder = (RepositoryFolder)item;
 
                             // Continue search through child folders
                             foreach (var child in folder.ChildObjects.Cast<StoredObject>())
@@ -211,11 +220,11 @@ namespace PDRepository
                         case (int)PdRMG_Classes.cls_RepositoryBranchFolder:
                             RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;
                             Branch branch = new Branch()
-                            {                                
+                            {
                                 RelativePath = (string.IsNullOrEmpty(location) ? rootFolder.Name : location + "/" + rootFolder.Name),
                                 Name = branchFolder.DisplayName
                             };
-                            branches.Add(branch);                            
+                            branches.Add(branch);
                             break;
                     }
                 }
@@ -224,25 +233,53 @@ namespace PDRepository
             {
                 RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)rootFolder;
                 Branch branch = new Branch()
-                {                    
+                {
                     RelativePath = location,
                     Name = branchFolder.DisplayName
                 };
-                branches.Add(branch);                
+                branches.Add(branch);
             }
         }
 
-        private static Document CreateDocument(RepositoryDocument doc)
-      {
-         return new Document()
-         {
-            ClassName = doc.ClassName,
-            Location = doc.Location,
-            Name = doc.Name,
-            Version = doc.Version,
-            VersionComment = doc.VersionComment
-         };
-      }
+        /// <summary>
+        /// Reads information from the passed object and returns it as a <see cref="Document"/> type.
+        /// </summary>
+        /// <param name="item">A <see cref="StoredObject"/> item.</param>
+        /// <returns>A <see cref="Document"/> type.</returns>
+        private static Document ParseStoredObjectInfo(StoredObject item)
+        {
+            Document document = null;
+            switch (item.ClassKind)
+            {
+                case (int)PdRMG_Classes.cls_RepositoryDocument:
+                    RepositoryDocument doc = (RepositoryDocument)item;
+                    document = new Document()
+                    {
+                        ClassName = doc.ClassName,
+                        Location = doc.Location,
+                        IsFrozen = Convert.ToBoolean(doc.Frozen),
+                        ObjectType = doc.ObjectType,
+                        Name = doc.Name,
+                        Version = doc.Version,
+                        VersionComment = doc.VersionComment
+                    };
+                    break;
+                case (int)PdRMG_Classes.cls_RepositoryModel:
+                    RepositoryModel mdl = (RepositoryModel)item;
+                    document = new Document()
+                    {
+                        ClassName = mdl.ClassName,
+                        Location = mdl.Location,
+                        IsFrozen = Convert.ToBoolean(mdl.Frozen),
+                        ObjectType = mdl.ObjectType,
+                        Name = mdl.Name,
+                        Version = mdl.Version,
+                        VersionComment = mdl.VersionComment
+                    };
+                    break;
+            }
+            return document;
+        }
 
         #endregion       
     }
