@@ -15,7 +15,7 @@ namespace PDRepository.Branches
         public BranchClient(RepositorySettings settings) : base(settings)
         {
             Connect();
-        }
+        }       
 
         /// <summary>
         /// Returns a list of <see cref="Branch"/> objects, relative to the specified path.
@@ -26,6 +26,18 @@ namespace PDRepository.Branches
         {   
             if (!IsConnected) ThrowNoRepositoryConnectionException();  
             return GetBranchFolders(rootFolderPath);
+        }
+
+        /// <summary>
+        /// Determines whether the specified branch exists.
+        /// </summary>
+        /// <param name="rootFolderPath">The repository folder from which to start the search.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <returns>True if the branch exists, False if it does not.</returns>
+        public bool BranchExists(string rootFolderPath, string branchName)
+        {
+            List<Branch> branches = ListBranches(rootFolderPath);            
+            return branches.Exists(b => b.Name.ToLower() == branchName.ToLower());
         }
     }
 }

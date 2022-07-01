@@ -26,18 +26,19 @@ namespace PDRepository.Samples
 
                 // Run branch samples
                 //BranchSamples.ListBranches(client);
+                //BranchSamples.BranchExists(client);
 
                 // Run document samples
-                DocumentSamples.ListDocuments(client);
+                //DocumentSamples.ListDocuments(client);
                 DocumentSamples.GetDocumentInfo(client);
-                
+
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Exception: {ex.Message}");
             }
             finally
-            {              
+            {
                 client?.Dispose();
                 Console.WriteLine("Press enter to exit");
                 Console.ReadLine();

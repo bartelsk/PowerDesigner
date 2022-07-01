@@ -161,7 +161,7 @@ namespace PDRepository
                     if (document != null)
                     {
                         documents.Add(document);
-                    }                    
+                    }
                 }
             }
             return documents;
@@ -178,10 +178,10 @@ namespace PDRepository
             Document document = null;
             RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
             if (repositoryFolder != null)
-            {                
+            {
                 StoredObject item = (StoredObject)repositoryFolder.FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
                 if (item != null)
-                {                    
+                {
                     document = ParseStoredObjectInfo(item);
                 }
             }
