@@ -170,22 +170,34 @@ namespace PDRepository
         /// <summary>
         /// Retrieves information on a document in the specified repository folder.
         /// </summary>
-        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="folderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document.</param>
         /// <returns>A <see cref="Document"/> type.</returns>
         public Document GetFolderDocumentInfo(string folderPath, string documentName)
         {
             Document document = null;
-            RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
-            if (repositoryFolder != null)
+            StoredObject item = GetFolderDocument(folderPath, documentName);            
+            if (item != null)
             {
-                StoredObject item = (StoredObject)repositoryFolder.FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
-                if (item != null)
-                {
-                    document = ParseStoredObjectInfo(item);
-                }
-            }
+                document = ParseStoredObjectInfo(item);
+            }            
             return document;
+        }
+
+        /// <summary>
+        /// Checks out the document in the specified repository folder and saves it to disc. 
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
+        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
+        public void CheckOutFolderDocument(string repoFolderPath, string documentName, string filePath)
+        {
+            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
+            if (item != null)
+            {
+                RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+                _ = doc.CheckOutToFile(filePath, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+            }
         }
 
         #endregion
@@ -242,6 +254,23 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Retrieves the specified folder document.
+        /// </summary>
+        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <returns>A <see cref="StoredObject"/> type.</returns>
+        private StoredObject GetFolderDocument(string folderPath, string documentName)
+        {
+            StoredObject storedObject = null;
+            RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
+            if (repositoryFolder != null)
+            {
+                storedObject = (StoredObject)repositoryFolder.FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
+            }
+            return storedObject;
+        }
+
+        /// <summary>
         /// Reads information from the passed object and returns it as a <see cref="Document"/> type.
         /// </summary>
         /// <param name="item">A <see cref="StoredObject"/> item.</param>
@@ -258,6 +287,7 @@ namespace PDRepository
                         ClassName = doc.ClassName,
                         Location = doc.Location,
                         IsFrozen = Convert.ToBoolean(doc.Frozen),
+                        IsLocked = doc.ObjectStatus != 0,
                         ObjectType = doc.ObjectType,
                         Name = doc.Name,
                         Version = doc.Version,
@@ -271,6 +301,7 @@ namespace PDRepository
                         ClassName = mdl.ClassName,
                         Location = mdl.Location,
                         IsFrozen = Convert.ToBoolean(mdl.Frozen),
+                        IsLocked = mdl.ObjectStatus != 0,
                         ObjectType = mdl.ObjectType,
                         Name = mdl.Name,
                         Version = mdl.Version,

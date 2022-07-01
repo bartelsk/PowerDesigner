@@ -23,17 +23,18 @@ namespace PDRepository.Documents
         /// <summary>
         /// Retrieves information on a document in the specified repository folder.
         /// </summary>
-        /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document.</param>
         /// <returns>A <see cref="Document"/> type.</returns>
         Document GetDocumentInfo(string repoFolderPath, string documentName);
 
         /// <summary>
-        /// Checks out the document in the specified repository folder and saves it in the target folder. 
+        /// Checks out the document in the specified repository folder and saves it to disc. 
         /// </summary>
-        /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
         /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
-        void CheckOutDocument(string repoFolderPath, string filePath);
+        void CheckOutDocument(string repoFolderPath, string documentName, string filePath);
 
         /// <summary>
         /// Checks out the documents in the specified repository folder and saves them in the target folder. 

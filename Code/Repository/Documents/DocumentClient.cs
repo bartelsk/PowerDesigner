@@ -36,7 +36,7 @@ namespace PDRepository.Documents
         /// <summary>
         /// Retrieves information on a document in the specified repository folder.
         /// </summary>
-        /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document.</param>
         /// <returns>A <see cref="Document"/> type.</returns>
         public Document GetDocumentInfo(string repoFolderPath, string documentName)
@@ -46,13 +46,15 @@ namespace PDRepository.Documents
         }
 
         /// <summary>
-        /// Checks out the document in the specified repository folder and saves it in the target folder. 
+        /// Checks out the document in the specified repository folder and saves it to disc. 
         /// </summary>
-        /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
         /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
-        public void CheckOutDocument(string repoFolderPath, string filePath)
+        public void CheckOutDocument(string repoFolderPath, string documentName, string filePath)
         {
-            throw new NotImplementedException();
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            CheckOutFolderDocument(repoFolderPath, documentName, filePath);
         }
 
         /// <summary>
@@ -64,6 +66,6 @@ namespace PDRepository.Documents
         public void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive)
         {
             throw new NotImplementedException();
-        }
+        }       
     }
 }

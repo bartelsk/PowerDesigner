@@ -21,6 +21,11 @@
         public bool IsFrozen { get; set; }
 
         /// <summary>
+        /// Determines whether the document is locked or not.
+        /// </summary>
+        public bool IsLocked { get; set; }
+
+        /// <summary>
         /// The location of the document in the repository.
         /// </summary>
         public string Location { get; set; }
