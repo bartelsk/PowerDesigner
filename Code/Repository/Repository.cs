@@ -142,31 +142,7 @@ namespace PDRepository
         #endregion
 
         #region Documents
-
-        /// <summary>
-        /// Returns a list of <see cref="Document"/> objects in the specified path.
-        /// Does not recurse sub-folders.
-        /// </summary>
-        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
-        /// <returns>A List with <see cref="Document"/> objects.</returns> 
-        public List<Document> GetFolderDocuments(string folderPath)
-        {
-            List<Document> documents = new List<Document>();
-            RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
-            if (repositoryFolder != null)
-            {
-                foreach (StoredObject item in repositoryFolder.ChildObjects.Cast<StoredObject>())
-                {
-                    Document document = ParseStoredObjectInfo(item);
-                    if (document != null)
-                    {
-                        documents.Add(document);
-                    }
-                }
-            }
-            return documents;
-        }
-
+        
         /// <summary>
         /// Retrieves information on a document in the specified repository folder.
         /// </summary>
@@ -182,6 +158,27 @@ namespace PDRepository
                 document = ParseStoredObjectInfo(item);
             }            
             return document;
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Document"/> objects in the specified path.
+        /// Does not recurse sub-folders.
+        /// </summary>
+        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <returns>A List with <see cref="Document"/> objects.</returns> 
+        public List<Document> GetFolderDocumentsInfo(string folderPath)
+        {
+            List<Document> documents = new List<Document>();
+            List<StoredObject> folderItems = GetFolderDocuments(folderPath);
+            foreach (StoredObject item in folderItems)
+            {
+                Document document = ParseStoredObjectInfo(item);
+                if (document != null)
+                {
+                    documents.Add(document);
+                }
+            }
+            return documents;
         }
 
         /// <summary>
@@ -271,7 +268,23 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Reads information from the passed object and returns it as a <see cref="Document"/> type.
+        /// Retrieves a list of folder documents.
+        /// </summary>
+        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <returns>A List of <see cref="StoredObject"/> types.</returns>
+        private List<StoredObject> GetFolderDocuments(string folderPath)
+        {
+            List<StoredObject> storedObjects = null;
+            RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
+            if (repositoryFolder != null)
+            {
+                storedObjects = repositoryFolder.ChildObjects.Cast<StoredObject>().ToList<StoredObject>();                            
+            }
+            return storedObjects;
+        }
+
+        /// <summary>
+        /// Reads information from the passed stored object and returns it as a <see cref="Document"/> type.
         /// </summary>
         /// <param name="item">A <see cref="StoredObject"/> item.</param>
         /// <returns>A <see cref="Document"/> type.</returns>

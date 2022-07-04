@@ -30,7 +30,7 @@ namespace PDRepository.Documents
         public List<Document> ListDocuments(string repoFolderPath)
         {
             if (!IsConnected) ThrowNoRepositoryConnectionException();
-            return GetFolderDocuments(repoFolderPath);
+            return GetFolderDocumentsInfo(repoFolderPath);
         }
 
         /// <summary>
