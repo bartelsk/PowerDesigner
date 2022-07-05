@@ -33,7 +33,7 @@ namespace PDRepository.Samples
                 // DocumentSamples.GetDocumentInfo(client);
                 //DocumentSamples.CheckOutDocument(client);
                 //DocumentSamples.CheckOutModel(client);
-
+                DocumentSamples.CheckOutDocuments(client);
                 
 
             }

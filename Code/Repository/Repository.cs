@@ -3,7 +3,7 @@ using PdRMG;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using System.IO;
 
 namespace PDRepository
 {
@@ -215,6 +215,44 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Checks out the documents in the specified repository folder and saves them in the target folder. 
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the documents.</param>
+        /// <param name="recursive">True to also check out the documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>
+        public void CheckOutFolderDocuments(string repoFolderPath, string targetFolder, bool recursive)
+        {
+            CheckOutDocuments(repoFolderPath, targetFolder, recursive);
+        }
+
+        private void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive)
+        {
+            List<StoredObject> folderDocs = GetFolderDocuments(repoFolderPath);
+            foreach (StoredObject folderDoc in folderDocs)
+            {
+                switch (folderDoc.ClassKind)
+                {
+                    case (int)PdRMG_Classes.cls_RepositoryFolder:
+                        RepositoryFolder folder = (RepositoryFolder)folderDoc;
+                        if (recursive)
+                        {
+                            CheckOutDocuments(folder.Location, targetFolder, recursive);
+                        }
+                        break;
+                    default:                  
+                        // Get extraction file name
+                        Document info = ParseStoredObjectInfo(folderDoc);
+                        string fileName = Path.Combine(targetFolder, Path.GetFileName(info.ExtractionFileName));
+
+                        // Check out file
+                        RepositoryDocumentBase doc = (RepositoryDocumentBase)folderDoc;
+                        _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+                        break;
+                }
+            }            
+        }
+
+        /// <summary>
         /// Freezes a repository document.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
@@ -389,6 +427,7 @@ namespace PDRepository
                     document = new Document()
                     {
                         ClassName = doc.ClassName,
+                        ExtractionFileName = doc.ExtractionName,
                         Location = doc.Location,
                         IsFrozen = Convert.ToBoolean(doc.Frozen),
                         IsLocked = doc.ObjectStatus != 0,
@@ -403,6 +442,7 @@ namespace PDRepository
                     document = new Document()
                     {
                         ClassName = mdl.ClassName,
+                        ExtractionFileName = mdl.ExtractionName,
                         Location = mdl.Location,
                         IsFrozen = Convert.ToBoolean(mdl.Frozen),
                         IsLocked = mdl.ObjectStatus != 0,
@@ -414,7 +454,7 @@ namespace PDRepository
                     break;
             }
             return document;
-        }
+        }       
 
         #endregion       
     }

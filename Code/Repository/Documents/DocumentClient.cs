@@ -78,7 +78,7 @@ namespace PDRepository.Documents
         /// <param name="recursive">True to also check out the documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>
         public void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive)
         {
-            throw new NotImplementedException();
+            CheckOutFolderDocuments(repoFolderPath, targetFolder, recursive);
         }
 
         /// <summary>

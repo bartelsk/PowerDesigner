@@ -16,6 +16,11 @@
         public string ClassName { get; set; }
 
         /// <summary>
+        /// The file name of the document when checked-out.
+        /// </summary>
+        public string ExtractionFileName { get; set; }
+
+        /// <summary>
         /// Determines whether the document is frozen or not.
         /// </summary>
         public bool IsFrozen { get; set; }
