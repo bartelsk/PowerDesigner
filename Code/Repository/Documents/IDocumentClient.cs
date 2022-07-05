@@ -37,6 +37,15 @@ namespace PDRepository.Documents
         void CheckOutDocument(string repoFolderPath, string documentName, string filePath);
 
         /// <summary>
+        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. 
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
+        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
+        /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
+        void CheckOutDocument(string repoFolderPath, string documentName, string filePath, int version);
+
+        /// <summary>
         /// Checks out the documents in the specified repository folder and saves them in the target folder. 
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>

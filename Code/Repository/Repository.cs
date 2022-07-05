@@ -197,6 +197,23 @@ namespace PDRepository
             }
         }
 
+        /// <summary>
+        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. 
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
+        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
+        /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
+        public void CheckOutFolderDocument(string repoFolderPath, string documentName, string filePath, int version)
+        {
+            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
+            if (item != null)
+            {
+                RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+                _ = doc.CheckOutOldVersionToFile(version.ToString(), filePath, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+            }
+        }
+
         #endregion
 
         #endregion

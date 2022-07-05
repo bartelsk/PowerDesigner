@@ -35,10 +35,24 @@ namespace PDRepository.Samples
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";
             string documentName = "DataVault Meta Data Profile";
             string targetFile = @"C:\Temp\DV.xem";
+            string targetFileVersion1 = @"C:\Temp\DV-v1.xem";
 
             Console.WriteLine($"Checking out document '{ documentName }' to '{ targetFile }'...");
 
+            // Get current document version
+            Document info = client.DocumentClient.GetDocumentInfo(folder, documentName);
+            if (info != null)
+            {
+                Console.WriteLine($"Current version: { info.Version }");
+            }
+            
+            // Check out current version of the document
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFile);
+
+            Console.WriteLine($"Checking out version 1 of document '{ documentName }' to '{ targetFileVersion1 }'...");
+
+            // Check out version 1 of the document
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFileVersion1, 1);
 
             Console.WriteLine("Check-out complete.");
         }

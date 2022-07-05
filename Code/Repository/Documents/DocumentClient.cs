@@ -58,6 +58,19 @@ namespace PDRepository.Documents
         }
 
         /// <summary>
+        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. 
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
+        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
+        /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
+        public void CheckOutDocument(string repoFolderPath, string documentName, string filePath, int version)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            CheckOutFolderDocument(repoFolderPath, documentName, filePath, version);
+        }
+
+        /// <summary>
         /// Checks out the documents in the specified repository folder and saves them in the target folder. 
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
@@ -66,6 +79,8 @@ namespace PDRepository.Documents
         public void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive)
         {
             throw new NotImplementedException();
-        }       
+        }
+
+       
     }
 }
