@@ -30,8 +30,11 @@ namespace PDRepository.Samples
 
                 // Run document samples
                 //DocumentSamples.ListDocuments(client);
-               // DocumentSamples.GetDocumentInfo(client);
-                DocumentSamples.CheckOutDocument(client);
+                // DocumentSamples.GetDocumentInfo(client);
+                //DocumentSamples.CheckOutDocument(client);
+                //DocumentSamples.CheckOutModel(client);
+
+                
 
             }
             catch (Exception ex)

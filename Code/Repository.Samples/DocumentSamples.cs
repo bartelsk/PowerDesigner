@@ -56,5 +56,20 @@ namespace PDRepository.Samples
 
             Console.WriteLine("Check-out complete.");
         }
+
+        public static void CheckOutModel(RepositoryClient client)
+        {
+            string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
+            string documentName = "CRDW_SA_StaticData";
+            string targetFile = @"C:\Temp\CRDW_SA_StaticData.pdm";            
+
+            Console.WriteLine($"Checking out model '{ documentName }' to '{ targetFile }'...");
+                        
+            // Check out current version of the document
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFile);
+            
+            Console.WriteLine("Check-out complete.");
+        }
+
     }
 }

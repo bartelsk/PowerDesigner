@@ -46,7 +46,7 @@ namespace PDRepository.Documents
         }
 
         /// <summary>
-        /// Checks out the document in the specified repository folder and saves it to disc. 
+        /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>
@@ -58,7 +58,7 @@ namespace PDRepository.Documents
         }
 
         /// <summary>
-        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. 
+        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>
@@ -81,6 +81,54 @@ namespace PDRepository.Documents
             throw new NotImplementedException();
         }
 
-       
+        /// <summary>
+        /// Locks a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to lock.</param>
+        /// <param name="comment">Lock comment.</param>
+        /// <returns>True if successful, False if not.</returns>
+        public bool LockDocument(string repoFolderPath, string documentName, string comment)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            return LockFolderDocument(repoFolderPath, documentName, comment);
+        }
+
+        /// <summary>
+        /// Unlocks a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to unlock.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        public bool UnlockDocument(string repoFolderPath, string documentName)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            return UnlockFolderDocument(repoFolderPath, documentName);
+        }
+
+        /// <summary>
+        /// Freezes a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to freeze.</param>
+        /// <param name="comment">Freeze comment.</param>
+        /// <returns>True if successful, False if not.</returns>
+        public bool FreezeDocument(string repoFolderPath, string documentName, string comment)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            return FreezeFolderDocument(repoFolderPath, documentName, comment);
+        }
+
+        /// <summary>
+        /// Unfreezes a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to unfreeze.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        public bool UnfreezeDocument(string repoFolderPath, string documentName)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            return UnfreezeFolderDocument(repoFolderPath, documentName);
+        }
     }
 }

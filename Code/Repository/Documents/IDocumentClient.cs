@@ -29,7 +29,7 @@ namespace PDRepository.Documents
         Document GetDocumentInfo(string repoFolderPath, string documentName);
 
         /// <summary>
-        /// Checks out the document in the specified repository folder and saves it to disc. 
+        /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>
@@ -37,7 +37,7 @@ namespace PDRepository.Documents
         void CheckOutDocument(string repoFolderPath, string documentName, string filePath);
 
         /// <summary>
-        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. 
+        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>
@@ -52,5 +52,39 @@ namespace PDRepository.Documents
         /// <param name="targetFolder">The folder on disc to use as the check-out location for the documents.</param>
         /// <param name="recursive">True to also check out the documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>
         void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive);
+
+        /// <summary>
+        /// Locks a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to lock.</param>
+        /// <param name="comment">Lock comment.</param>
+        /// <returns>True if successful, False if not.</returns>
+        bool LockDocument(string repoFolderPath, string documentName, string comment);
+
+        /// <summary>
+        /// Unlocks a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to unlock.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        bool UnlockDocument(string repoFolderPath, string documentName);
+
+        /// <summary>
+        /// Freezes a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to freeze.</param>
+        /// <param name="comment">Freeze comment.</param>
+        /// <returns>True if successful, False if not.</returns>
+        bool FreezeDocument(string repoFolderPath, string documentName, string comment);
+
+        /// <summary>
+        /// Unfreezes a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to unfreeze.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        bool UnfreezeDocument(string repoFolderPath, string documentName);
     }
 }

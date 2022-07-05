@@ -94,8 +94,6 @@
     <Compile Include="Documents\IDocumentClient.cs" />
     <Compile Include="LibraryModels\Branch.cs" />
     <Compile Include="LibraryModels\Document.cs" />
-    <Compile Include="Models\IModelClient.cs" />
-    <Compile Include="Models\ModelClient.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="RepositoryConnection.cs" />
     <Compile Include="RepositoryException.cs" />
