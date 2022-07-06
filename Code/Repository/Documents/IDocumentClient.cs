@@ -33,17 +33,36 @@ namespace PDRepository.Documents
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>
-        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
-        void CheckOutDocument(string repoFolderPath, string documentName, string filePath);
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder);
+
+        /// <summary>
+        /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        /// <param name="targetFileName">The file name for the document.</param>
+        void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName);
 
         /// <summary>
         /// Checks out a specific version of the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>
-        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
         /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
-        void CheckOutDocument(string repoFolderPath, string documentName, string filePath, int version);
+        void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, int version);
+
+        /// <summary>
+        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        /// <param name="targetFileName">The file name for the document.</param>
+        /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
+        void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName, int version);
 
         /// <summary>
         /// Checks out the documents in the specified repository folder and saves them in the target folder. 

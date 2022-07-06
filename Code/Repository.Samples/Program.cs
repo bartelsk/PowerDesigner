@@ -31,10 +31,10 @@ namespace PDRepository.Samples
                 // Run document samples
                // DocumentSamples.ListDocuments(client);
                 // DocumentSamples.GetDocumentInfo(client);
-                //DocumentSamples.CheckOutDocument(client);
-                //DocumentSamples.CheckOutModel(client);
-                DocumentSamples.CheckOutDocuments(client);
                 
+                //DocumentSamples.CheckOutModel(client);
+               // DocumentSamples.CheckOutDocuments(client);
+                DocumentSamples.CheckOutDocument(client);
 
             }
             catch (Exception ex)

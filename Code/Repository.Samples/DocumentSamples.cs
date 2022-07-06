@@ -34,10 +34,9 @@ namespace PDRepository.Samples
         {
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";
             string documentName = "DataVault Meta Data Profile";
-            string targetFile = @"C:\Temp\DV.xem";
-            string targetFileVersion1 = @"C:\Temp\DV-v1.xem";
+            string targetFolder = @"C:\Temp";            
 
-            Console.WriteLine($"Checking out document '{ documentName }' to '{ targetFile }'...");
+            Console.WriteLine($"Checking out document '{ documentName }' to '{ targetFolder }'...");
 
             // Get current document version
             Document info = client.DocumentClient.GetDocumentInfo(folder, documentName);
@@ -47,12 +46,12 @@ namespace PDRepository.Samples
             }
             
             // Check out current version of the document
-            client.DocumentClient.CheckOutDocument(folder, documentName, targetFile);
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder);
 
-            Console.WriteLine($"Checking out version 1 of document '{ documentName }' to '{ targetFileVersion1 }'...");
+            Console.WriteLine($"Checking out version 1 of document '{ documentName }' to '{ targetFolder }'...");
 
             // Check out version 1 of the document
-            client.DocumentClient.CheckOutDocument(folder, documentName, targetFileVersion1, 1);
+            //client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, 1);
 
             Console.WriteLine("Check-out complete.");
         }
@@ -61,12 +60,12 @@ namespace PDRepository.Samples
         {
             string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
             string documentName = "CRDW_SA_StaticData";
-            string targetFile = @"C:\Temp\CRDW_SA_StaticData.pdm";            
+            string targetFolder = @"C:\Temp";            
 
-            Console.WriteLine($"Checking out model '{ documentName }' to '{ targetFile }'...");
+            Console.WriteLine($"Checking out model '{ documentName }' to '{ targetFolder }'...");
                         
             // Check out current version of the document
-            client.DocumentClient.CheckOutDocument(folder, documentName, targetFile);
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder);
             
             Console.WriteLine("Check-out complete.");
         }
@@ -75,8 +74,8 @@ namespace PDRepository.Samples
         {
             string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
             //string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
-            string targetFile = @"C:\Temp";
-            client.DocumentClient.CheckOutDocuments(folder, targetFile, false);
+            string targetFolder = @"C:\Temp";
+            client.DocumentClient.CheckOutDocuments(folder, targetFolder, false);
         }
 
     }

@@ -186,14 +186,15 @@ namespace PDRepository
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>
-        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
-        public void CheckOutFolderDocument(string repoFolderPath, string documentName, string filePath)
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        public void CheckOutFolderDocument(string repoFolderPath, string documentName, string targetFolder)
         {
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);
             if (item != null)
             {
                 RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                _ = doc.CheckOutToFile(filePath, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+                string fileName = GetDocumentFileName(targetFolder, doc);
+                _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
             }
         }
 
@@ -202,15 +203,16 @@ namespace PDRepository
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>
-        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
         /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
-        public void CheckOutFolderDocument(string repoFolderPath, string documentName, string filePath, int version)
+        public void CheckOutFolderDocument(string repoFolderPath, string documentName, string targetFolder, int version)
         {
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);
             if (item != null)
             {
                 RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                _ = doc.CheckOutOldVersionToFile(version.ToString(), filePath, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+                string fileName = GetDocumentFileName(targetFolder, doc);
+                _ = doc.CheckOutOldVersionToFile(version.ToString(), fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
             }
         }
 
@@ -219,38 +221,30 @@ namespace PDRepository
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
         /// <param name="targetFolder">The folder on disc to use as the check-out location for the documents.</param>
-        /// <param name="recursive">True to also check out the documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>
+        /// <param name="recursive">True to also check out the documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>        
         public void CheckOutFolderDocuments(string repoFolderPath, string targetFolder, bool recursive)
-        {
-            CheckOutDocuments(repoFolderPath, targetFolder, recursive);
-        }
-
-        private void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive)
         {
             List<StoredObject> folderDocs = GetFolderDocuments(repoFolderPath);
             foreach (StoredObject folderDoc in folderDocs)
             {
                 switch (folderDoc.ClassKind)
                 {
-                    case (int)PdRMG_Classes.cls_RepositoryFolder:
-                        RepositoryFolder folder = (RepositoryFolder)folderDoc;
+                    case (int)PdRMG_Classes.cls_RepositoryFolder:                        
                         if (recursive)
                         {
-                            CheckOutDocuments(folder.Location, targetFolder, recursive);
+                            RepositoryFolder folder = (RepositoryFolder)folderDoc;
+                            CheckOutFolderDocuments(folder.Location, targetFolder, recursive);
                         }
                         break;
-                    default:                  
-                        // Get extraction file name
-                        Document info = ParseStoredObjectInfo(folderDoc);
-                        string fileName = Path.Combine(targetFolder, info.ExtractionFileName);
-                        
+                    default:                        
                         // Check out file
                         RepositoryDocumentBase doc = (RepositoryDocumentBase)folderDoc;
+                        string fileName = GetDocumentFileName(targetFolder, doc);
                         _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
                         break;
                 }
             }            
-        }
+        }        
 
         /// <summary>
         /// Freezes a repository document.
@@ -413,9 +407,21 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Returns the document file name.
+        /// </summary>
+        /// <param name="targetFolder">A file folder on disc.</param>
+        /// <param name="storedObject">A <see cref="StoredObject"/> type.</param>
+        /// <returns>A fully-qualified file name.</returns>
+        private static string GetDocumentFileName(string targetFolder, StoredObject storedObject)
+        {
+            Document info = ParseStoredObjectInfo(storedObject);
+            return Path.Combine(targetFolder, info.ExtractionFileName);            
+        }
+
+        /// <summary>
         /// Reads information from the passed stored object and returns it as a <see cref="Document"/> type.
         /// </summary>
-        /// <param name="item">A <see cref="StoredObject"/> item.</param>
+        /// <param name="item">A <see cref="StoredObject"/> type.</param>
         /// <returns>A <see cref="Document"/> type.</returns>
         private static Document ParseStoredObjectInfo(StoredObject item)
         {
@@ -456,28 +462,36 @@ namespace PDRepository
             return document;
         }       
 
+        /// <summary>
+        /// Returns the file name of the passed repository model.
+        /// </summary>
+        /// <param name="model">A <see cref="RepositoryModel"/> type.</param>
+        /// <returns>The file name of the model.</returns>
         private static string ParseModelFileName(RepositoryModel model)
         {
             string fileName = string.Empty;
-            switch (model.ClassName)
+            switch (model.ClassName.ToLower())
             {
-                case "Free Model":
-                    fileName = model.Name + ".p";
+                case "extension":
+                    fileName = model.Name + ".xem";
                     break;
-                case "Glossary Model":
-                    fileName = model.Name + ".m";
+                case "free model":
+                    fileName = model.Name + ".fem";
                     break;
-                case "Logical Data Model":
+                case "glossary model":
+                    fileName = model.Name + ".glm";
+                    break;
+                case "logical data model":
                     fileName = model.Name + ".ldm";
                     break;
-                case "Physical Data Model":
+                case "physical data model":
                     fileName = model.Name + ".pdm";
                     break;
-                case "Requirements Model":
-                    fileName = model.Name + ".p";
+                case "requirements model":
+                    fileName = model.Name + ".rqm";
                     break;
-                case "XML Model":
-                    fileName = model.Name + ".d";
+                case "xml model":
+                    fileName = model.Name + ".xsm";
                     break;
             }
             return fileName;

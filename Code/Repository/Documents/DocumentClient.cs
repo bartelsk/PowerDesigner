@@ -49,12 +49,37 @@ namespace PDRepository.Documents
         /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
-        /// <param name="documentName">The name of the document to check out.</param>
-        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
-        public void CheckOutDocument(string repoFolderPath, string documentName, string filePath)
+        /// <param name="documentName">The name of the document to check out.</param>        
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder)
         {
             if (!IsConnected) ThrowNoRepositoryConnectionException();
-            CheckOutFolderDocument(repoFolderPath, documentName, filePath);
+            CheckOutFolderDocument(repoFolderPath, documentName, targetFolder);
+        }
+
+        /// <summary>
+        /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        /// <param name="targetFileName">The file name for the document.</param>
+        public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>        
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
+        public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, int version)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            CheckOutFolderDocument(repoFolderPath, documentName, targetFolder, version);
         }
 
         /// <summary>
@@ -62,12 +87,12 @@ namespace PDRepository.Documents
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>
-        /// <param name="filePath">The fully-qualified file path for the file on disc.</param>
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        /// <param name="targetFileName">The file name for the document.</param>
         /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
-        public void CheckOutDocument(string repoFolderPath, string documentName, string filePath, int version)
+        public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName, int version)
         {
-            if (!IsConnected) ThrowNoRepositoryConnectionException();
-            CheckOutFolderDocument(repoFolderPath, documentName, filePath, version);
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -129,6 +154,6 @@ namespace PDRepository.Documents
         {
             if (!IsConnected) ThrowNoRepositoryConnectionException();
             return UnfreezeFolderDocument(repoFolderPath, documentName);
-        }
+        }       
     }
 }
