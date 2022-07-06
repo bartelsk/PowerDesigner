@@ -32,13 +32,15 @@ namespace PDRepository.Samples
 
         public static void CheckOutDocument(RepositoryClient client)
         {
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";
-            string documentName = "DataVault Meta Data Profile";
+            //string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";
+            //string documentName = "DataVault Meta Data Profile";
+            //string alternativeFileName = "MyProfile.xem";
 
-            //string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
-            //string documentName = "CRDW_SA_StaticData";
+            string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
+            string documentName = "CRDW_SA_StaticData";
+            string alternativeFileName = "CRDW_SA_StaticData_alt.pdm";
 
-            string targetFolder = @"C:\Temp";
+            string targetFolder = @"C:\Temp";            
 
             // Check out document with default name
 
@@ -47,11 +49,10 @@ namespace PDRepository.Samples
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder);
 
             // Check out same document with alternative name
+            
+            Console.WriteLine($"Checking out document '{ documentName }' as '{ alternativeFileName }' to '{ targetFolder }'...");
 
-            string newFileName = "MyProfile.xem";
-            Console.WriteLine($"Checking out document '{ documentName }' as '{ newFileName }' to '{ targetFolder }'...");
-
-            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, newFileName);
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, alternativeFileName);
             
             Console.WriteLine("Check-out complete.");
         }

@@ -205,7 +205,7 @@ namespace PDRepository
             if (item != null)
             {
                 RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : targetFileName;
+                string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : Path.Combine(targetFolder, targetFileName);
                 _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
             }
         }
@@ -236,7 +236,7 @@ namespace PDRepository
             if (item != null)
             {
                 RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : targetFileName;
+                string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : Path.Combine(targetFolder, targetFileName);
                 _ = doc.CheckOutOldVersionToFile(version.ToString(), fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
             }
         }
