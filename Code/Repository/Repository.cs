@@ -189,11 +189,23 @@ namespace PDRepository
         /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
         public void CheckOutFolderDocument(string repoFolderPath, string documentName, string targetFolder)
         {
+            CheckOutFolderDocument(repoFolderPath, documentName, targetFolder, string.Empty);
+        }
+
+        /// <summary>
+        /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        /// <param name="targetFileName">The file name for the document.</param>
+        public void CheckOutFolderDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName)
+        {
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);
             if (item != null)
             {
                 RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                string fileName = GetDocumentFileName(targetFolder, doc);
+                string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : targetFileName;
                 _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
             }
         }
@@ -207,11 +219,24 @@ namespace PDRepository
         /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
         public void CheckOutFolderDocument(string repoFolderPath, string documentName, string targetFolder, int version)
         {
+            CheckOutFolderDocument(repoFolderPath, documentName, targetFolder, string.Empty, version);
+        }
+
+        /// <summary>
+        /// Checks out a specific version of the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
+        /// <param name="documentName">The name of the document to check out.</param>
+        /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
+        /// <param name="targetFileName">The file name for the document.</param>
+        /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
+        public void CheckOutFolderDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName, int version)
+        {
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);
             if (item != null)
             {
                 RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                string fileName = GetDocumentFileName(targetFolder, doc);
+                string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : targetFileName;
                 _ = doc.CheckOutOldVersionToFile(version.ToString(), fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
             }
         }

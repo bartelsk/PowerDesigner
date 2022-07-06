@@ -66,7 +66,8 @@ namespace PDRepository.Documents
         /// <param name="targetFileName">The file name for the document.</param>
         public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName)
         {
-            throw new NotImplementedException();
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            CheckOutFolderDocument(repoFolderPath, documentName, targetFolder, targetFileName);
         }
 
         /// <summary>
@@ -92,7 +93,8 @@ namespace PDRepository.Documents
         /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
         public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName, int version)
         {
-            throw new NotImplementedException();
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            CheckOutFolderDocument(repoFolderPath, documentName, targetFolder, targetFileName, version);
         }
 
         /// <summary>

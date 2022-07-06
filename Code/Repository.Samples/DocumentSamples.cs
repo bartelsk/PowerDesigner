@@ -26,7 +26,7 @@ namespace PDRepository.Samples
             Document doc = client.DocumentClient.GetDocumentInfo(folder, documentName);
             if (doc != null)
             {
-                Console.WriteLine($"Name: {doc.Name} ({doc.ClassName}) - Version: {doc.Version}\r\nObject type: { doc.ObjectType }\r\nFrozen: { doc.IsFrozen }\r\nLocked: { doc.IsLocked }\r\nLocation: {doc.Location}\r\nVersion comment: {doc.VersionComment}\r\n\r\n");
+                Console.WriteLine($"Name: {doc.Name} ({doc.ClassName}) - Version: {doc.Version}\r\nObject type: { doc.ObjectType }\r\nFrozen: { doc.IsFrozen }\r\nLocked: { doc.IsLocked }\r\nLocation: {doc.Location}\r\nExtraction name: { doc.ExtractionFileName }\r\nVersion comment: {doc.VersionComment}\r\n\r\n");
             }
         }
 
@@ -34,39 +34,49 @@ namespace PDRepository.Samples
         {
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";
             string documentName = "DataVault Meta Data Profile";
-            string targetFolder = @"C:\Temp";            
 
-            Console.WriteLine($"Checking out document '{ documentName }' to '{ targetFolder }'...");
+            //string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
+            //string documentName = "CRDW_SA_StaticData";
 
-            // Get current document version
-            Document info = client.DocumentClient.GetDocumentInfo(folder, documentName);
-            if (info != null)
-            {
-                Console.WriteLine($"Current version: { info.Version }");
-            }
+            string targetFolder = @"C:\Temp";
+
+            // Check out document with default name
+
+            Console.WriteLine($"Checking out document '{ documentName }' to '{ targetFolder }'...");                        
             
-            // Check out current version of the document
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder);
 
-            Console.WriteLine($"Checking out version 1 of document '{ documentName }' to '{ targetFolder }'...");
+            // Check out same document with alternative name
 
-            // Check out version 1 of the document
-            //client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, 1);
+            string newFileName = "MyProfile.xem";
+            Console.WriteLine($"Checking out document '{ documentName }' as '{ newFileName }' to '{ targetFolder }'...");
 
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, newFileName);
+            
             Console.WriteLine("Check-out complete.");
         }
 
-        public static void CheckOutModel(RepositoryClient client)
+        public static void CheckOutDocumentOtherVersion(RepositoryClient client)
         {
-            string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
-            string documentName = "CRDW_SA_StaticData";
-            string targetFolder = @"C:\Temp";            
+            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";            
+            string documentName = "DataVault Meta Data Profile";
+            int documentVersion = 1;
+            string targetFolder = @"C:\Temp";
 
-            Console.WriteLine($"Checking out model '{ documentName }' to '{ targetFolder }'...");
-                        
-            // Check out current version of the document
-            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder);
+            // Check out document with default name but different version
+
+            Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' to '{ targetFolder }'...");
             
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, documentVersion);
+
+            // Check out same document with alternative name and version
+
+            string newFileName = $"MyProfile-v{ documentVersion }.xem";
+
+            Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' as '{ newFileName }' to '{ targetFolder }'...");
+
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, newFileName, documentVersion);
+
             Console.WriteLine("Check-out complete.");
         }
 
