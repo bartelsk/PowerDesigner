@@ -242,8 +242,8 @@ namespace PDRepository
                     default:                  
                         // Get extraction file name
                         Document info = ParseStoredObjectInfo(folderDoc);
-                        string fileName = Path.Combine(targetFolder, Path.GetFileName(info.ExtractionFileName));
-
+                        string fileName = Path.Combine(targetFolder, info.ExtractionFileName);
+                        
                         // Check out file
                         RepositoryDocumentBase doc = (RepositoryDocumentBase)folderDoc;
                         _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
@@ -426,8 +426,8 @@ namespace PDRepository
                     RepositoryDocument doc = (RepositoryDocument)item;
                     document = new Document()
                     {
-                        ClassName = doc.ClassName,
-                        ExtractionFileName = doc.ExtractionName,
+                        ClassName = doc.ClassName, 
+                        ExtractionFileName = doc.Name,
                         Location = doc.Location,
                         IsFrozen = Convert.ToBoolean(doc.Frozen),
                         IsLocked = doc.ObjectStatus != 0,
@@ -438,11 +438,11 @@ namespace PDRepository
                     };
                     break;
                 case (int)PdRMG_Classes.cls_RepositoryModel:
-                    RepositoryModel mdl = (RepositoryModel)item;
+                    RepositoryModel mdl = (RepositoryModel)item;                   
                     document = new Document()
                     {
                         ClassName = mdl.ClassName,
-                        ExtractionFileName = mdl.ExtractionName,
+                        ExtractionFileName = ParseModelFileName(mdl),
                         Location = mdl.Location,
                         IsFrozen = Convert.ToBoolean(mdl.Frozen),
                         IsLocked = mdl.ObjectStatus != 0,
@@ -455,6 +455,33 @@ namespace PDRepository
             }
             return document;
         }       
+
+        private static string ParseModelFileName(RepositoryModel model)
+        {
+            string fileName = string.Empty;
+            switch (model.ClassName)
+            {
+                case "Free Model":
+                    fileName = model.Name + ".p";
+                    break;
+                case "Glossary Model":
+                    fileName = model.Name + ".m";
+                    break;
+                case "Logical Data Model":
+                    fileName = model.Name + ".ldm";
+                    break;
+                case "Physical Data Model":
+                    fileName = model.Name + ".pdm";
+                    break;
+                case "Requirements Model":
+                    fileName = model.Name + ".p";
+                    break;
+                case "XML Model":
+                    fileName = model.Name + ".d";
+                    break;
+            }
+            return fileName;
+        }
 
         #endregion       
     }
