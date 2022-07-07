@@ -11,8 +11,9 @@ namespace PDRepository.Samples
             Console.WriteLine("Listing documents...\r\n");
 
             string rootFolder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            bool recursive = true; 
 
-            List<Document> docs = client.DocumentClient.ListDocuments(rootFolder);
+            List<Document> docs = client.DocumentClient.ListDocuments(rootFolder, recursive);
             docs.ForEach(d => Console.WriteLine($"Name: { d.Name } ({ d.ClassName }) - Version: { d.Version }\r\nObject type: { d.ObjectType }\r\nFrozen: { d.IsFrozen }\r\nLocked: { d.IsLocked }\r\nLocation: { d.Location }\r\nVersion comment: { d.VersionComment }\r\n\r\n"));
         }
 

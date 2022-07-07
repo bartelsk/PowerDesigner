@@ -13,12 +13,12 @@ namespace PDRepository.Documents
     public interface IDocumentClient : IDisposable
     {
         /// <summary>
-        /// Returns a list of <see cref="Document"/> objects in the specified repository folder.
-        /// Does not recurse sub-folders.
+        /// Returns a list of <see cref="Document"/> objects in the specified repository folder.        
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="recursive">True to also list documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>
         /// <returns>A List with <see cref="Document"/> objects.</returns>      
-        List<Document> ListDocuments(string repoFolderPath);
+        List<Document> ListDocuments(string repoFolderPath, bool recursive);
 
         /// <summary>
         /// Retrieves information on a document in the specified repository folder.

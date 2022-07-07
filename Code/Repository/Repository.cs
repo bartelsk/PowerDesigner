@@ -161,26 +161,18 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Returns a list of <see cref="Document"/> objects in the specified path.
-        /// Does not recurse sub-folders.
+        /// Returns a list of <see cref="Document"/> objects in the specified path.        
         /// </summary>
         /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="recursive">True to also list documents in any sub-folder of the <paramref name="folderPath"/>.</param>
         /// <returns>A List with <see cref="Document"/> objects.</returns> 
-        public List<Document> GetFolderDocumentsInfo(string folderPath)
+        public List<Document> GetFolderDocumentsInfo(string folderPath, bool recursive)
         {
             List<Document> documents = new List<Document>();
-            List<StoredObject> folderItems = GetFolderDocuments(folderPath);
-            foreach (StoredObject item in folderItems)
-            {
-                Document document = ParseStoredObjectInfo(item);
-                if (document != null)
-                {
-                    documents.Add(document);
-                }
-            }
+            ListFolderDocuments(folderPath, recursive, ref documents);
             return documents;
         }
-
+        
         /// <summary>
         /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>
@@ -396,6 +388,40 @@ namespace PDRepository
                 };
                 branches.Add(branch);
             }
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Document"/> objects in the specified path.        
+        /// </summary>
+        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="recursive">True to also list documents in any sub-folder of the <paramref name="folderPath"/>.</param>
+        /// <param name="documents">A ref to the List of found <see cref="Document"/> types.</param>
+        /// <returns>A List with <see cref="Document"/> objects.</returns> 
+        private List<Document> ListFolderDocuments(string folderPath, bool recursive, ref List<Document> documents)
+        {
+            List<StoredObject> folderItems = GetFolderDocuments(folderPath);
+            foreach (StoredObject item in folderItems)
+            {
+                switch (item.ClassKind)
+                {
+                    case (int)PdRMG_Classes.cls_RepositoryFolder:
+                        if (recursive)
+                        {
+                            RepositoryFolder folder = (RepositoryFolder)item;
+                            ListFolderDocuments(folder.Location.Substring(1) + "/" + folder.Name, recursive, ref documents);
+                        }
+                        break;
+                    default:
+                        Document document = ParseStoredObjectInfo(item);
+                        if (document != null)
+                        {
+                            documents.Add(document);
+                        }
+                        break;
+                }
+
+            }
+            return documents;
         }
 
         /// <summary>

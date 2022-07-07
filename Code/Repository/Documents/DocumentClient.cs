@@ -19,18 +19,18 @@ namespace PDRepository.Documents
         public DocumentClient(RepositorySettings settings) : base(settings)
         {
             Connect();
-        }      
+        }
 
         /// <summary>
-        /// Returns a list of <see cref="Document"/> objects in the specified repository folder.
-        /// Does not recurse sub-folders.
+        /// Returns a list of <see cref="Document"/> objects in the specified repository folder.        
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
-        /// <returns>A List with <see cref="Document"/> objects.</returns> 
-        public List<Document> ListDocuments(string repoFolderPath)
+        /// <param name="recursive">True to also list documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>
+        /// <returns>A List with <see cref="Document"/> objects.</returns>      
+        public List<Document> ListDocuments(string repoFolderPath, bool recursive)
         {
             if (!IsConnected) ThrowNoRepositoryConnectionException();
-            return GetFolderDocumentsInfo(repoFolderPath);
+            return GetFolderDocumentsInfo(repoFolderPath, recursive);
         }
 
         /// <summary>
