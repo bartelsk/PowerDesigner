@@ -103,9 +103,10 @@ namespace PDRepository.Documents
         /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
         /// <param name="targetFolder">The folder on disc to use as the check-out location for the documents.</param>
         /// <param name="recursive">True to also check out the documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>
-        public void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive)
+        /// <param name="preserveFolderStructure">True to mimic the repository folder structure on the local disc when checking out. Applies to recursive check-outs only.</param>
+        public void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive, bool preserveFolderStructure)
         {
-            CheckOutFolderDocuments(repoFolderPath, targetFolder, recursive);
+            CheckOutFolderDocuments(repoFolderPath, targetFolder, recursive, preserveFolderStructure);
         }
 
         /// <summary>

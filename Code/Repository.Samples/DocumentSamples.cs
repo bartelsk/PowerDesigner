@@ -79,12 +79,30 @@ namespace PDRepository.Samples
         }
 
         public static void CheckOutDocuments(RepositoryClient client)
-        {
-            //string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/KBTest";
-            string targetFolder = @"C:\Temp";
-            client.DocumentClient.CheckOutDocuments(folder, targetFolder, false);
+        {            
+            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string targetFolder = @"C:\Temp\CheckOutTest\SingleRepoFolder";
+
+            Console.WriteLine($"Checking out all document in folder '{ folder }' into '{ targetFolder }' (no sub-folders)...");
+            client.DocumentClient.CheckOutDocuments(folder, targetFolder, false, false);
         }
 
+        public static void CheckOutDocumentsRecursively(RepositoryClient client)
+        {            
+            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string targetFolder = @"C:\Temp\CheckOutTest\SingleTargetFolder";
+
+            Console.WriteLine($"Checking out all document in folder '{ folder }' and its sub-folders (if any) into '{ targetFolder }'...");
+            client.DocumentClient.CheckOutDocuments(folder, targetFolder, true, false);
+        }
+
+        public static void CheckOutDocumentsRecursivelyMimicingRepoStructure(RepositoryClient client)
+        {            
+            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string targetFolder = @"C:\Temp\CheckOutTest\MimicRepoStructure";
+
+            Console.WriteLine($"Checking out all document in folder '{ folder }' and its sub-folders (if any) into '{ targetFolder }' (mimicing repo folder structure)...");
+            client.DocumentClient.CheckOutDocuments(folder, targetFolder, true, true);
+        }
     }
 }

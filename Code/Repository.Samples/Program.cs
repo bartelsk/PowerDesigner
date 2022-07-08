@@ -33,7 +33,9 @@ namespace PDRepository.Samples
                 //DocumentSamples.GetDocumentInfo(client);
                // DocumentSamples.CheckOutDocument(client);
                // DocumentSamples.CheckOutDocumentOtherVersion(client);
-                DocumentSamples.CheckOutDocuments(client);               
+               // DocumentSamples.CheckOutDocuments(client);
+               // DocumentSamples.CheckOutDocumentsRecursively(client);
+                //DocumentSamples.CheckOutDocumentsRecursivelyMimicingRepoStructure(client);
 
             }
             catch (Exception ex)

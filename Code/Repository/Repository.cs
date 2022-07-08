@@ -238,10 +238,11 @@ namespace PDRepository
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>
         /// <param name="targetFolder">The folder on disc to use as the check-out location for the documents.</param>
-        /// <param name="recursive">True to also check out the documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>        
-        public void CheckOutFolderDocuments(string repoFolderPath, string targetFolder, bool recursive)
+        /// <param name="recursive">True to also check out the documents in any sub-folder of the <paramref name="repoFolderPath"/>.</param>     
+        /// <param name="preserveFolderStructure">True to mimic the repository folder structure on the local disc when checking out. Applies to recursive check-outs only.</param>
+        public void CheckOutFolderDocuments(string repoFolderPath, string targetFolder, bool recursive, bool preserveFolderStructure)
         {
-            List<StoredObject> folderDocs = GetFolderDocuments(repoFolderPath);
+            List<StoredObject> folderDocs = GetFolderDocuments(repoFolderPath);            
             foreach (StoredObject folderDoc in folderDocs)
             {
                 switch (folderDoc.ClassKind)
@@ -250,7 +251,8 @@ namespace PDRepository
                         if (recursive)
                         {
                             RepositoryFolder folder = (RepositoryFolder)folderDoc;
-                            CheckOutFolderDocuments(folder.Location, targetFolder, recursive);
+                            string localTargetFolder = preserveFolderStructure ? Path.Combine(targetFolder, folder.Name) : targetFolder;
+                            CheckOutFolderDocuments(folder.Location.Substring(1) + "/" + folder.Name, localTargetFolder, recursive, preserveFolderStructure);
                         }
                         break;
                     default:                        
@@ -448,7 +450,7 @@ namespace PDRepository
         /// <returns>A List of <see cref="StoredObject"/> types.</returns>
         private List<StoredObject> GetFolderDocuments(string folderPath)
         {
-            List<StoredObject> storedObjects = null;
+            List<StoredObject> storedObjects = new List<StoredObject>();
             RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
             if (repositoryFolder != null)
             {
