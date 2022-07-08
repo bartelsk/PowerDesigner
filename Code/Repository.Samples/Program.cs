@@ -29,11 +29,11 @@ namespace PDRepository.Samples
                 //BranchSamples.BranchExists(client);
 
                 // Run document samples
-                DocumentSamples.ListDocuments(client);
+               // DocumentSamples.ListDocuments(client);
                 //DocumentSamples.GetDocumentInfo(client);
                // DocumentSamples.CheckOutDocument(client);
                // DocumentSamples.CheckOutDocumentOtherVersion(client);
-               // DocumentSamples.CheckOutDocuments(client);               
+                DocumentSamples.CheckOutDocuments(client);               
 
             }
             catch (Exception ex)

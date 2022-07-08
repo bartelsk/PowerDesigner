@@ -483,7 +483,7 @@ namespace PDRepository
                     RepositoryDocument doc = (RepositoryDocument)item;
                     document = new Document()
                     {
-                        ClassName = doc.ClassName, 
+                        ClassName = doc.ClassName,
                         ExtractionFileName = doc.Name,
                         Location = doc.Location,
                         IsFrozen = Convert.ToBoolean(doc.Frozen),
@@ -491,11 +491,11 @@ namespace PDRepository
                         ObjectType = doc.ObjectType,
                         Name = doc.Name,
                         Version = doc.Version,
-                        VersionComment = doc.VersionComment
+                        VersionComment = doc.VersionComment.Trim()
                     };
                     break;
                 case (int)PdRMG_Classes.cls_RepositoryModel:
-                    RepositoryModel mdl = (RepositoryModel)item;                   
+                    RepositoryModel mdl = (RepositoryModel)item;
                     document = new Document()
                     {
                         ClassName = mdl.ClassName,
@@ -506,12 +506,12 @@ namespace PDRepository
                         ObjectType = mdl.ObjectType,
                         Name = mdl.Name,
                         Version = mdl.Version,
-                        VersionComment = mdl.VersionComment
+                        VersionComment = mdl.VersionComment.Trim()
                     };
                     break;
             }
             return document;
-        }       
+        }
 
         /// <summary>
         /// Returns the file name of the passed repository model.
@@ -523,6 +523,9 @@ namespace PDRepository
             string fileName = string.Empty;
             switch (model.ClassName.ToLower())
             {
+                case "dbms":
+                    fileName = model.Name + ".xdb";
+                    break;
                 case "extension":
                     fileName = model.Name + ".xem";
                     break;
@@ -537,6 +540,9 @@ namespace PDRepository
                     break;
                 case "physical data model":
                     fileName = model.Name + ".pdm";
+                    break;
+                case "report language":
+                    fileName = model.Name + ".xrl";
                     break;
                 case "requirements model":
                     fileName = model.Name + ".rqm";

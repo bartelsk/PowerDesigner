@@ -45,14 +45,12 @@ namespace PDRepository.Samples
 
             // Check out document with default name
 
-            Console.WriteLine($"Checking out document '{ documentName }' to '{ targetFolder }'...");                        
-            
+            Console.WriteLine($"Checking out document '{ documentName }' to '{ targetFolder }'...");
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder);
 
             // Check out same document with alternative name
             
             Console.WriteLine($"Checking out document '{ documentName }' as '{ alternativeFileName }' to '{ targetFolder }'...");
-
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, alternativeFileName);
             
             Console.WriteLine("Check-out complete.");
@@ -67,8 +65,7 @@ namespace PDRepository.Samples
 
             // Check out document with default name but different version
 
-            Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' to '{ targetFolder }'...");
-            
+            Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' to '{ targetFolder }'...");            
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, documentVersion);
 
             // Check out same document with alternative name and version
@@ -76,7 +73,6 @@ namespace PDRepository.Samples
             string newFileName = $"MyProfile-v{ documentVersion }.xem";
 
             Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' as '{ newFileName }' to '{ targetFolder }'...");
-
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, newFileName, documentVersion);
 
             Console.WriteLine("Check-out complete.");
@@ -84,8 +80,8 @@ namespace PDRepository.Samples
 
         public static void CheckOutDocuments(RepositoryClient client)
         {
-            string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
-            //string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            //string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
+            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/KBTest";
             string targetFolder = @"C:\Temp";
             client.DocumentClient.CheckOutDocuments(folder, targetFolder, false);
         }
