@@ -41,16 +41,19 @@ namespace PDRepository.Samples
             string documentName = "CRDW_SA_StaticData";
             string alternativeFileName = "CRDW_SA_StaticData_alt.pdm";
 
-            string targetFolder = @"C:\Temp";            
+            string targetFolder = @"C:\Temp";
+
+            // Register event handler
+            client.DocumentClient.DocumentCheckedOut += DocumentCheckedOut;
 
             // Check out document with default name
 
-            Console.WriteLine($"Checking out document '{ documentName }' to '{ targetFolder }'...");
+            Console.WriteLine($"Checking out document '{ documentName }' to '{ targetFolder }'...");            
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder);
-
-            // Check out same document with alternative name
             
-            Console.WriteLine($"Checking out document '{ documentName }' as '{ alternativeFileName }' to '{ targetFolder }'...");
+            // Check out same document with alternative name
+
+            Console.WriteLine($"Checking out document '{ documentName }' as '{ alternativeFileName }' to '{ targetFolder }'...");            
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, alternativeFileName);
             
             Console.WriteLine("Check-out complete.");
@@ -62,6 +65,9 @@ namespace PDRepository.Samples
             string documentName = "DataVault Meta Data Profile";
             int documentVersion = 1;
             string targetFolder = @"C:\Temp";
+
+            // Register event handler
+            client.DocumentClient.DocumentCheckedOut += DocumentCheckedOut;
 
             // Check out document with default name but different version
 
@@ -83,16 +89,22 @@ namespace PDRepository.Samples
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
             string targetFolder = @"C:\Temp\CheckOutTest\SingleRepoFolder";
 
-            Console.WriteLine($"Checking out all document in folder '{ folder }' into '{ targetFolder }' (no sub-folders)...");
+            // Register event handler            
+            client.DocumentClient.DocumentCheckedOut += DocumentCheckedOut;
+
+            Console.WriteLine($"Checking out all document in folder '{ folder }' into '{ targetFolder }' (no sub-folders)...");            
             client.DocumentClient.CheckOutDocuments(folder, targetFolder, false, false);
-        }
+        }        
 
         public static void CheckOutDocumentsRecursively(RepositoryClient client)
         {            
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
             string targetFolder = @"C:\Temp\CheckOutTest\SingleTargetFolder";
 
-            Console.WriteLine($"Checking out all document in folder '{ folder }' and its sub-folders (if any) into '{ targetFolder }'...");
+            // Register event handler
+            client.DocumentClient.DocumentCheckedOut += DocumentCheckedOut;
+
+            Console.WriteLine($"Checking out all document in folder '{ folder }' and its sub-folders (if any) into '{ targetFolder }'...");            
             client.DocumentClient.CheckOutDocuments(folder, targetFolder, true, false);
         }
 
@@ -101,8 +113,16 @@ namespace PDRepository.Samples
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
             string targetFolder = @"C:\Temp\CheckOutTest\MimicRepoStructure";
 
+            // Register event handler
+            client.DocumentClient.DocumentCheckedOut += DocumentCheckedOut;
+
             Console.WriteLine($"Checking out all document in folder '{ folder }' and its sub-folders (if any) into '{ targetFolder }' (mimicing repo folder structure)...");
             client.DocumentClient.CheckOutDocuments(folder, targetFolder, true, true);
+        }
+
+        private static void DocumentCheckedOut(object sender, CheckOutEventArgs e)
+        {
+            Console.WriteLine($"Checked out document '{ e.DocumentName }' to file '{ e.CheckOutFileName }'");
         }
     }
 }

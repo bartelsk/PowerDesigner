@@ -13,6 +13,11 @@ namespace PDRepository.Documents
     public interface IDocumentClient : IDisposable
     {
         /// <summary>
+        /// Signals a document has been checked out.
+        /// </summary>
+        event EventHandler<CheckOutEventArgs> DocumentCheckedOut;
+
+        /// <summary>
         /// Returns a list of <see cref="Document"/> objects in the specified repository folder.        
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the documents.</param>

@@ -16,6 +16,7 @@ namespace PDRepository
     {
         private bool disposedValue;
         internal readonly RepositoryConnection _con;
+        public event EventHandler<CheckOutEventArgs> RepoDocumentCheckedOut;
 
         #region Constructor / Destructor
 
@@ -199,6 +200,9 @@ namespace PDRepository
                 RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
                 string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : Path.Combine(targetFolder, targetFileName);
                 _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+
+                // Trigger checked out event
+                OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });
             }
         }
 
@@ -230,6 +234,9 @@ namespace PDRepository
                 RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
                 string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : Path.Combine(targetFolder, targetFileName);
                 _ = doc.CheckOutOldVersionToFile(version.ToString(), fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+
+                // Trigger checked out event
+                OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });
             }
         }
 
@@ -260,6 +267,9 @@ namespace PDRepository
                         RepositoryDocumentBase doc = (RepositoryDocumentBase)folderDoc;
                         string fileName = GetDocumentFileName(targetFolder, doc);
                         _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+
+                        // Trigger checked out event
+                        OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });
                         break;
                 }
             }            
@@ -556,7 +566,16 @@ namespace PDRepository
             return fileName;
         }
 
-        #endregion       
+        #endregion
+
+        #region Events
+
+        protected virtual void OnDocumentCheckedOut(CheckOutEventArgs args)
+        {
+            RepoDocumentCheckedOut?.Invoke(this, args);
+        }
+
+        #endregion
     }
 
 #pragma warning restore CS1591

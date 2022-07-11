@@ -13,6 +13,11 @@ namespace PDRepository.Documents
     public class DocumentClient : Repository, IDocumentClient
     {
         /// <summary>
+        /// Signals a document has been checked out.
+        /// </summary>
+        public event EventHandler<CheckOutEventArgs> DocumentCheckedOut;
+
+        /// <summary>
         /// Creates a new instance of the <see cref="DocumentClient"/> class.
         /// </summary>
         /// <param name="settings">The current <see cref="RepositorySettings"/>.</param>
@@ -157,6 +162,15 @@ namespace PDRepository.Documents
         {
             if (!IsConnected) ThrowNoRepositoryConnectionException();
             return UnfreezeFolderDocument(repoFolderPath, documentName);
-        }       
+        }
+
+        /// <summary>
+        /// Signals a document is checked out.
+        /// </summary>
+        /// <param name="args">The file name of the document.</param>
+        protected override void OnDocumentCheckedOut(CheckOutEventArgs args)
+        {
+            DocumentCheckedOut?.Invoke(this, args);
+        }
     }
 }
