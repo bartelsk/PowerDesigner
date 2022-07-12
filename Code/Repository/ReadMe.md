@@ -24,4 +24,4 @@ Most of the time you can find the assemblies in `C:\Program Files\SAP\PowerDesig
 
 ## Usage
 
-Check out the Repository.Samples folder detailed usage samples.
+Check out the [Repository.Samples](/Code/Repository.Samples) folder detailed usage samples.
