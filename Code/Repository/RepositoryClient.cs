@@ -1,6 +1,6 @@
 ﻿using PDRepository.Branches;
+using PDRepository.Common;
 using PDRepository.Documents;
-using PDRepository.Models;
 using PDRepository.Users;
 using System;
 using System.Diagnostics;
@@ -20,8 +20,7 @@ namespace PDRepository
         protected RepositoryClient(RepositorySettings settings)
         {
             this.BranchClient = new BranchClient(settings);
-            this.DocumentClient = new DocumentClient(settings);
-            this.ModelClient = new ModelClient(settings);
+            this.DocumentClient = new DocumentClient(settings);            
             this.UserClient = new UserClient(settings);
         }
 
@@ -52,12 +51,7 @@ namespace PDRepository
         /// Entry point to Documents
         /// </summary>
         public IDocumentClient DocumentClient { get; }
-
-        /// <summary>
-        /// Entry point to Models
-        /// </summary>
-        public IModelClient ModelClient { get; }
-
+        
         /// <summary>
         /// Entry point to Users
         /// </summary>
@@ -69,8 +63,7 @@ namespace PDRepository
         public void Dispose()
         {
             BranchClient?.Dispose();
-            DocumentClient?.Dispose();
-            ModelClient?.Dispose();
+            DocumentClient?.Dispose();            
             UserClient?.Dispose();
         }
 

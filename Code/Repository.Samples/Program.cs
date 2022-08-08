@@ -1,10 +1,6 @@
-﻿using PDRepository.LibraryModels;
+﻿using PDRepository.Common;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDRepository.Samples
 {
@@ -30,15 +26,26 @@ namespace PDRepository.Samples
                 client = RepositoryClient.CreateClient(settings);
 
                 // Run branch samples
-                BranchSamples.ListBranches(client);
-                
+                //BranchSamples.ListBranches(client);
+                //BranchSamples.BranchExists(client);
+
+                // Run document samples
+                // DocumentSamples.ListDocuments(client);
+                DocumentSamples.DocumentExists(client);
+                //DocumentSamples.GetDocumentInfo(client);
+                //DocumentSamples.CheckOutDocument(client);
+               // DocumentSamples.CheckOutDocumentOtherVersion(client);
+               // DocumentSamples.CheckOutDocuments(client);
+               // DocumentSamples.CheckOutDocumentsRecursively(client);
+               // DocumentSamples.CheckOutDocumentsRecursivelyMimicingRepoStructure(client);
+
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Exception: {ex.Message}");
             }
             finally
-            {              
+            {
                 client?.Dispose();
                 Console.WriteLine("Press enter to exit");
                 Console.ReadLine();
