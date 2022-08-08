@@ -1,4 +1,4 @@
-﻿namespace PDRepository
+﻿namespace PDRepository.LibraryModels
 {
    /// <summary>
    /// This class represents the settings used to connect with the repository.
