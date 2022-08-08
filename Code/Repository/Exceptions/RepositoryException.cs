@@ -5,7 +5,7 @@ namespace PDRepository.Exceptions
     /// <summary>
     /// The exception that is thrown in case of a generic exception.
     /// </summary>
-    public class RepositoryException : Exception
+    public sealed class RepositoryException : Exception
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositoryException"/> class.

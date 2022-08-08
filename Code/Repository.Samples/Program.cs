@@ -1,4 +1,4 @@
-﻿using PDRepository.LibraryModels;
+﻿using PDRepository.Common;
 using System;
 using System.Configuration;
 
@@ -30,8 +30,9 @@ namespace PDRepository.Samples
                 //BranchSamples.BranchExists(client);
 
                 // Run document samples
-               // DocumentSamples.ListDocuments(client);
-                DocumentSamples.GetDocumentInfo(client);
+                // DocumentSamples.ListDocuments(client);
+                DocumentSamples.DocumentExists(client);
+                //DocumentSamples.GetDocumentInfo(client);
                 //DocumentSamples.CheckOutDocument(client);
                // DocumentSamples.CheckOutDocumentOtherVersion(client);
                // DocumentSamples.CheckOutDocuments(client);

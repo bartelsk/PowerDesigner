@@ -1,10 +1,10 @@
-﻿using PDRepository.LibraryModels;
+﻿using PDRepository.Common;
+using PDRepository.Exceptions;
 using PdRMG;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using PDRepository.Exceptions;
+using System.Linq;
 
 namespace PDRepository
 {
@@ -59,18 +59,8 @@ namespace PDRepository
 
         protected static void ThrowNoRepositoryConnectionException()
         {
-            CreateRepositoryException("No repository connection.");
-        }
-
-        protected static RepositoryException CreateRepositoryException(string message)
-        {
-            throw new RepositoryException(message);
-        }
-
-        protected static RepositoryException CreateRepositoryException(string message, Exception innerException)
-        {
-            throw new RepositoryException(message, innerException);
-        }
+            throw new NoRepositoryConnectionException("No repository connection.");
+        }       
 
         #endregion
 

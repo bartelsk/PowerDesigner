@@ -1,4 +1,4 @@
-﻿using PDRepository.LibraryModels;
+﻿using PDRepository.Common;
 using System;
 using System.Collections.Generic;
 
@@ -15,6 +15,19 @@ namespace PDRepository.Samples
 
             List<Document> docs = client.DocumentClient.ListDocuments(rootFolder, recursive);
             docs.ForEach(d => Console.WriteLine($"Name: { d.Name } ({ d.ClassName }) - Version: { d.Version }\r\nObject type: { d.ObjectType }\r\nFrozen: { d.IsFrozen }\r\nLocked: { d.IsLocked }\r\nLocation: { d.Location }\r\nVersion comment: { d.VersionComment }\r\n\r\n"));
+        }
+
+        public static void DocumentExists(RepositoryClient client)
+        {
+            Console.WriteLine("Checking whether document exists...\r\n");
+
+            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";
+            string documentName = "DataVault Meta Data Profile";
+
+            bool exists = client.DocumentClient.DocumentExists(folder, documentName);
+            Console.WriteLine($"Document '{ documentName }' does{ (exists ? string.Empty : " not") } exist in folder '{ folder }'.");
+
+            Console.WriteLine("Check complete.");
         }
 
         public static void GetDocumentInfo(RepositoryClient client)

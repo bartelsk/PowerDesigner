@@ -1,5 +1,5 @@
-﻿using PDRepository.Exceptions;
-using PDRepository.LibraryModels;
+﻿using PDRepository.Common;
+using PDRepository.Exceptions;
 using System;
 
 namespace PDRepository
@@ -103,7 +103,7 @@ namespace PDRepository
                 _pdRepoCon = (PdRMG.RepositoryConnection)_app.RepositoryConnection;
                 if (!_pdRepoCon.Open("", _settings.User, _settings.Password))
                 {
-                    throw new RepositoryException("Invalid repository credentials.");
+                    throw new InvalidCredentialsException("Could not connect to the repository: invalid credentials.");
                 }                
             }
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PDRepository.LibraryModels
+namespace PDRepository.Common
 {
     /// <summary>
     /// Represents repository document check out event arguments.

@@ -1,4 +1,4 @@
-﻿namespace PDRepository.LibraryModels
+﻿namespace PDRepository.Common
 {
     /// <summary>
     /// Represents a repository branch.

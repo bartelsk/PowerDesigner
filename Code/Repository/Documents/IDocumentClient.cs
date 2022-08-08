@@ -1,9 +1,6 @@
-﻿using PDRepository.LibraryModels;
+﻿using PDRepository.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDRepository.Documents
 {
@@ -16,6 +13,14 @@ namespace PDRepository.Documents
         /// Signals a document has been checked out.
         /// </summary>
         event EventHandler<CheckOutEventArgs> DocumentCheckedOut;
+
+        /// <summary>
+        /// Determines whether a document exists in the specified repository folder.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder in which the document should be located.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <returns>True if the document exists in the specified repository folder, False if it does not.</returns>
+        bool DocumentExists(string repoFolderPath, string documentName);
 
         /// <summary>
         /// Returns a list of <see cref="Document"/> objects in the specified repository folder.        

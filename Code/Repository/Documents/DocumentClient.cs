@@ -1,9 +1,6 @@
-﻿using PDRepository.LibraryModels;
+﻿using PDRepository.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDRepository.Documents
 {
@@ -24,6 +21,18 @@ namespace PDRepository.Documents
         public DocumentClient(RepositorySettings settings) : base(settings)
         {
             Connect();
+        }
+
+        /// <summary>
+        /// Determines whether a document exists in the specified repository folder.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder in which the document should be located.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <returns>True if the document exists in the specified repository folder, False if it does not.</returns>
+        public bool DocumentExists(string repoFolderPath, string documentName)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();            
+            return (GetFolderDocumentInfo(repoFolderPath, documentName) != null);
         }
 
         /// <summary>
