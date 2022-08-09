@@ -34,13 +34,23 @@ namespace PDRepository.Branches
         /// <summary>
         /// Determines whether the specified branch exists.
         /// </summary>
-        /// <param name="rootFolderPath">The repository folder from which to start the search.</param>
+        /// <param name="repoFolderPath">The repository folder from which to start the search.</param>
         /// <param name="branchName">The name of the branch.</param>
         /// <returns>True if the branch exists, False if it does not.</returns>
-        public bool BranchExists(string rootFolderPath, string branchName)
+        public bool BranchExists(string repoFolderPath, string branchName)
         {
-            List<Branch> branches = ListBranches(rootFolderPath);            
+            List<Branch> branches = ListBranches(repoFolderPath);            
             return branches.Exists(b => b.Name.ToLower() == branchName.ToLower());
+        }
+
+        public void CreateBranch(string repoFolderPath, string branchName)
+        {
+
+        }
+
+        public void CreateBranch(string repoFolderPath, string branchName, Permission branchPermission)
+        {
+
         }
     }
 }

@@ -11,8 +11,6 @@ using System.Linq;
 
 namespace PDRepository
 {
-#pragma warning disable CS1591
-
     /// <summary>
     /// Abstract class that provides methods to interact with the PowerDesigner repository.
     /// </summary>
@@ -571,6 +569,4 @@ namespace PDRepository
 
         #endregion
     }
-
-#pragma warning restore CS1591
 }

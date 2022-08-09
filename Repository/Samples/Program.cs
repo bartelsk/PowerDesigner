@@ -28,12 +28,12 @@ namespace PDRepository.Samples
                client = RepositoryClient.CreateClient(settings);
 
                 // Run branch samples
-                //BranchSamples.ListBranches(client);
+                BranchSamples.ListBranches(client);
                 //BranchSamples.BranchExists(client);
 
                 // Run document samples
                 // DocumentSamples.ListDocuments(client);
-                DocumentSamples.DocumentExists(client);
+                //DocumentSamples.DocumentExists(client);
                 //DocumentSamples.GetDocumentInfo(client);
                 //DocumentSamples.CheckOutDocument(client);
                // DocumentSamples.CheckOutDocumentOtherVersion(client);

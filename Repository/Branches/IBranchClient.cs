@@ -22,9 +22,13 @@ namespace PDRepository.Branches
         /// <summary>
         /// Determines whether the specified branch exists.
         /// </summary>
-        /// <param name="rootFolderPath">The repository folder from which to start the search.</param>
+        /// <param name="repoFolderPath">The repository folder from which to start the search.</param>
         /// <param name="branchName">The name of the branch.</param>
         /// <returns>True if the branch exists, False if it does not.</returns>
-        bool BranchExists(string rootFolderPath, string branchName);
+        bool BranchExists(string repoFolderPath, string branchName);
+
+        void CreateBranch(string repoFolderPath, string branchName);
+
+        void CreateBranch(string repoFolderPath, string branchName, Permission branchPermission);
     }
 }

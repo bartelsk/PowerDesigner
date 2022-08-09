@@ -44,7 +44,7 @@
     <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DocumentationFile>bin\Debug\PDRepository.xml</DocumentationFile>
-    <NoWarn>1701;1702</NoWarn>
+    <NoWarn>1701;1702;1591</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
@@ -90,6 +90,8 @@
   <ItemGroup>
     <Compile Include="Branches\BranchClient.cs" />
     <Compile Include="Branches\IBranchClient.cs" />
+    <Compile Include="Common\Enums.cs" />
+    <Compile Include="Common\Permission.cs" />
     <Compile Include="Documents\DocumentClient.cs" />
     <Compile Include="Documents\IDocumentClient.cs" />
     <Compile Include="Exceptions\InvalidCredentialsException.cs" />

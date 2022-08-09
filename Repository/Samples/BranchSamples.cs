@@ -23,10 +23,10 @@ namespace PDRepository.Samples
         {
             Console.WriteLine("Testing branch existence...\r\n");
 
-            string rootFolder = "Wholesale&Rural";
+            string repoFolder = "Wholesale&Rural";
             string branchName = "Development";
 
-            bool exists = client.BranchClient.BranchExists(rootFolder, branchName);
+            bool exists = client.BranchClient.BranchExists(repoFolder, branchName);
             Console.WriteLine($"Branch '{ branchName }' " + ((exists) ? "exists." : "does not exist."));
         }
     }
