@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PDRepository.Samples")]
+[assembly: AssemblyTitle("PowerDesigner Repository Client Library Samples")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PDRepository.Samples")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyProduct("PowerDesigner Repository Client Library Samples")]
+[assembly: AssemblyCopyright("Copyright Karlo Bartels © 2022 - https://github.com/bartelsk/PowerDesigner")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
