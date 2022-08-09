@@ -17,5 +17,10 @@ namespace PDRepository.Common
         /// The location of the branch relative to the specified root path.
         /// </summary>
         public string RelativePath { get; set; }
+
+        /// <summary>
+        /// The branch folder permission for the specified repository user.
+        /// </summary>
+        public PermissionTypeEnum Permission { get; set; }
     }
 }

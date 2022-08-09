@@ -16,19 +16,20 @@ namespace PDRepository.Samples
             {
                 Console.WriteLine("PowerDesigner Repository Client");
                 Console.WriteLine("===============================\r\n");
-            
+
                 RepositorySettings settings = new RepositorySettings()
                 {
                     Password = ConfigurationManager.AppSettings["PDRepoPassword"],
                     User = ConfigurationManager.AppSettings["PDRepoUser"]
                 };
 
-               // Start PD and connect to repo
-               Console.WriteLine("Connecting...");
-               client = RepositoryClient.CreateClient(settings);
+                // Start PD and connect to repo
+                Console.WriteLine("Connecting...");
+                client = RepositoryClient.CreateClient(settings);
 
                 // Run branch samples
-                BranchSamples.ListBranches(client);
+                //BranchSamples.ListBranches(client);
+                BranchSamples.ListBranchesWithPermissions(client);
                 //BranchSamples.BranchExists(client);
 
                 // Run document samples
@@ -36,10 +37,10 @@ namespace PDRepository.Samples
                 //DocumentSamples.DocumentExists(client);
                 //DocumentSamples.GetDocumentInfo(client);
                 //DocumentSamples.CheckOutDocument(client);
-               // DocumentSamples.CheckOutDocumentOtherVersion(client);
-               // DocumentSamples.CheckOutDocuments(client);
-               // DocumentSamples.CheckOutDocumentsRecursively(client);
-               // DocumentSamples.CheckOutDocumentsRecursivelyMimicingRepoStructure(client);
+                // DocumentSamples.CheckOutDocumentOtherVersion(client);
+                // DocumentSamples.CheckOutDocuments(client);
+                // DocumentSamples.CheckOutDocumentsRecursively(client);
+                // DocumentSamples.CheckOutDocumentsRecursivelyMimicingRepoStructure(client);
 
             }
             catch (Exception ex)

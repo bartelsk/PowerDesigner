@@ -6,5 +6,5 @@ namespace PDRepository.Common
     /// <summary>
     /// Permission types of a repository object.
     /// </summary>
-    public enum PermissionTypeEnum { Full, Listable, Read, Submit, Write }
+    public enum PermissionTypeEnum { NotSet = -1, Listable = 0, Read = 10, Submit = 20, Write = 30, Full = 40 }
 }

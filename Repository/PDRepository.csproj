@@ -95,10 +95,12 @@
     <Compile Include="Documents\DocumentClient.cs" />
     <Compile Include="Documents\IDocumentClient.cs" />
     <Compile Include="Exceptions\InvalidCredentialsException.cs" />
+    <Compile Include="Exceptions\InvalidPermissionException.cs" />
     <Compile Include="Exceptions\NoRepositoryConnectionException.cs" />
     <Compile Include="Common\Branch.cs" />
     <Compile Include="Common\CheckOutEventArgs.cs" />
     <Compile Include="Common\Document.cs" />
+    <Compile Include="Exceptions\UnknownUserOrGroupException.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="RepositoryConnection.cs" />
     <Compile Include="Exceptions\RepositoryException.cs" />

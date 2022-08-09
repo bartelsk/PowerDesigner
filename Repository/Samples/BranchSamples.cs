@@ -19,6 +19,17 @@ namespace PDRepository.Samples
             branches.ForEach(b => Console.WriteLine($"Branch: { b.Name } - Relative path: { b.RelativePath }"));
         }
 
+        public static void ListBranchesWithPermissions(RepositoryClient client)
+        {
+            string rootFolder = "Wholesale&Rural";
+            string userLogIn = "BartelsK";
+
+            Console.WriteLine($"Listing branches for user '{ userLogIn }'...\r\n");
+
+            List<Branch> branches = client.BranchClient.ListBranches(rootFolder, userLogIn);
+            branches.ForEach(b => Console.WriteLine($"Branch: { b.Name } - Relative path: { b.RelativePath } - Permission: { b.Permission }"));
+        }
+
         public static void BranchExists(RepositoryClient client)
         {
             Console.WriteLine("Testing branch existence...\r\n");

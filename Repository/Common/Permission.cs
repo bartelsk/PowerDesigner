@@ -9,7 +9,7 @@ namespace PDRepository.Common
     public class Permission
     {
         /// <summary>
-        /// The name of the user or group.
+        /// The login name of the user or group.
         /// </summary>
         public string UserOrGroupName { get; set; }
 

@@ -122,12 +122,23 @@ namespace PDRepository
         /// <param name="rootFolder">The repository folder from which to start the search.</param>
         /// <returns>A List with <see cref="Branch"/> objects.</returns>
         public List<Branch> GetBranchFolders(string rootFolder)
+        {            
+            return GetBranchFolders(rootFolder, string.Empty);
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Branch"/> objects, relative to the specified root folder.
+        /// </summary>
+        /// <param name="rootFolder">The repository folder from which to start the search.</param>
+        /// <param name="userOrGroupNameFilter">A user login or group name used to filter branches based on access permission.</param>
+        /// <returns>A List with <see cref="Branch"/> objects.</returns>
+        public List<Branch> GetBranchFolders(string rootFolder, string userOrGroupNameFilter)
         {
             List<Branch> branches = new List<Branch>();
             RepositoryFolder repositoryFolder = GetRepositoryFolder(rootFolder);
             if (repositoryFolder != null)
             {
-                ListBranches(repositoryFolder, ref branches, string.Empty);
+                ListBranches(repositoryFolder, ref branches, string.Empty, string.IsNullOrEmpty(userOrGroupNameFilter) ? null : ParseUser(userOrGroupNameFilter));
             }
             return branches;
         }
@@ -135,7 +146,7 @@ namespace PDRepository
         #endregion
 
         #region Documents
-        
+
         /// <summary>
         /// Retrieves information on a document in the specified repository folder.
         /// </summary>
@@ -348,12 +359,26 @@ namespace PDRepository
         #region Private methods
 
         /// <summary>
+        /// Tries to parse the specified user or group name.
+        /// </summary>
+        /// <param name="userOrGroupName">A user login name or group name.</param>
+        /// <returns>A <see cref="BaseObject"/> which represents the user or group.</returns>
+        private BaseObject ParseUser(string userOrGroupName)
+        {
+            BaseObject repoUser = _con.Connection.GetUser(userOrGroupName);
+            if (repoUser == null)
+                throw new UnknownUserOrGroupException($"The user or group with name '{ userOrGroupName }' does not exist in the repository.");
+            return repoUser;
+        }
+
+        /// <summary>
         /// Recursively retrieves branch folders from the repository starting at the specified root folder.
         /// </summary>
         /// <param name="rootFolder">The repository folder from which to start the search.</param>
         /// <param name="branches">A List type that will contain the encountered branch folders.</param>
         /// <param name="location">Used to track the current folder location in the recursion process.</param>
-        private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location)
+        /// <param name="user">Used to filter branches based on the permission.</param>
+        private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location, BaseObject user = null)
         {
             if (rootFolder.ClassKind != (int)PdRMG_Classes.cls_RepositoryBranchFolder)
             {
@@ -367,17 +392,33 @@ namespace PDRepository
                             // Continue search through child folders
                             foreach (var child in folder.ChildObjects.Cast<StoredObject>())
                             {
-                                ListBranches(child, ref branches, (string.IsNullOrEmpty(location) ? rootFolder.Name + "/" + folder.Name : location + "/" + rootFolder.Name + "/" + folder.Name));
+                                ListBranches(child, ref branches, (string.IsNullOrEmpty(location) ? rootFolder.Name + "/" + folder.Name : location + "/" + rootFolder.Name + "/" + folder.Name), user);
                             }
                             break;
                         case (int)PdRMG_Classes.cls_RepositoryBranchFolder:
-                            RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;
-                            Branch branch = new Branch()
+                            RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;                               
+                            if (user != null)
                             {
-                                RelativePath = (string.IsNullOrEmpty(location) ? rootFolder.Name : location + "/" + rootFolder.Name),
-                                Name = branchFolder.DisplayName
-                            };
-                            branches.Add(branch);
+                                // Filter branches for specified user
+                                PermissionTypeEnum branchPermission = ParsePermission(branchFolder.GetPermission(user).ToString());
+                                if (branchPermission != PermissionTypeEnum.NotSet)
+                                {
+                                    branches.Add(new Branch()
+                                    {
+                                        Name = branchFolder.DisplayName,
+                                        Permission = branchPermission,
+                                        RelativePath = (string.IsNullOrEmpty(location) ? rootFolder.Name : location + "/" + rootFolder.Name)
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                branches.Add(new Branch()
+                                {
+                                    Name = branchFolder.DisplayName,
+                                    RelativePath = (string.IsNullOrEmpty(location) ? rootFolder.Name : location + "/" + rootFolder.Name)
+                                });
+                            }
                             break;
                     }
                 }
@@ -556,6 +597,18 @@ namespace PDRepository
                     break;
             }
             return fileName;
+        }
+
+        /// <summary>
+        /// Tries to parse the specified permission into a valid PermissionType enum.
+        /// </summary>
+        /// <param name="permission">The permission to parse.</param>
+        /// <returns>A <see cref="PermissionTypeEnum"/> enum.</returns>
+        private static PermissionTypeEnum ParsePermission(string permission)
+        {
+            if (!Enum.TryParse<PermissionTypeEnum>(permission, out PermissionTypeEnum result))
+                throw new InvalidPermissionException("Invalid permission");
+            return result;
         }
 
         #endregion

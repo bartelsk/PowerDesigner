@@ -32,6 +32,18 @@ namespace PDRepository.Branches
         }
 
         /// <summary>
+        /// Returns a list of <see cref="Branch"/> objects, relative to the specified path.
+        /// </summary>
+        /// <param name="rootFolderPath">The repository folder from which to start the search.</param>
+        /// <param name="userOrGroupNameFilter">A user login or group name used to filter branches based on access permission.</param>
+        /// <returns>A List with <see cref="Branch"/> objects.</returns>       
+        public List<Branch> ListBranches(string rootFolderPath, string userOrGroupNameFilter)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            return GetBranchFolders(rootFolderPath, userOrGroupNameFilter);
+        }
+
+        /// <summary>
         /// Determines whether the specified branch exists.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to start the search.</param>
