@@ -1,4 +1,7 @@
-﻿using PDRepository.Common;
+﻿// Code by Karlo Bartels - https://github.com/bartelsk/PowerDesigner
+// Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
+
+using PDRepository.Common;
 using System;
 using System.Configuration;
 
@@ -13,17 +16,16 @@ namespace PDRepository.Samples
             {
                 Console.WriteLine("PowerDesigner Repository Client");
                 Console.WriteLine("===============================\r\n");
-
-                Console.WriteLine("Connecting...");
-
+            
                 RepositorySettings settings = new RepositorySettings()
                 {
                     Password = ConfigurationManager.AppSettings["PDRepoPassword"],
                     User = ConfigurationManager.AppSettings["PDRepoUser"]
                 };
 
-                // Start PD and connect to repo
-                client = RepositoryClient.CreateClient(settings);
+               // Start PD and connect to repo
+               Console.WriteLine("Connecting...");
+               client = RepositoryClient.CreateClient(settings);
 
                 // Run branch samples
                 //BranchSamples.ListBranches(client);

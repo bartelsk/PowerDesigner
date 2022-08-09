@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("PowerDesigner Repository Client Library")]
-[assembly: AssemblyCopyright("Copyright Karlo Bartels © 2022")]
+[assembly: AssemblyCopyright("Copyright Karlo Bartels © 2022 - https://github.com/bartelsk/PowerDesigner")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
