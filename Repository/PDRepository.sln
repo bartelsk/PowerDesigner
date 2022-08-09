@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDRepository", "PDRepository.csproj", "{ED4D5095-77B9-4E89-B4C7-720975012FF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDRepository.Samples", "..\Repository.Samples\PDRepository.Samples.csproj", "{4B92916B-661E-46D7-B53A-B8F207217EA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDRepository.Samples", "Samples\PDRepository.Samples.csproj", "{4B92916B-661E-46D7-B53A-B8F207217EA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

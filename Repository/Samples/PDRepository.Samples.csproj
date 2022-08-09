@@ -73,7 +73,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Repository\PDRepository.csproj">
+    <ProjectReference Include="..\PDRepository.csproj">
       <Project>{ed4d5095-77b9-4e89-b4c7-720975012ff4}</Project>
       <Name>PDRepository</Name>
     </ProjectReference>
