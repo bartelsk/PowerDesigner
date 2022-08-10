@@ -114,25 +114,15 @@ namespace PDRepository
                 folder = (RepositoryFolder)baseFolder;
             }
             return folder;
-        }
+        }       
 
         /// <summary>
         /// Returns a list of <see cref="Branch"/> objects, relative to the specified root folder.
         /// </summary>
         /// <param name="rootFolder">The repository folder from which to start the search.</param>
+        /// <param name="userOrGroupNameFilter">A user login or group name used to filter branches based on access permission (optional).</param>
         /// <returns>A List with <see cref="Branch"/> objects.</returns>
-        public List<Branch> GetBranchFolders(string rootFolder)
-        {            
-            return GetBranchFolders(rootFolder, string.Empty);
-        }
-
-        /// <summary>
-        /// Returns a list of <see cref="Branch"/> objects, relative to the specified root folder.
-        /// </summary>
-        /// <param name="rootFolder">The repository folder from which to start the search.</param>
-        /// <param name="userOrGroupNameFilter">A user login or group name used to filter branches based on access permission.</param>
-        /// <returns>A List with <see cref="Branch"/> objects.</returns>
-        public List<Branch> GetBranchFolders(string rootFolder, string userOrGroupNameFilter)
+        public List<Branch> GetBranchFolders(string rootFolder, string userOrGroupNameFilter = null)
         {
             List<Branch> branches = new List<Branch>();
             RepositoryFolder repositoryFolder = GetRepositoryFolder(rootFolder);
@@ -377,7 +367,7 @@ namespace PDRepository
         /// <param name="rootFolder">The repository folder from which to start the search.</param>
         /// <param name="branches">A List type that will contain the encountered branch folders.</param>
         /// <param name="location">Used to track the current folder location in the recursion process.</param>
-        /// <param name="user">Used to filter branches based on the permission.</param>
+        /// <param name="user">Used to filter branches based on the permission of the specified user or group.</param>
         private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location, BaseObject user = null)
         {
             if (rootFolder.ClassKind != (int)PdRMG_Classes.cls_RepositoryBranchFolder)
