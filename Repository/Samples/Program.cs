@@ -29,7 +29,8 @@ namespace PDRepository.Samples
 
                 // Run branch samples
                 //BranchSamples.ListBranches(client);
-                BranchSamples.ListBranchesWithPermissions(client);
+                //BranchSamples.ListBranchesWithPermissions(client);
+                BranchSamples.CreateBreach(client);
                 //BranchSamples.BranchExists(client);
 
                 // Run document samples

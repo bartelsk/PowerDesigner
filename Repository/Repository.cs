@@ -114,7 +114,23 @@ namespace PDRepository
                 folder = (RepositoryFolder)baseFolder;
             }
             return folder;
-        }       
+        }
+
+        /// <summary>
+        /// Returns a <see cref="RepositoryBranchFolder"/> instance.
+        /// </summary>
+        /// <param name="branchFolderPath">The location of the branch folder in the repository.</param>
+        /// <returns>A <see cref="RepositoryBranchFolder"/> type.</returns>
+        public RepositoryBranchFolder GetRepositoryBranchFolder(string branchFolderPath)
+        {
+            RepositoryBranchFolder folder = null;
+            BaseObject baseFolder = _con.Connection.FindChildByPath(branchFolderPath, (int)PdRMG_Classes.cls_RepositoryBranchFolder);
+            if (baseFolder != null)
+            {
+                folder = (RepositoryBranchFolder)baseFolder;
+            }
+            return folder;
+        }
 
         /// <summary>
         /// Returns a list of <see cref="Branch"/> objects, relative to the specified root folder.
@@ -131,6 +147,32 @@ namespace PDRepository
                 ListBranches(repositoryFolder, ref branches, string.Empty, string.IsNullOrEmpty(userOrGroupNameFilter) ? null : ParseUser(userOrGroupNameFilter));
             }
             return branches;
+        }
+
+        #endregion
+
+        #region Branches        
+
+        public void CreateNewBranch(string sourceBranchFolder, string newBranchName, Permission branchPermission = null)
+        {
+            RepositoryBranchFolder sourceBranch = GetRepositoryBranchFolder(sourceBranchFolder);
+            if (sourceBranch != null)
+            {
+                // Check if branch exists already
+                if (GetRepositoryBranchFolder(sourceBranch.Location.Substring(1) + "/" + newBranchName) != null)
+                    throw new RepositoryException($"A branch named '{ newBranchName }' already exists.");
+
+                // Get parent folder and create new branch in that folder
+                RepositoryFolder targetRepoFolder = (RepositoryFolder)sourceBranch.Parent;
+                BaseObject newBranch = targetRepoFolder.CreateBranch(newBranchName, sourceBranch.DisplayName);
+
+                // Set branch permission
+                if (newBranch != null && branchPermission != null)
+                {                    
+                    RepositoryBranchFolder newBranchFolder = (RepositoryBranchFolder)newBranch;                    
+                    newBranchFolder.SetPermission(ParseUser(branchPermission.UserOrGroupName), ((int)branchPermission.PermissionType), branchPermission.CopyToChildren);  
+                }
+            }
         }
 
         #endregion

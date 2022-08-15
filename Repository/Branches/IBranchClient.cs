@@ -35,8 +35,8 @@ namespace PDRepository.Branches
         /// <returns>True if the branch exists, False if it does not.</returns>
         bool BranchExists(string repoFolderPath, string branchName);
 
-        void CreateBranch(string repoFolderPath, string branchName);
+        void CreateBranch(string sourceBranchFolder, string newBranchName);
 
-        void CreateBranch(string repoFolderPath, string branchName, Permission branchPermission);
+        void CreateBranch(string sourceBranchFolder, string newBranchName, Permission branchPermission);
     }
 }

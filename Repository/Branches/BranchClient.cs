@@ -55,14 +55,16 @@ namespace PDRepository.Branches
             return branches.Exists(b => b.Name.ToLower() == branchName.ToLower());
         }
 
-        public void CreateBranch(string repoFolderPath, string branchName)
+        public void CreateBranch(string sourceBranchFolder, string newBranchName)
         {
-
+            // TODO: also check for empty parameters
+            CreateBranch(sourceBranchFolder, newBranchName, null);
         }
 
-        public void CreateBranch(string repoFolderPath, string branchName, Permission branchPermission)
+        public void CreateBranch(string sourceBranchFolder, string newBranchName, Permission branchPermission)
         {
-
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            CreateNewBranch(sourceBranchFolder, newBranchName, branchPermission);
         }
     }
 }

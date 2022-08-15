@@ -40,5 +40,20 @@ namespace PDRepository.Samples
             bool exists = client.BranchClient.BranchExists(repoFolder, branchName);
             Console.WriteLine($"Branch '{ branchName }' " + ((exists) ? "exists." : "does not exist."));
         }
+
+        public static void CreateBreach(RepositoryClient client)
+        {
+            string sourceBranchFolder = "Wholesale&Rural/RDW/PDM/Development";
+            string newBranchName = "MyNewBranch";
+
+            Console.WriteLine($"Creating branch '{ newBranchName }' for source branch '{ sourceBranchFolder }'...\r\n");
+
+            client.BranchClient.CreateBranch(sourceBranchFolder, newBranchName);
+        }
+
+        public static void CreateBreachWithPermissions(RepositoryClient client)
+        {
+
+        }
     }
 }
