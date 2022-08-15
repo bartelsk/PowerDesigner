@@ -46,7 +46,7 @@ namespace PDRepository.Samples
             string sourceBranchFolder = "Wholesale&Rural/RDW/PDM/Development";
             string newBranchName = "MyNewBranch";
 
-            Console.WriteLine($"Creating branch '{ newBranchName }' for source branch '{ sourceBranchFolder }'...\r\n");
+            Console.WriteLine($"Creating branch '{ newBranchName }' of source branch '{ sourceBranchFolder }'...\r\n");
 
             client.BranchClient.CreateBranch(sourceBranchFolder, newBranchName);
         }

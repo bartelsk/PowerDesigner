@@ -153,6 +153,19 @@ namespace PDRepository
 
         #region Branches        
 
+        /// <summary>
+        /// Creates a new branch of an existing repository branch. 
+        /// The source branch's document hierarchy will be duplicated in the new branch.
+        /// </summary>
+        /// <param name="sourceBranchFolder">The location of the source branch folder in the repository.</param>
+        /// <param name="newBranchName">The name for the new branch.</param>
+        /// <param name="branchPermission">Permission settings for the new branch. If omitted, the permissions of the currently connected account will be applied.</param>
+        /// <remarks>The branch creation can fail for several reasons:
+        /// - The currently connected account does not have Write permissions on the folder. 
+        /// - The currently connected account does not have Manage Branches privilege. 
+        /// - The source branch folder already belongs to a branch (sub-branches are not supported).
+        /// Be aware that PowerDesigner does not throw an exception in any of these cases.
+        /// </remarks>
         public void CreateNewBranch(string sourceBranchFolder, string newBranchName, Permission branchPermission = null)
         {
             RepositoryBranchFolder sourceBranch = GetRepositoryBranchFolder(sourceBranchFolder);
