@@ -63,6 +63,11 @@ namespace PDRepository
             throw new NoRepositoryConnectionException("No repository connection.");
         }       
 
+        protected static void ThrowArgumentNullException(string argumentName)
+        {
+            throw new ArgumentNullException(argumentName, $"Parameter '{ argumentName }' cannot be null or empty.");
+        }
+
         #endregion
 
         #region Public methods
@@ -161,8 +166,8 @@ namespace PDRepository
         /// <param name="newBranchName">The name for the new branch.</param>
         /// <param name="branchPermission">Permission settings for the new branch. If omitted, the permissions of the currently connected account will be applied.</param>
         /// <remarks>The branch creation can fail for several reasons:
-        /// - The currently connected account does not have Write permissions on the folder. 
-        /// - The currently connected account does not have Manage Branches privilege. 
+        /// - The currently connected account does not have Write permissions on the folder
+        /// - The currently connected account does not have the Manage Branches privilege
         /// - The source branch folder already belongs to a branch (sub-branches are not supported).
         /// Be aware that PowerDesigner does not throw an exception in any of these cases.
         /// </remarks>
