@@ -11,8 +11,6 @@ using System.Linq;
 
 namespace PDRepository
 {
-#pragma warning disable CS1591
-
     /// <summary>
     /// Abstract class that provides methods to interact with the PowerDesigner repository.
     /// </summary>
@@ -64,6 +62,11 @@ namespace PDRepository
         {
             throw new NoRepositoryConnectionException("No repository connection.");
         }       
+
+        protected static void ThrowArgumentNullException(string argumentName)
+        {
+            throw new ArgumentNullException(argumentName, $"Parameter '{ argumentName }' cannot be null or empty.");
+        }
 
         #endregion
 
@@ -119,17 +122,73 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Returns a <see cref="RepositoryBranchFolder"/> instance.
+        /// </summary>
+        /// <param name="branchFolderPath">The location of the branch folder in the repository.</param>
+        /// <returns>A <see cref="RepositoryBranchFolder"/> type.</returns>
+        public RepositoryBranchFolder GetRepositoryBranchFolder(string branchFolderPath)
+        {
+            RepositoryBranchFolder folder = null;
+            BaseObject baseFolder = _con.Connection.FindChildByPath(branchFolderPath, (int)PdRMG_Classes.cls_RepositoryBranchFolder);
+            if (baseFolder != null)
+            {
+                folder = (RepositoryBranchFolder)baseFolder;
+            }
+            return folder;
+        }       
+
+        #endregion
+
+        #region Branches        
+
+        /// <summary>
+        /// Creates a new branch of an existing repository branch. 
+        /// The source branch's document hierarchy will be duplicated in the new branch.
+        /// </summary>
+        /// <param name="sourceBranchFolder">The location of the source branch folder in the repository.</param>
+        /// <param name="newBranchName">The name for the new branch.</param>
+        /// <param name="branchPermission">Permission settings for the new branch. If omitted, the permissions of the currently connected account will be applied.</param>
+        /// <remarks>The branch creation can fail for several reasons:
+        /// - The currently connected account does not have Write permissions on the folder
+        /// - The currently connected account does not have the Manage Branches privilege
+        /// - The source branch folder already belongs to a branch (sub-branches are not supported).
+        /// Be aware that PowerDesigner does not throw an exception in any of these cases.
+        /// </remarks>
+        public void CreateNewBranch(string sourceBranchFolder, string newBranchName, Permission branchPermission = null)
+        {
+            RepositoryBranchFolder sourceBranch = GetRepositoryBranchFolder(sourceBranchFolder);
+            if (sourceBranch != null)
+            {
+                // Check if branch exists already
+                if (GetRepositoryBranchFolder(sourceBranch.Location.Substring(1) + "/" + newBranchName) != null)
+                    throw new RepositoryException($"A branch named '{ newBranchName }' already exists.");
+
+                // Get parent folder and create new branch in that folder
+                RepositoryFolder targetRepoFolder = (RepositoryFolder)sourceBranch.Parent;
+                BaseObject newBranch = targetRepoFolder.CreateBranch(newBranchName, sourceBranch.DisplayName);
+
+                // Set branch permission
+                if (newBranch != null && branchPermission != null)
+                {                    
+                    RepositoryBranchFolder newBranchFolder = (RepositoryBranchFolder)newBranch;                    
+                    newBranchFolder.SetPermission(ParseUser(branchPermission.UserOrGroupName), ((int)branchPermission.PermissionType), branchPermission.CopyToChildren);  
+                }
+            }
+        }
+
+        /// <summary>
         /// Returns a list of <see cref="Branch"/> objects, relative to the specified root folder.
         /// </summary>
         /// <param name="rootFolder">The repository folder from which to start the search.</param>
+        /// <param name="userOrGroupNameFilter">A user login or group name used to filter branches based on access permission (optional).</param>
         /// <returns>A List with <see cref="Branch"/> objects.</returns>
-        public List<Branch> GetBranchFolders(string rootFolder)
+        public List<Branch> GetBranchFolders(string rootFolder, string userOrGroupNameFilter = null)
         {
             List<Branch> branches = new List<Branch>();
             RepositoryFolder repositoryFolder = GetRepositoryFolder(rootFolder);
             if (repositoryFolder != null)
             {
-                ListBranches(repositoryFolder, ref branches, string.Empty);
+                ListBranches(repositoryFolder, ref branches, string.Empty, string.IsNullOrEmpty(userOrGroupNameFilter) ? null : ParseUser(userOrGroupNameFilter));
             }
             return branches;
         }
@@ -137,7 +196,7 @@ namespace PDRepository
         #endregion
 
         #region Documents
-        
+
         /// <summary>
         /// Retrieves information on a document in the specified repository folder.
         /// </summary>
@@ -350,12 +409,26 @@ namespace PDRepository
         #region Private methods
 
         /// <summary>
+        /// Tries to parse the specified user or group name.
+        /// </summary>
+        /// <param name="userOrGroupName">A user login name or group name.</param>
+        /// <returns>A <see cref="BaseObject"/> which represents the user or group.</returns>
+        private BaseObject ParseUser(string userOrGroupName)
+        {
+            BaseObject repoUser = _con.Connection.GetUser(userOrGroupName);
+            if (repoUser == null)
+                throw new UnknownUserOrGroupException($"The user or group with name '{ userOrGroupName }' does not exist in the repository.");
+            return repoUser;
+        }
+
+        /// <summary>
         /// Recursively retrieves branch folders from the repository starting at the specified root folder.
         /// </summary>
         /// <param name="rootFolder">The repository folder from which to start the search.</param>
         /// <param name="branches">A List type that will contain the encountered branch folders.</param>
         /// <param name="location">Used to track the current folder location in the recursion process.</param>
-        private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location)
+        /// <param name="user">Used to filter branches based on the permission of the specified user or group.</param>
+        private static void ListBranches(StoredObject rootFolder, ref List<Branch> branches, string location, BaseObject user = null)
         {
             if (rootFolder.ClassKind != (int)PdRMG_Classes.cls_RepositoryBranchFolder)
             {
@@ -369,17 +442,33 @@ namespace PDRepository
                             // Continue search through child folders
                             foreach (var child in folder.ChildObjects.Cast<StoredObject>())
                             {
-                                ListBranches(child, ref branches, (string.IsNullOrEmpty(location) ? rootFolder.Name + "/" + folder.Name : location + "/" + rootFolder.Name + "/" + folder.Name));
+                                ListBranches(child, ref branches, (string.IsNullOrEmpty(location) ? rootFolder.Name + "/" + folder.Name : location + "/" + rootFolder.Name + "/" + folder.Name), user);
                             }
                             break;
                         case (int)PdRMG_Classes.cls_RepositoryBranchFolder:
-                            RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;
-                            Branch branch = new Branch()
+                            RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;                               
+                            if (user != null)
                             {
-                                RelativePath = (string.IsNullOrEmpty(location) ? rootFolder.Name : location + "/" + rootFolder.Name),
-                                Name = branchFolder.DisplayName
-                            };
-                            branches.Add(branch);
+                                // Filter branches for specified user
+                                PermissionTypeEnum branchPermission = ParsePermission(branchFolder.GetPermission(user).ToString());
+                                if (branchPermission != PermissionTypeEnum.NotSet)
+                                {
+                                    branches.Add(new Branch()
+                                    {
+                                        Name = branchFolder.DisplayName,
+                                        Permission = branchPermission,
+                                        RelativePath = (string.IsNullOrEmpty(location) ? rootFolder.Name : location + "/" + rootFolder.Name)
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                branches.Add(new Branch()
+                                {
+                                    Name = branchFolder.DisplayName,
+                                    RelativePath = (string.IsNullOrEmpty(location) ? rootFolder.Name : location + "/" + rootFolder.Name)
+                                });
+                            }
                             break;
                     }
                 }
@@ -560,6 +649,18 @@ namespace PDRepository
             return fileName;
         }
 
+        /// <summary>
+        /// Tries to parse the specified permission into a valid PermissionType enum.
+        /// </summary>
+        /// <param name="permission">The permission to parse.</param>
+        /// <returns>A <see cref="PermissionTypeEnum"/> enum.</returns>
+        private static PermissionTypeEnum ParsePermission(string permission)
+        {
+            if (!Enum.TryParse<PermissionTypeEnum>(permission, out PermissionTypeEnum result))
+                throw new InvalidPermissionException("Invalid permission");
+            return result;
+        }
+
         #endregion
 
         #region Events
@@ -571,6 +672,4 @@ namespace PDRepository
 
         #endregion
     }
-
-#pragma warning restore CS1591
 }
