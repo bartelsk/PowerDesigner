@@ -135,24 +135,7 @@ namespace PDRepository
                 folder = (RepositoryBranchFolder)baseFolder;
             }
             return folder;
-        }
-
-        /// <summary>
-        /// Returns a list of <see cref="Branch"/> objects, relative to the specified root folder.
-        /// </summary>
-        /// <param name="rootFolder">The repository folder from which to start the search.</param>
-        /// <param name="userOrGroupNameFilter">A user login or group name used to filter branches based on access permission (optional).</param>
-        /// <returns>A List with <see cref="Branch"/> objects.</returns>
-        public List<Branch> GetBranchFolders(string rootFolder, string userOrGroupNameFilter = null)
-        {
-            List<Branch> branches = new List<Branch>();
-            RepositoryFolder repositoryFolder = GetRepositoryFolder(rootFolder);
-            if (repositoryFolder != null)
-            {
-                ListBranches(repositoryFolder, ref branches, string.Empty, string.IsNullOrEmpty(userOrGroupNameFilter) ? null : ParseUser(userOrGroupNameFilter));
-            }
-            return branches;
-        }
+        }       
 
         #endregion
 
@@ -191,6 +174,23 @@ namespace PDRepository
                     newBranchFolder.SetPermission(ParseUser(branchPermission.UserOrGroupName), ((int)branchPermission.PermissionType), branchPermission.CopyToChildren);  
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Branch"/> objects, relative to the specified root folder.
+        /// </summary>
+        /// <param name="rootFolder">The repository folder from which to start the search.</param>
+        /// <param name="userOrGroupNameFilter">A user login or group name used to filter branches based on access permission (optional).</param>
+        /// <returns>A List with <see cref="Branch"/> objects.</returns>
+        public List<Branch> GetBranchFolders(string rootFolder, string userOrGroupNameFilter = null)
+        {
+            List<Branch> branches = new List<Branch>();
+            RepositoryFolder repositoryFolder = GetRepositoryFolder(rootFolder);
+            if (repositoryFolder != null)
+            {
+                ListBranches(repositoryFolder, ref branches, string.Empty, string.IsNullOrEmpty(userOrGroupNameFilter) ? null : ParseUser(userOrGroupNameFilter));
+            }
+            return branches;
         }
 
         #endregion

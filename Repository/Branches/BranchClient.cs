@@ -75,7 +75,7 @@ namespace PDRepository.Branches
         /// </remarks>
         public void CreateBranch(string sourceBranchFolder, string newBranchName)
         {
-            CreateBranch(sourceBranchFolder, newBranchName, null);
+            CreateBranch(sourceBranchFolder, newBranchName, null);            
         }
 
         /// <summary>
