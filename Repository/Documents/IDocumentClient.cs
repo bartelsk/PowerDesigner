@@ -109,24 +109,24 @@ namespace PDRepository.Documents
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
         /// <param name="documentName">The name of the document to freeze.</param>
         /// <param name="comment">Freeze comment.</param>
-        /// <returns>True if successful, False if not.</returns>
+        /// <returns>True if successful, False if not (the document may already be frozen).</returns>
         bool FreezeDocument(string repoFolderPath, string documentName, string comment);
 
         /// <summary>
-        /// Unfreezes a repository document.
+        /// Unfreezes a repository document, making it updateable.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
         /// <param name="documentName">The name of the document to unfreeze.</param>        
-        /// <returns>True if successful, False if not.</returns>
+        /// <returns>True if successful, False if not (the document may already be updateable).</returns>
         bool UnfreezeDocument(string repoFolderPath, string documentName);
 
         /// <summary>
-        /// 
+        /// Retrieves the permission of a repository document for a specific user login or group name.
         /// </summary>
-        /// <param name="repoFolderPath">The repository folder that contains the document. Please note this should be the location of a 'regular' folder, not a branch folder.</param>
-        /// <param name="documentName"></param>
-        /// <param name="userOrGroupName"></param>
-        /// <returns></returns>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <param name="userOrGroupName">The user login or group name for which to check its permission.</param>
+        /// <returns>A <see cref="PermissionTypeEnum"/> type.</returns>
         PermissionTypeEnum GetPermission(string repoFolderPath, string documentName, string userOrGroupName);
     }
 }

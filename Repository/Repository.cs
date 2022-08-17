@@ -327,7 +327,7 @@ namespace PDRepository
                         break;
                 }
             }            
-        }        
+        }
 
         /// <summary>
         /// Freezes a repository document.
@@ -335,7 +335,7 @@ namespace PDRepository
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
         /// <param name="documentName">The name of the document to freeze.</param>
         /// <param name="comment">Freeze comment.</param>
-        /// <returns>True if successful, False if not.</returns>
+        /// <returns>True if successful, False if not (the document may already be frozen).</returns>
         public bool FreezeFolderDocument(string repoFolderPath, string documentName, string comment)
         {            
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);
@@ -344,11 +344,11 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Unfreezes a repository document.
+        /// Unfreezes a repository document, making it updateable.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
         /// <param name="documentName">The name of the document to unfreeze.</param>        
-        /// <returns>True if successful, False if not.</returns>
+        /// <returns>True if successful, False if not (the document may already be updateable).</returns>
         public bool UnfreezeFolderDocument(string repoFolderPath, string documentName)
         {            
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);            
@@ -383,6 +383,13 @@ namespace PDRepository
             return doc.Unlock();            
         }
 
+        /// <summary>
+        /// Retrieves the permission of a repository document for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <param name="userOrGroupName">The user login or group name for which to check its permission.</param>
+        /// <returns>A <see cref="PermissionTypeEnum"/> type.</returns>
         public PermissionTypeEnum GetDocumentPermission(string repoFolderPath, string documentName, string userOrGroupName)
         {            
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);

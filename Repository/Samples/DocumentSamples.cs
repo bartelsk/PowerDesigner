@@ -164,7 +164,37 @@ namespace PDRepository.Samples
             client.DocumentClient.CheckOutDocuments(folder, targetFolder, true, true);
         }
 
-        // freeze/unfreeze sample
+        /// <summary>
+        /// Freezes a document.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void FreezeDocument(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "settings-git.txt";
+            string freezeComment = "New version freeze.";
+
+            Console.WriteLine($"Freezing document '{ documentName }' in folder '{ folder }'...");
+
+            bool success = client.DocumentClient.FreezeDocument(folder, documentName, freezeComment);
+            Console.WriteLine($"The document was { (!success ? "NOT " : string.Empty) }frozen successfully.");
+        }
+
+        /// <summary>
+        /// Unfreezes a document.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void UnfreezeDocument(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "settings-git.txt";            
+
+            Console.WriteLine($"Unfreezing document '{ documentName }' in folder '{ folder }'...");
+
+            bool success = client.DocumentClient.UnfreezeDocument(folder, documentName);
+            Console.WriteLine($"The document was { (!success ? "NOT " : string.Empty) }successfully unfrozen.");
+        }
+        
         // lock/unlock sample
 
         /// <summary>
