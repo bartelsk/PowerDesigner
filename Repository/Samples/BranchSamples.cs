@@ -13,7 +13,7 @@ namespace PDRepository.Samples
         /// <summary>
         /// List all branches
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void ListBranches(RepositoryClient client)
         {
             Console.WriteLine("Listing branches...\r\n");
@@ -27,7 +27,7 @@ namespace PDRepository.Samples
         /// <summary>
         /// List all branches based on access permissions.
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void ListBranchesWithPermissions(RepositoryClient client)
         {
             string rootFolder = "LibManSamples";
@@ -42,7 +42,7 @@ namespace PDRepository.Samples
         /// <summary>
         /// Checks whether a branch exists.
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void BranchExists(RepositoryClient client)
         {
             Console.WriteLine("Testing branch existence...\r\n");
@@ -57,7 +57,7 @@ namespace PDRepository.Samples
         /// <summary>
         /// Creates a new branch of an existing branch.
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CreateBranch(RepositoryClient client)
         {
             try
@@ -82,7 +82,7 @@ namespace PDRepository.Samples
         /// <summary>
         /// Creates a new branch of an existing branch and applies specific branch permissions.
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CreateBranchWithPermissions(RepositoryClient client)
         {
             try

@@ -34,17 +34,16 @@ namespace PDRepository.Samples
                 //BranchSamples.CreateBranch(client);
                 //BranchSamples.CreateBranchWithPermissions(client);
 
-                // Run document samples
-                DocumentSamples.GetDocumentPermissions(client);
-                // DocumentSamples.ListDocuments(client);
-                //DocumentSamples.DocumentExists(client);
-                //DocumentSamples.GetDocumentInfo(client);
+                // Run document samples             
+                //DocumentSamples.ListDocuments(client);
+                // DocumentSamples.DocumentExists(client);
+                DocumentSamples.GetDocumentInfo(client);
                 //DocumentSamples.CheckOutDocument(client);
                 // DocumentSamples.CheckOutDocumentOtherVersion(client);
                 // DocumentSamples.CheckOutDocuments(client);
                 // DocumentSamples.CheckOutDocumentsRecursively(client);
                 // DocumentSamples.CheckOutDocumentsRecursivelyMimicingRepoStructure(client);
-
+                 DocumentSamples.GetDocumentPermissions(client);
             }
             catch (Exception ex)
             {

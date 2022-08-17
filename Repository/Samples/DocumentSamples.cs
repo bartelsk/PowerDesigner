@@ -9,23 +9,31 @@ namespace PDRepository.Samples
 {
     static class DocumentSamples
     {
+        /// <summary>
+        /// List all documents in a folder.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void ListDocuments(RepositoryClient client)
         {
             Console.WriteLine("Listing documents...\r\n");
 
-            string rootFolder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string rootFolder = "LibManSamples/Development";
             bool recursive = true; 
 
             List<Document> docs = client.DocumentClient.ListDocuments(rootFolder, recursive);
             docs.ForEach(d => Console.WriteLine($"Name: { d.Name } ({ d.ClassName }) - Version: { d.Version }\r\nObject type: { d.ObjectType }\r\nFrozen: { d.IsFrozen }\r\nLocked: { d.IsLocked }\r\nLocation: { d.Location }\r\nVersion comment: { d.VersionComment }\r\n\r\n"));
         }
 
+        /// <summary>
+        /// Determines whether a document exists.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void DocumentExists(RepositoryClient client)
         {
             Console.WriteLine("Checking whether document exists...\r\n");
 
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";
-            string documentName = "DataVault Meta Data Profile";
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "settings-git.txt";
 
             bool exists = client.DocumentClient.DocumentExists(folder, documentName);
             Console.WriteLine($"Document '{ documentName }' does{ (exists ? string.Empty : " not") } exist in folder '{ folder }'.");
@@ -33,12 +41,16 @@ namespace PDRepository.Samples
             Console.WriteLine("Check complete.");
         }
 
+        /// <summary>
+        /// Retrieves document information.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void GetDocumentInfo(RepositoryClient client)
         {
             Console.WriteLine("Retrieving document info...\r\n");
 
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";
-            string documentName = "DataVault Meta Data Profile";
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "settings-git.txt";
 
             Document doc = client.DocumentClient.GetDocumentInfo(folder, documentName);
             if (doc != null)
@@ -47,12 +59,12 @@ namespace PDRepository.Samples
             }
         }
 
+        /// <summary>
+        /// Checks out a document with its default name and an alternative name.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CheckOutDocument(RepositoryClient client)
         {
-            //string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";
-            //string documentName = "DataVault Meta Data Profile";
-            //string alternativeFileName = "MyProfile.xem";
-
             string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
             string documentName = "CRDW_SA_StaticData";
             string alternativeFileName = "CRDW_SA_StaticData_alt.pdm";
@@ -75,6 +87,10 @@ namespace PDRepository.Samples
             Console.WriteLine("Check-out complete.");
         }
 
+        /// <summary>
+        /// Checks out a specific version of a document. 
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CheckOutDocumentOtherVersion(RepositoryClient client)
         {
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";            
@@ -100,6 +116,10 @@ namespace PDRepository.Samples
             Console.WriteLine("Check-out complete.");
         }
 
+        /// <summary>
+        /// Checks out all documents in a folder.
+        /// </summary>
+        /// <param name="client"></param>
         public static void CheckOutDocuments(RepositoryClient client)
         {            
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
@@ -112,6 +132,10 @@ namespace PDRepository.Samples
             client.DocumentClient.CheckOutDocuments(folder, targetFolder, false, false);
         }        
 
+        /// <summary>
+        /// Checks out all documents in a folder (and any sub folder of that folder) into a single folder on disc.
+        /// </summary>
+        /// <param name="client"></param>
         public static void CheckOutDocumentsRecursively(RepositoryClient client)
         {            
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
@@ -124,6 +148,10 @@ namespace PDRepository.Samples
             client.DocumentClient.CheckOutDocuments(folder, targetFolder, true, false);
         }
 
+        /// <summary>
+        /// Checks out all documents in a folder (and any sub folder of that folder) while preserving the repository folder structure on disc.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CheckOutDocumentsRecursivelyMimicingRepoStructure(RepositoryClient client)
         {            
             string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
@@ -136,10 +164,17 @@ namespace PDRepository.Samples
             client.DocumentClient.CheckOutDocuments(folder, targetFolder, true, true);
         }
 
+        // freeze/unfreeze sample
+        // lock/unlock sample
+
+        /// <summary>
+        /// Retrieves the permission of a document for a specific user or group.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void GetDocumentPermissions(RepositoryClient client)
         {
-            string folder = "LibManSamples/Development/Resources";
-            string documentName = "settings-git.txt";
+            string folder = "LibManSamples/Development";
+            string documentName = "Microsoft SQL Server 2014";
             string userOrGroupName = "HR";
 
             Console.WriteLine("Checking document permission...");

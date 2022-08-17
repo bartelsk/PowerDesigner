@@ -181,7 +181,7 @@ namespace PDRepository
                 if (newBranch != null && branchPermission != null)
                 {                    
                     RepositoryBranchFolder newBranchFolder = (RepositoryBranchFolder)newBranch;                    
-                    newBranchFolder.SetPermission(ParseUser(branchPermission.UserOrGroupName), ((int)branchPermission.PermissionType), branchPermission.CopyToChildren);  
+                    newBranchFolder.SetPermission(ParseUserOrGroup(branchPermission.UserOrGroupName), ((int)branchPermission.PermissionType), branchPermission.CopyToChildren);  
                 }
             }
         }
@@ -198,7 +198,7 @@ namespace PDRepository
             RepositoryFolder repositoryFolder = GetRepositoryFolder(rootFolder);
             if (repositoryFolder != null)
             {
-                ListBranches(repositoryFolder, ref branches, string.Empty, string.IsNullOrEmpty(userOrGroupNameFilter) ? null : ParseUser(userOrGroupNameFilter));
+                ListBranches(repositoryFolder, ref branches, string.Empty, string.IsNullOrEmpty(userOrGroupNameFilter) ? null : ParseUserOrGroup(userOrGroupNameFilter));
             }
             return branches;
         }
@@ -214,14 +214,9 @@ namespace PDRepository
         /// <param name="documentName">The name of the document.</param>
         /// <returns>A <see cref="Document"/> type.</returns>
         public Document GetFolderDocumentInfo(string folderPath, string documentName)
-        {
-            Document document = null;
-            StoredObject item = GetFolderDocument(folderPath, documentName);            
-            if (item != null)
-            {
-                document = ParseStoredObjectInfo(item);
-            }            
-            return document;
+        {            
+            StoredObject item = GetFolderDocument(folderPath, documentName);                        
+            return ParseStoredObjectInfo(item);                                    
         }
 
         /// <summary>
@@ -258,15 +253,13 @@ namespace PDRepository
         public void CheckOutFolderDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName)
         {
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            if (item != null)
-            {
-                RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : Path.Combine(targetFolder, targetFileName);
-                _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
 
-                // Trigger checked out event
-                OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });
-            }
+            string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : Path.Combine(targetFolder, targetFileName);
+            _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+
+            // Trigger checked out event
+            OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });            
         }
 
         /// <summary>
@@ -291,16 +284,14 @@ namespace PDRepository
         /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
         public void CheckOutFolderDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName, int version)
         {
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            if (item != null)
-            {
-                RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : Path.Combine(targetFolder, targetFileName);
-                _ = doc.CheckOutOldVersionToFile(version.ToString(), fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+            StoredObject item = GetFolderDocument(repoFolderPath, documentName);            
+            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
 
-                // Trigger checked out event
-                OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });
-            }
+            string fileName = (string.IsNullOrEmpty(targetFileName)) ? GetDocumentFileName(targetFolder, doc) : Path.Combine(targetFolder, targetFileName);
+            _ = doc.CheckOutOldVersionToFile(version.ToString(), fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
+
+            // Trigger checked out event
+            OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });            
         }
 
         /// <summary>
@@ -346,15 +337,10 @@ namespace PDRepository
         /// <param name="comment">Freeze comment.</param>
         /// <returns>True if successful, False if not.</returns>
         public bool FreezeFolderDocument(string repoFolderPath, string documentName, string comment)
-        {
-            bool result = false;
+        {            
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            if (item != null)
-            {
-                RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                result = doc.Freeze(comment);
-            }
-            return result;
+            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+            return doc.Freeze(comment);            
         }
 
         /// <summary>
@@ -364,15 +350,10 @@ namespace PDRepository
         /// <param name="documentName">The name of the document to unfreeze.</param>        
         /// <returns>True if successful, False if not.</returns>
         public bool UnfreezeFolderDocument(string repoFolderPath, string documentName)
-        {
-            bool result = false;
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            if (item != null)
-            {
-                RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                result = doc.Unfreeze();
-            }
-            return result;
+        {            
+            StoredObject item = GetFolderDocument(repoFolderPath, documentName);            
+            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+            return doc.Unfreeze();           
         }
 
         /// <summary>
@@ -383,15 +364,10 @@ namespace PDRepository
         /// <param name="comment">Lock comment.</param>
         /// <returns>True if successful, False if not.</returns>
         public bool LockFolderDocument(string repoFolderPath, string documentName, string comment)
-        {
-            bool result = false;
+        {         
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            if (item != null)
-            {
-                RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                result = doc.Lock(comment);
-            }
-            return result;
+            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+            return doc.Lock(comment);            
         }
 
         /// <summary>
@@ -402,14 +378,9 @@ namespace PDRepository
         /// <returns>True if successful, False if not.</returns>
         public bool UnlockFolderDocument(string repoFolderPath, string documentName)
         {
-            bool result = false;
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            if (item != null)
-            {
-                RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-                result = doc.Unlock();
-            }
-            return result;
+            StoredObject item = GetFolderDocument(repoFolderPath, documentName);            
+            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+            return doc.Unlock();            
         }
 
         public PermissionTypeEnum GetDocumentPermission(string repoFolderPath, string documentName, string userOrGroupName)
@@ -417,7 +388,7 @@ namespace PDRepository
             StoredObject item = GetFolderDocument(repoFolderPath, documentName);
             RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
 
-            int permission = doc.GetPermission(ParseUser(userOrGroupName));
+            int permission = doc.GetPermission(ParseUserOrGroup(userOrGroupName));
             return ParsePermission(permission.ToString());            
         }
 
@@ -428,22 +399,78 @@ namespace PDRepository
         #region Private methods
 
         /// <summary>
-        /// Tries to parse the specified user or group name.
+        /// Generatic method for retrieving a repository (branch) folder.
         /// </summary>
-        /// <param name="userOrGroupName">A user login name or group name.</param>
-        /// <returns>A <see cref="BaseObject"/> which represents the user or group.</returns>
-        private BaseObject ParseUser(string userOrGroupName)
+        /// <param name="folderPath">A repository folder path.</param>        
+        /// <returns>A <see cref="StoredObject"/> type that represents the folder.</returns>
+        private StoredObject GetFolder(string folderPath)
         {
-            BaseObject repoUser = _con.Connection.GetUser(userOrGroupName);
-            if (repoUser == null)
+            StoredObject storedObject;
+            storedObject = GetRepositoryFolder(folderPath);
+            if (storedObject == null)
             {
-                repoUser = _con.Connection.GetGroup(userOrGroupName);
-                if (repoUser == null)
-                {
-                    throw new UnknownUserOrGroupException($"The user or group with name '{ userOrGroupName }' does not exist in the repository.");
-                }
+                storedObject = GetRepositoryBranchFolder(folderPath);
+                if (storedObject == null) ThrowFolderNotFoundException(folderPath);
             }
-            return repoUser;
+            return storedObject;
+        }
+
+        /// <summary>
+        /// Retrieves the specified folder document.
+        /// </summary>
+        /// <param name="folderPath">The folder from which to retrieve the documents.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <returns>A <see cref="StoredObject"/> type.</returns>
+        private StoredObject GetFolderDocument(string folderPath, string documentName)
+        {
+            StoredObject document = (StoredObject)GetFolder(folderPath).FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
+            if (document == null) ThrowDocumentNotFoundException(documentName, folderPath);
+            return document;
+        }
+
+        /// <summary>
+        /// Retrieves a list of folder documents.
+        /// </summary>
+        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <returns>A List of <see cref="StoredObject"/> types.</returns>
+        private List<StoredObject> GetFolderDocuments(string folderPath)
+        {
+            StoredObject repositoryFolder = GetFolder(folderPath);
+            return repositoryFolder.ChildObjects.Cast<StoredObject>().ToList<StoredObject>();
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Document"/> objects in the specified path.        
+        /// </summary>
+        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
+        /// <param name="recursive">True to also list documents in any sub-folder of the <paramref name="folderPath"/>.</param>
+        /// <param name="documents">A ref to the List of found <see cref="Document"/> types.</param>
+        /// <returns>A List with <see cref="Document"/> objects.</returns> 
+        private List<Document> ListFolderDocuments(string folderPath, bool recursive, ref List<Document> documents)
+        {
+            List<StoredObject> folderItems = GetFolderDocuments(folderPath);
+            foreach (StoredObject item in folderItems)
+            {
+                switch (item.ClassKind)
+                {
+                    case (int)PdRMG_Classes.cls_RepositoryFolder:
+                        if (recursive)
+                        {
+                            RepositoryFolder folder = (RepositoryFolder)item;
+                            ListFolderDocuments(folder.Location.Substring(1) + "/" + folder.Name, recursive, ref documents);
+                        }
+                        break;
+                    default:
+                        Document document = ParseStoredObjectInfo(item);
+                        if (document != null)
+                        {
+                            documents.Add(document);
+                        }
+                        break;
+                }
+
+            }
+            return documents;
         }
 
         /// <summary>
@@ -471,7 +498,7 @@ namespace PDRepository
                             }
                             break;
                         case (int)PdRMG_Classes.cls_RepositoryBranchFolder:
-                            RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;                               
+                            RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;
                             if (user != null)
                             {
                                 // Filter branches for specified user
@@ -511,71 +538,6 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Returns a list of <see cref="Document"/> objects in the specified path.        
-        /// </summary>
-        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
-        /// <param name="recursive">True to also list documents in any sub-folder of the <paramref name="folderPath"/>.</param>
-        /// <param name="documents">A ref to the List of found <see cref="Document"/> types.</param>
-        /// <returns>A List with <see cref="Document"/> objects.</returns> 
-        private List<Document> ListFolderDocuments(string folderPath, bool recursive, ref List<Document> documents)
-        {
-            List<StoredObject> folderItems = GetFolderDocuments(folderPath);
-            foreach (StoredObject item in folderItems)
-            {
-                switch (item.ClassKind)
-                {
-                    case (int)PdRMG_Classes.cls_RepositoryFolder:
-                        if (recursive)
-                        {
-                            RepositoryFolder folder = (RepositoryFolder)item;
-                            ListFolderDocuments(folder.Location.Substring(1) + "/" + folder.Name, recursive, ref documents);
-                        }
-                        break;
-                    default:
-                        Document document = ParseStoredObjectInfo(item);
-                        if (document != null)
-                        {
-                            documents.Add(document);
-                        }
-                        break;
-                }
-
-            }
-            return documents;
-        }
-
-        /// <summary>
-        /// Retrieves the specified folder document.
-        /// </summary>
-        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
-        /// <param name="documentName">The name of the document.</param>
-        /// <returns>A <see cref="StoredObject"/> type.</returns>
-        private StoredObject GetFolderDocument(string folderPath, string documentName)
-        {
-            StoredObject storedObject;
-            RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
-            if (repositoryFolder == null) ThrowFolderNotFoundException(folderPath);
-                        
-            storedObject = (StoredObject)repositoryFolder.FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
-            if (storedObject == null) ThrowDocumentNotFoundException(documentName, folderPath);            
-            
-            return storedObject;
-        }
-
-        /// <summary>
-        /// Retrieves a list of folder documents.
-        /// </summary>
-        /// <param name="folderPath">The repository folder from which to retrieve the documents.</param>
-        /// <returns>A List of <see cref="StoredObject"/> types.</returns>
-        private List<StoredObject> GetFolderDocuments(string folderPath)
-        {
-            RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
-            if (repositoryFolder == null) ThrowFolderNotFoundException(folderPath);
-
-            return repositoryFolder.ChildObjects.Cast<StoredObject>().ToList<StoredObject>();  
-        }
-
-        /// <summary>
         /// Returns the document file name.
         /// </summary>
         /// <param name="targetFolder">A file folder on disc.</param>
@@ -585,6 +547,25 @@ namespace PDRepository
         {
             Document info = ParseStoredObjectInfo(storedObject);
             return Path.Combine(targetFolder, info.ExtractionFileName);            
+        }
+
+        /// <summary>
+        /// Tries to parse the specified user or group name.
+        /// </summary>
+        /// <param name="userOrGroupName">A user login name or group name.</param>
+        /// <returns>A <see cref="BaseObject"/> which represents the user or group.</returns>
+        private BaseObject ParseUserOrGroup(string userOrGroupName)
+        {
+            BaseObject repoUser = _con.Connection.GetUser(userOrGroupName);
+            if (repoUser == null)
+            {
+                repoUser = _con.Connection.GetGroup(userOrGroupName);
+                if (repoUser == null)
+                {
+                    throw new UnknownUserOrGroupException($"The user or group with name '{ userOrGroupName }' does not exist in the repository.");
+                }
+            }
+            return repoUser;
         }
 
         /// <summary>

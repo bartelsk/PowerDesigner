@@ -34,7 +34,7 @@ namespace PDRepository.Documents
         /// <returns>True if the document exists in the specified repository folder, False if it does not.</returns>
         public bool DocumentExists(string repoFolderPath, string documentName)
         {
-            if (!IsConnected) ThrowNoRepositoryConnectionException();            
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
             return (GetFolderDocumentInfo(repoFolderPath, documentName) != null);
         }
 
