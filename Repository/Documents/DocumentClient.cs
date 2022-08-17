@@ -176,6 +176,12 @@ namespace PDRepository.Documents
             return UnfreezeFolderDocument(repoFolderPath, documentName);
         }
 
+        public PermissionTypeEnum GetPermission(string repoFolderPath, string documentName, string userOrGroupName)
+        {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+            return GetDocumentPermission(repoFolderPath, documentName, userOrGroupName);
+        }
+
         /// <summary>
         /// Signals a document is checked out.
         /// </summary>

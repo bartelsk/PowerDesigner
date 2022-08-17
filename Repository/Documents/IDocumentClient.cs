@@ -119,5 +119,14 @@ namespace PDRepository.Documents
         /// <param name="documentName">The name of the document to unfreeze.</param>        
         /// <returns>True if successful, False if not.</returns>
         bool UnfreezeDocument(string repoFolderPath, string documentName);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document. Please note this should be the location of a 'regular' folder, not a branch folder.</param>
+        /// <param name="documentName"></param>
+        /// <param name="userOrGroupName"></param>
+        /// <returns></returns>
+        PermissionTypeEnum GetPermission(string repoFolderPath, string documentName, string userOrGroupName);
     }
 }

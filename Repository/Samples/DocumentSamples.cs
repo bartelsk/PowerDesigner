@@ -136,6 +136,18 @@ namespace PDRepository.Samples
             client.DocumentClient.CheckOutDocuments(folder, targetFolder, true, true);
         }
 
+        public static void GetDocumentPermissions(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "settings-git.txt";
+            string userOrGroupName = "HR";
+
+            Console.WriteLine("Checking document permission...");
+
+            PermissionTypeEnum permission = client.DocumentClient.GetPermission(folder, documentName, userOrGroupName);
+            Console.WriteLine($"The permission of user or group '{ userOrGroupName }' on document '{ documentName }' is: '{ permission }'");
+        }
+
         private static void DocumentCheckedOut(object sender, CheckOutEventArgs e)
         {
             Console.WriteLine($"Checked out document '{ e.DocumentName }' to file '{ e.CheckOutFileName }'");

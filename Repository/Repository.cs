@@ -68,6 +68,16 @@ namespace PDRepository
             throw new ArgumentNullException(argumentName, $"Parameter '{ argumentName }' cannot be null or empty.");
         }
 
+        protected static void ThrowFolderNotFoundException(string documentFolder)
+        {
+            throw new RepositoryException($"The folder '{ documentFolder }' does not exist.");
+        }
+
+        protected static void ThrowDocumentNotFoundException(string documentName, string documentFolder)
+        {
+            throw new RepositoryException($"The document '{ documentName }' does not exist in folder '{ documentFolder }'.");
+        }
+
         #endregion
 
         #region Public methods
@@ -402,6 +412,15 @@ namespace PDRepository
             return result;
         }
 
+        public PermissionTypeEnum GetDocumentPermission(string repoFolderPath, string documentName, string userOrGroupName)
+        {            
+            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
+            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+
+            int permission = doc.GetPermission(ParseUser(userOrGroupName));
+            return ParsePermission(permission.ToString());            
+        }
+
         #endregion
 
         #endregion
@@ -417,7 +436,13 @@ namespace PDRepository
         {
             BaseObject repoUser = _con.Connection.GetUser(userOrGroupName);
             if (repoUser == null)
-                throw new UnknownUserOrGroupException($"The user or group with name '{ userOrGroupName }' does not exist in the repository.");
+            {
+                repoUser = _con.Connection.GetGroup(userOrGroupName);
+                if (repoUser == null)
+                {
+                    throw new UnknownUserOrGroupException($"The user or group with name '{ userOrGroupName }' does not exist in the repository.");
+                }
+            }
             return repoUser;
         }
 
@@ -527,12 +552,13 @@ namespace PDRepository
         /// <returns>A <see cref="StoredObject"/> type.</returns>
         private StoredObject GetFolderDocument(string folderPath, string documentName)
         {
-            StoredObject storedObject = null;
+            StoredObject storedObject;
             RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
-            if (repositoryFolder != null)
-            {
-                storedObject = (StoredObject)repositoryFolder.FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
-            }
+            if (repositoryFolder == null) ThrowFolderNotFoundException(folderPath);
+                        
+            storedObject = (StoredObject)repositoryFolder.FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
+            if (storedObject == null) ThrowDocumentNotFoundException(documentName, folderPath);            
+            
             return storedObject;
         }
 
@@ -543,13 +569,10 @@ namespace PDRepository
         /// <returns>A List of <see cref="StoredObject"/> types.</returns>
         private List<StoredObject> GetFolderDocuments(string folderPath)
         {
-            List<StoredObject> storedObjects = new List<StoredObject>();
             RepositoryFolder repositoryFolder = GetRepositoryFolder(folderPath);
-            if (repositoryFolder != null)
-            {
-                storedObjects = repositoryFolder.ChildObjects.Cast<StoredObject>().ToList<StoredObject>();                            
-            }
-            return storedObjects;
+            if (repositoryFolder == null) ThrowFolderNotFoundException(folderPath);
+
+            return repositoryFolder.ChildObjects.Cast<StoredObject>().ToList<StoredObject>();  
         }
 
         /// <summary>
