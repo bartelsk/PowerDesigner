@@ -43,8 +43,10 @@ namespace PDRepository.Samples
                 //DocumentSamples.CheckOutDocuments(client);
                 //DocumentSamples.CheckOutDocumentsRecursively(client);
                 //DocumentSamples.CheckOutDocumentsRecursivelyMimicingRepoStructure(client);
-                DocumentSamples.FreezeDocument(client);
-                DocumentSamples.UnfreezeDocument(client);
+                //DocumentSamples.FreezeDocument(client);
+                //DocumentSamples.UnfreezeDocument(client);
+                DocumentSamples.LockDocument(client);
+                DocumentSamples.UnlockDocument(client);
                 //DocumentSamples.GetDocumentPermissions(client);
             }
             catch (Exception ex)

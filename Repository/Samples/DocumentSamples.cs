@@ -193,9 +193,38 @@ namespace PDRepository.Samples
 
             bool success = client.DocumentClient.UnfreezeDocument(folder, documentName);
             Console.WriteLine($"The document was { (!success ? "NOT " : string.Empty) }successfully unfrozen.");
+        }      
+
+        /// <summary>
+        /// Locks a document.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void LockDocument(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "settings-git.txt";
+            string lockComment = "Locking for maintenance.";
+
+            Console.WriteLine($"Locking document '{ documentName }' in folder '{ folder }'...");
+
+            bool success = client.DocumentClient.LockDocument(folder, documentName, lockComment);
+            Console.WriteLine($"The document was { (!success ? "NOT " : string.Empty) }locked successfully.");
         }
-        
-        // lock/unlock sample
+
+        /// <summary>
+        /// Unlocks a document.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void UnlockDocument(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "settings-git.txt";            
+
+            Console.WriteLine($"Unlocking document '{ documentName }' in folder '{ folder }'...");
+
+            bool success = client.DocumentClient.UnlockDocument(folder, documentName);
+            Console.WriteLine($"The document was { (!success ? "NOT " : string.Empty) }unlocked successfully.");
+        }
 
         /// <summary>
         /// Retrieves the permission of a document for a specific user or group.
