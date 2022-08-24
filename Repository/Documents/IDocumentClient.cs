@@ -109,15 +109,42 @@ namespace PDRepository.Documents
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
         /// <param name="documentName">The name of the document to freeze.</param>
         /// <param name="comment">Freeze comment.</param>
-        /// <returns>True if successful, False if not.</returns>
+        /// <returns>True if successful, False if not (the document may already be frozen).</returns>
         bool FreezeDocument(string repoFolderPath, string documentName, string comment);
 
         /// <summary>
-        /// Unfreezes a repository document.
+        /// Unfreezes a repository document, making it updateable.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
         /// <param name="documentName">The name of the document to unfreeze.</param>        
-        /// <returns>True if successful, False if not.</returns>
+        /// <returns>True if successful, False if not (the document may already be updateable).</returns>
         bool UnfreezeDocument(string repoFolderPath, string documentName);
+
+        /// <summary>
+        /// Retrieves the permission on a repository document for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <param name="userOrGroupName">The user login or group name for which to check its permission.</param>
+        /// <returns>A <see cref="PermissionTypeEnum"/> type.</returns>
+        PermissionTypeEnum GetPermission(string repoFolderPath, string documentName, string userOrGroupName);
+
+        /// <summary>
+        /// Grants permissions to a repository document for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <param name="permission">The <see cref="Permission"/> that is to be granted to the folder document.</param>
+        /// <returns>True if successful, False if not.</returns>
+        bool SetPermission(string repoFolderPath, string documentName, Permission permission);
+
+        /// <summary>
+        /// Deletes all permissions from a repository document for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <param name="permission">A <see cref="Permission"/> type that specifies the user login or group name and whether to remove the permissions from all child objects as well (if any).</param>
+        /// <returns>True if successful, False if not.</returns>
+        bool DeletePermission(string repoFolderPath, string documentName, Permission permission);
     }
 }
