@@ -34,7 +34,10 @@ namespace PDRepository.Documents
         /// <returns>True if the document exists in the specified repository folder, False if it does not.</returns>
         public bool DocumentExists(string repoFolderPath, string documentName)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return (GetFolderDocumentInfo(repoFolderPath, documentName) != null);
         }
 
@@ -46,7 +49,9 @@ namespace PDRepository.Documents
         /// <returns>A List with <see cref="Document"/> objects.</returns>      
         public List<Document> ListDocuments(string repoFolderPath, bool recursive)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return GetFolderDocumentsInfo(repoFolderPath, recursive);
         }
 
@@ -58,7 +63,10 @@ namespace PDRepository.Documents
         /// <returns>A <see cref="Document"/> type.</returns>
         public Document GetDocumentInfo(string repoFolderPath, string documentName)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return GetFolderDocumentInfo(repoFolderPath, documentName);
         }
 
@@ -70,7 +78,11 @@ namespace PDRepository.Documents
         /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
         public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
+            if (string.IsNullOrEmpty(targetFolder)) ThrowArgumentNullException(targetFolder);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             CheckOutFolderDocument(repoFolderPath, documentName, targetFolder);
         }
 
@@ -83,7 +95,12 @@ namespace PDRepository.Documents
         /// <param name="targetFileName">The file name for the document.</param>
         public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
+            if (string.IsNullOrEmpty(targetFolder)) ThrowArgumentNullException(targetFolder);
+            if (string.IsNullOrEmpty(targetFileName)) ThrowArgumentNullException(targetFileName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             CheckOutFolderDocument(repoFolderPath, documentName, targetFolder, targetFileName);
         }
 
@@ -96,7 +113,11 @@ namespace PDRepository.Documents
         /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
         public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, int version)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
+            if (string.IsNullOrEmpty(targetFolder)) ThrowArgumentNullException(targetFolder);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             CheckOutFolderDocument(repoFolderPath, documentName, targetFolder, version);
         }
 
@@ -110,7 +131,12 @@ namespace PDRepository.Documents
         /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
         public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName, int version)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
+            if (string.IsNullOrEmpty(targetFolder)) ThrowArgumentNullException(targetFolder);
+            if (string.IsNullOrEmpty(targetFileName)) ThrowArgumentNullException(targetFileName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+            
             CheckOutFolderDocument(repoFolderPath, documentName, targetFolder, targetFileName, version);
         }
 
@@ -123,6 +149,10 @@ namespace PDRepository.Documents
         /// <param name="preserveFolderStructure">True to mimic the repository folder structure on the local disc when checking out. Applies to recursive check-outs only.</param>
         public void CheckOutDocuments(string repoFolderPath, string targetFolder, bool recursive, bool preserveFolderStructure)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);            
+            if (string.IsNullOrEmpty(targetFolder)) ThrowArgumentNullException(targetFolder);            
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             CheckOutFolderDocuments(repoFolderPath, targetFolder, recursive, preserveFolderStructure);
         }
 
@@ -135,7 +165,10 @@ namespace PDRepository.Documents
         /// <returns>True if successful, False if not.</returns>
         public bool LockDocument(string repoFolderPath, string documentName, string comment)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return LockFolderDocument(repoFolderPath, documentName, comment);
         }
 
@@ -147,7 +180,10 @@ namespace PDRepository.Documents
         /// <returns>True if successful, False if not.</returns>
         public bool UnlockDocument(string repoFolderPath, string documentName)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return UnlockFolderDocument(repoFolderPath, documentName);
         }
 
@@ -160,7 +196,10 @@ namespace PDRepository.Documents
         /// <returns>True if successful, False if not (the document may already be frozen).</returns>
         public bool FreezeDocument(string repoFolderPath, string documentName, string comment)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return FreezeFolderDocument(repoFolderPath, documentName, comment);
         }
 
@@ -172,7 +211,10 @@ namespace PDRepository.Documents
         /// <returns>True if successful, False if not (the document may already be updateable).</returns>
         public bool UnfreezeDocument(string repoFolderPath, string documentName)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return UnfreezeFolderDocument(repoFolderPath, documentName);
         }
 
@@ -185,7 +227,11 @@ namespace PDRepository.Documents
         /// <returns>A <see cref="PermissionTypeEnum"/> type.</returns>
         public PermissionTypeEnum GetPermission(string repoFolderPath, string documentName, string userOrGroupName)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
+            if (string.IsNullOrEmpty(userOrGroupName)) ThrowArgumentNullException(userOrGroupName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return GetDocumentPermission(repoFolderPath, documentName, userOrGroupName);
         }
 
@@ -198,7 +244,11 @@ namespace PDRepository.Documents
         /// <returns>True if successful, False if not.</returns>
         public bool SetPermission(string repoFolderPath, string documentName, Permission permission)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
+            if (permission == null) ThrowArgumentNullException("permission");
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return SetDocumentPermission(repoFolderPath, documentName, permission);
         }
 
@@ -211,7 +261,11 @@ namespace PDRepository.Documents
         /// <returns>True if successful, False if not.</returns>
         public bool DeletePermission(string repoFolderPath, string documentName, Permission permission)
         {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
+            if (permission == null) ThrowArgumentNullException("permission");
             if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return DeleteDocumentPermission(repoFolderPath, documentName, permission);
         }
 

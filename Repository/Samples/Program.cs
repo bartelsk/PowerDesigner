@@ -33,9 +33,9 @@ namespace PDRepository.Samples
                 //BranchSamples.BranchExists(client);
                 //BranchSamples.CreateBranch(client);
                 //BranchSamples.CreateBranchWithPermissions(client);
-                BranchSamples.GetBranchPermissions(client);
-                BranchSamples.SetBranchPermission(client);
-                BranchSamples.DeleteBranchPermission(client);
+                //BranchSamples.GetBranchPermissions(client);
+                //BranchSamples.SetBranchPermission(client);
+                //BranchSamples.DeleteBranchPermission(client);
 
                 // Run document samples             
                 //DocumentSamples.ListDocuments(client);
