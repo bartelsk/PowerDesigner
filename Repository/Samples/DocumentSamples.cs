@@ -242,6 +242,51 @@ namespace PDRepository.Samples
             Console.WriteLine($"The permission of user or group '{ userOrGroupName }' on document '{ documentName }' is: '{ permission }'");
         }
 
+        /// <summary>
+        /// Grants permissions to a document for a specific user or group.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void SetDocumentPermissions(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development";
+            string documentName = "Microsoft SQL Server 2014";
+
+            // Grants the HR group Read permission to the specified document 
+            Permission permission = new Permission()
+            {
+                CopyToChildren = false,
+                PermissionType = PermissionTypeEnum.Read,
+                UserOrGroupName = "HR"
+            };
+
+            Console.WriteLine("Setting document permission...");
+
+            bool success = client.DocumentClient.SetPermission(folder, documentName, permission);
+            Console.WriteLine($"The permission for user or group '{ permission.UserOrGroupName }' on document '{ documentName }' was { (!success ? "NOT " : string.Empty) }set successfully to '{ permission.PermissionType }'.");
+        }
+
+        /// <summary>
+        /// Deletes permissions from a document for a specific user or group.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void DeleteDocumentPermissions(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development";
+            string documentName = "Microsoft SQL Server 2014";
+
+            // Grants the HR group Read permission to the specified document 
+            Permission permission = new Permission()
+            {
+                CopyToChildren = false,                
+                UserOrGroupName = "HR"
+            };
+
+            Console.WriteLine("Removing document permission...");
+
+            bool success = client.DocumentClient.DeletePermission(folder, documentName, permission);
+            Console.WriteLine($"The permission for user or group '{ permission.UserOrGroupName }' on document '{ documentName }' was { (!success ? "NOT " : string.Empty) }removed successfully.");
+        }
+
         private static void DocumentCheckedOut(object sender, CheckOutEventArgs e)
         {
             Console.WriteLine($"Checked out document '{ e.DocumentName }' to file '{ e.CheckOutFileName }'");

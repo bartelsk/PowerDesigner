@@ -399,6 +399,36 @@ namespace PDRepository
             return ParsePermission(permission.ToString());            
         }
 
+        /// <summary>
+        /// Grants permissions to a repository document for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <param name="permission">The <see cref="Permission"/> that is to be granted to the folder document.</param>
+        /// <returns>True if successful, False if not.</returns>
+        public bool SetDocumentPermission(string repoFolderPath, string documentName, Permission permission)
+        {
+            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
+            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+
+            return doc.SetPermission(ParseUserOrGroup(permission.UserOrGroupName), (int)permission.PermissionType, permission.CopyToChildren);
+        }
+
+        /// <summary>
+        /// Deletes all permissions from a repository document for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <param name="permission">A <see cref="Permission"/> type that specifies the user login or group name and whether to remove the permissions from all child objects as well (if any).</param>
+        /// <returns>True if successful, False if not.</returns>
+        public bool DeleteDocumentPermission(string repoFolderPath, string documentName, Permission permission)
+        {
+            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
+            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+
+            return doc.DeletePermission(ParseUserOrGroup(permission.UserOrGroupName), permission.CopyToChildren);
+        }
+
         #endregion
 
         #endregion
