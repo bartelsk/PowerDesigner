@@ -203,6 +203,47 @@ namespace PDRepository
             return branches;
         }
 
+        /// <summary>
+        /// Retrieves the permission on a repository branch for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The location of the branch folder in the repository.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <param name="userOrGroupName">The user login or group name for which to check its permission.</param>
+        /// <returns>A <see cref="PermissionTypeEnum"/> type.</returns>
+        public PermissionTypeEnum GetBranchPermission(string repoFolderPath, string branchName, string userOrGroupName)
+        {
+            RepositoryBranchFolder branchFolder = GetRepositoryBranchFolder(repoFolderPath + "/" + branchName);            
+
+            int permission = branchFolder.GetPermission(ParseUserOrGroup(userOrGroupName));
+            return ParsePermission(permission.ToString());
+        }
+
+        /// <summary>
+        /// Grants permissions to a repository branch for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The location of the branch folder in the repository.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <param name="permission">The <see cref="Permission"/> that is to be granted to the branch.</param>
+        /// <returns>True if successful, False if not.</returns>
+        public bool SetBranchPermission(string repoFolderPath, string branchName, Permission permission)
+        {
+            RepositoryBranchFolder branchFolder = GetRepositoryBranchFolder(repoFolderPath + "/" + branchName);
+            return branchFolder.SetPermission(ParseUserOrGroup(permission.UserOrGroupName), (int)permission.PermissionType, permission.CopyToChildren);
+        }
+
+        /// <summary>
+        /// Deletes all permissions from a repository branch for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The location of the branch folder in the repository.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <param name="permission">A <see cref="Permission"/> type that specifies the user login or group name and whether to remove the permissions from all child objects as well (if any).</param>
+        /// <returns>True if successful, False if not.</returns>
+        public bool DeleteBranchPermission(string repoFolderPath, string branchName, Permission permission)
+        {
+            RepositoryBranchFolder branchFolder = GetRepositoryBranchFolder(repoFolderPath + "/" + branchName);
+            return branchFolder.DeletePermission(ParseUserOrGroup(permission.UserOrGroupName), permission.CopyToChildren);
+        }
+
         #endregion
 
         #region Documents
@@ -384,7 +425,7 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Retrieves the permission of a repository document for a specific user login or group name.
+        /// Retrieves the permission on a repository document for a specific user login or group name.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
         /// <param name="documentName">The name of the document.</param>

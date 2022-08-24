@@ -99,5 +99,56 @@ namespace PDRepository.Branches
 
             CreateNewBranch(sourceBranchFolder, newBranchName, branchPermission);
         }
+
+        /// <summary>
+        /// Retrieves the permission on a repository branch for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The location of the branch folder in the repository.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <param name="userOrGroupName">The user login or group name for which to check its permission.</param>
+        /// <returns>A <see cref="PermissionTypeEnum"/> type.</returns>
+        public PermissionTypeEnum GetPermission(string repoFolderPath, string branchName, string userOrGroupName)
+        {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(branchName)) ThrowArgumentNullException(branchName);
+            if (string.IsNullOrEmpty(userOrGroupName)) ThrowArgumentNullException(userOrGroupName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return GetBranchPermission(repoFolderPath, branchName, userOrGroupName);
+        }
+
+        /// <summary>
+        /// Grants permissions to a repository branch for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The location of the branch folder in the repository.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <param name="permission">The <see cref="Permission"/> that is to be granted to the branch.</param>
+        /// <returns>True if successful, False if not.</returns>
+        public bool SetPermission(string repoFolderPath, string branchName, Permission permission)
+        {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(branchName)) ThrowArgumentNullException(branchName);
+            if (permission == null) ThrowArgumentNullException("permission");
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return SetBranchPermission(repoFolderPath, branchName, permission);
+        }
+
+        /// <summary>
+        /// Deletes all permissions from a repository branch for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The location of the branch folder in the repository.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <param name="permission">A <see cref="Permission"/> type that specifies the user login or group name and whether to remove the permissions from all child objects as well (if any).</param>
+        /// <returns>True if successful, False if not.</returns>
+        public bool DeletePermission(string repoFolderPath, string branchName, Permission permission)
+        {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(branchName)) ThrowArgumentNullException(branchName);
+            if (permission == null) ThrowArgumentNullException("permission");
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return DeleteBranchPermission(repoFolderPath, branchName, permission);
+        }
     }
 }

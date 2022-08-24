@@ -64,5 +64,32 @@ namespace PDRepository.Branches
         /// Be aware that PowerDesigner does not throw an exception in any of these cases.
         /// </remarks>
         void CreateBranch(string sourceBranchFolder, string newBranchName, Permission branchPermission);
+
+        /// <summary>
+        /// Retrieves the permission on a repository branch for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The location of the branch folder in the repository.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <param name="userOrGroupName">The user login or group name for which to check its permission.</param>
+        /// <returns>A <see cref="PermissionTypeEnum"/> type.</returns>
+        PermissionTypeEnum GetPermission(string repoFolderPath, string branchName, string userOrGroupName);
+
+        /// <summary>
+        /// Grants permissions to a repository branch for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The location of the branch folder in the repository.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <param name="permission">The <see cref="Permission"/> that is to be granted to the branch.</param>
+        /// <returns>True if successful, False if not.</returns>
+        bool SetPermission(string repoFolderPath, string branchName, Permission permission);
+
+        /// <summary>
+        /// Deletes all permissions from a repository branch for a specific user login or group name.
+        /// </summary>
+        /// <param name="repoFolderPath">The location of the branch folder in the repository.</param>
+        /// <param name="branchName">The name of the branch.</param>
+        /// <param name="permission">A <see cref="Permission"/> type that specifies the user login or group name and whether to remove the permissions from all child objects as well (if any).</param>
+        /// <returns>True if successful, False if not.</returns>
+        bool DeletePermission(string repoFolderPath, string branchName, Permission permission);
     }
 }

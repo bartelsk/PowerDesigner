@@ -177,7 +177,7 @@ namespace PDRepository.Documents
         }
 
         /// <summary>
-        /// Retrieves the permission of a repository document for a specific user login or group name.
+        /// Retrieves the permission on a repository document for a specific user login or group name.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
         /// <param name="documentName">The name of the document.</param>

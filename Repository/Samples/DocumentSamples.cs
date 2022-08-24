@@ -227,7 +227,7 @@ namespace PDRepository.Samples
         }
 
         /// <summary>
-        /// Retrieves the permission of a document for a specific user or group.
+        /// Retrieves the permission on a document for a specific user or group.
         /// </summary>
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void GetDocumentPermissions(RepositoryClient client)
@@ -246,12 +246,12 @@ namespace PDRepository.Samples
         /// Grants permissions to a document for a specific user or group.
         /// </summary>
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
-        public static void SetDocumentPermissions(RepositoryClient client)
+        public static void SetDocumentPermission(RepositoryClient client)
         {
             string folder = "LibManSamples/Development";
             string documentName = "Microsoft SQL Server 2014";
 
-            // Grants the HR group Read permission to the specified document 
+            // Grant the HR group Read permission to the specified document 
             Permission permission = new Permission()
             {
                 CopyToChildren = false,
@@ -269,12 +269,12 @@ namespace PDRepository.Samples
         /// Deletes permissions from a document for a specific user or group.
         /// </summary>
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
-        public static void DeleteDocumentPermissions(RepositoryClient client)
+        public static void DeleteDocumentPermission(RepositoryClient client)
         {
             string folder = "LibManSamples/Development";
             string documentName = "Microsoft SQL Server 2014";
 
-            // Grants the HR group Read permission to the specified document 
+            // Remove the HR group permission from the specified document 
             Permission permission = new Permission()
             {
                 CopyToChildren = false,                

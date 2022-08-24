@@ -33,6 +33,9 @@ namespace PDRepository.Samples
                 //BranchSamples.BranchExists(client);
                 //BranchSamples.CreateBranch(client);
                 //BranchSamples.CreateBranchWithPermissions(client);
+                BranchSamples.GetBranchPermissions(client);
+                BranchSamples.SetBranchPermission(client);
+                BranchSamples.DeleteBranchPermission(client);
 
                 // Run document samples             
                 //DocumentSamples.ListDocuments(client);
@@ -48,8 +51,8 @@ namespace PDRepository.Samples
                 //DocumentSamples.LockDocument(client);
                 //DocumentSamples.UnlockDocument(client);
                 //DocumentSamples.GetDocumentPermissions(client);
-                //DocumentSamples.SetDocumentPermissions(client);
-                //DocumentSamples.DeleteDocumentPermissions(client);
+                //DocumentSamples.SetDocumentPermission(client);
+                //DocumentSamples.DeleteDocumentPermission(client);
             }
             catch (Exception ex)
             {
