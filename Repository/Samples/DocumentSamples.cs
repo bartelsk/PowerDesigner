@@ -104,10 +104,12 @@ namespace PDRepository.Samples
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CheckOutDocumentOtherVersion(RepositoryClient client)
         {
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";            
-            string documentName = "DataVault Meta Data Profile";
-            int documentVersion = 1;
+            string folder = "LibManSamples/Development/PDM";            
+            string documentName = "MyModel";
             string targetFolder = @"C:\Temp";
+
+            int documentVersion = 2;
+            string documentVersionFileName = $"MyModel-v{ documentVersion }.pdm";
 
             // Register event handler
             client.DocumentClient.DocumentCheckedOut += DocumentCheckedOut;
@@ -117,12 +119,10 @@ namespace PDRepository.Samples
             Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' to '{ targetFolder }'...");            
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, documentVersion);
 
-            // Check out same document with alternative name and version
+            // Check out same document with alternative name and version           
 
-            string newFileName = $"MyProfile-v{ documentVersion }.xem";
-
-            Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' as '{ newFileName }' to '{ targetFolder }'...");
-            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, newFileName, documentVersion);
+            Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' as '{ documentVersionFileName }' to '{ targetFolder }'...");
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, documentVersionFileName, documentVersion);
 
             Console.WriteLine("Check-out complete.");
         }
