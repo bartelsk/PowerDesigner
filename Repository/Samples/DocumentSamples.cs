@@ -236,6 +236,36 @@ namespace PDRepository.Samples
         }
 
         /// <summary>
+        /// Deletes a document.
+        /// </summary>
+        /// <param name="client"></param>
+        public static void DeleteDocument(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "old.txt";
+
+            Console.WriteLine($"Deleting document '{ documentName }' in folder '{ folder }'...");
+
+            bool success = client.DocumentClient.DeleteDocument(folder, documentName);
+            Console.WriteLine($"The document was { (!success ? "NOT " : string.Empty) }deleted successfully.");
+        }
+
+        /// <summary>
+        /// Deletes a document version.
+        /// </summary>
+        /// <param name="client"></param>
+        public static void DeleteDocumentVersion(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "old.txt";
+
+            Console.WriteLine($"Deleting current version of document '{ documentName }' in folder '{ folder }'...");
+
+            bool success = client.DocumentClient.DeleteDocumentVersion(folder, documentName);
+            Console.WriteLine($"The document version was { (!success ? "NOT " : string.Empty) }deleted successfully.");
+        }
+
+        /// <summary>
         /// Retrieves the permission on a document for a specific user or group.
         /// </summary>
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>

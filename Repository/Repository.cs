@@ -256,8 +256,9 @@ namespace PDRepository
         /// <returns>A <see cref="Document"/> type.</returns>
         public Document GetFolderDocumentInfo(string folderPath, string documentName)
         {            
-            StoredObject item = GetFolderDocument(folderPath, documentName);                        
-            return ParseStoredObjectInfo(item);                                    
+            StoredObject document = (StoredObject)GetFolder(folderPath).FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
+            if (document == null) ThrowDocumentNotFoundException(documentName, folderPath);
+            return ParseStoredObjectInfo(document);                                    
         }
 
         /// <summary>
@@ -277,7 +278,7 @@ namespace PDRepository
         {
             StoredObject item = GetFolder(repoFolderPath);
             RepositoryFolder folder = (RepositoryFolder)item;
-            BaseObject obj = folder.CheckInDocument(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, out string actions, out string conflicts, string.Empty, out BaseObject changeList);
+            BaseObject obj = folder.CheckInDocument(fileName, (int)SRmgMergeMode.SRmgMergeNoAutoResolve, out string actions, out string conflicts, string.Empty, out BaseObject changeList);
 
         }
 
@@ -386,9 +387,8 @@ namespace PDRepository
         /// <param name="comment">Freeze comment.</param>
         /// <returns>True if successful, False if not (the document may already be frozen).</returns>
         public bool FreezeFolderDocument(string repoFolderPath, string documentName, string comment)
-        {            
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+        {
+            RepositoryDocumentBase doc = GetFolderDocument(repoFolderPath, documentName);
             return doc.Freeze(comment);            
         }
 
@@ -399,9 +399,8 @@ namespace PDRepository
         /// <param name="documentName">The name of the document to unfreeze.</param>        
         /// <returns>True if successful, False if not (the document may already be updateable).</returns>
         public bool UnfreezeFolderDocument(string repoFolderPath, string documentName)
-        {            
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);            
-            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+        {
+            RepositoryDocumentBase doc = GetFolderDocument(repoFolderPath, documentName);            
             return doc.Unfreeze();           
         }
 
@@ -413,9 +412,8 @@ namespace PDRepository
         /// <param name="comment">Lock comment.</param>
         /// <returns>True if successful, False if not.</returns>
         public bool LockFolderDocument(string repoFolderPath, string documentName, string comment)
-        {         
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+        {
+            RepositoryDocumentBase doc = GetFolderDocument(repoFolderPath, documentName);
             return doc.Lock(comment);            
         }
 
@@ -427,9 +425,32 @@ namespace PDRepository
         /// <returns>True if successful, False if not.</returns>
         public bool UnlockFolderDocument(string repoFolderPath, string documentName)
         {
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);            
-            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
+            RepositoryDocumentBase doc = GetFolderDocument(repoFolderPath, documentName);
             return doc.Unlock();            
+        }
+
+        /// <summary>
+        /// Completely removes a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to remove completely.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        public bool DeleteFolderDocument(string repoFolderPath, string documentName)
+        {
+            RepositoryDocumentBase doc = GetFolderDocument(repoFolderPath, documentName);
+            return doc.DeleteAllVersions();
+        }
+
+        /// <summary>
+        /// Removes the current version of a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>   
+        /// <returns>True if successful, False if not.</returns>
+        public bool DeleteFolderDocumentVersion(string repoFolderPath, string documentName)
+        {
+            RepositoryDocumentBase doc = GetFolderDocument(repoFolderPath, documentName);
+            return doc.DeleteVersion();
         }
 
         /// <summary>
@@ -440,11 +461,10 @@ namespace PDRepository
         /// <param name="userOrGroupName">The user login or group name for which to check its permission.</param>
         /// <returns>A <see cref="PermissionTypeEnum"/> type.</returns>
         public PermissionTypeEnum GetDocumentPermission(string repoFolderPath, string documentName, string userOrGroupName)
-        {            
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-
+        {
+            RepositoryDocumentBase doc = GetFolderDocument(repoFolderPath, documentName);   
             int permission = doc.GetPermission(ParseUserOrGroup(userOrGroupName));
+            
             return ParsePermission(permission.ToString());            
         }
 
@@ -457,9 +477,7 @@ namespace PDRepository
         /// <returns>True if successful, False if not.</returns>
         public bool SetDocumentPermission(string repoFolderPath, string documentName, Permission permission)
         {
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-
+            RepositoryDocumentBase doc = GetFolderDocument(repoFolderPath, documentName); 
             return doc.SetPermission(ParseUserOrGroup(permission.UserOrGroupName), (int)permission.PermissionType, permission.CopyToChildren);
         }
 
@@ -472,9 +490,7 @@ namespace PDRepository
         /// <returns>True if successful, False if not.</returns>
         public bool DeleteDocumentPermission(string repoFolderPath, string documentName, Permission permission)
         {
-            StoredObject item = GetFolderDocument(repoFolderPath, documentName);
-            RepositoryDocumentBase doc = (RepositoryDocumentBase)item;
-
+            RepositoryDocumentBase doc = GetFolderDocument(repoFolderPath, documentName);
             return doc.DeletePermission(ParseUserOrGroup(permission.UserOrGroupName), permission.CopyToChildren);
         }
 
@@ -507,11 +523,11 @@ namespace PDRepository
         /// <param name="folderPath">The folder from which to retrieve the documents.</param>
         /// <param name="documentName">The name of the document.</param>
         /// <returns>A <see cref="StoredObject"/> type.</returns>
-        private StoredObject GetFolderDocument(string folderPath, string documentName)
+        private RepositoryDocumentBase GetFolderDocument(string folderPath, string documentName)
         {
             StoredObject document = (StoredObject)GetFolder(folderPath).FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
             if (document == null) ThrowDocumentNotFoundException(documentName, folderPath);
-            return document;
+            return (RepositoryDocumentBase)document;
         }
 
         /// <summary>

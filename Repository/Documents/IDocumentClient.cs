@@ -123,6 +123,22 @@ namespace PDRepository.Documents
         bool UnfreezeDocument(string repoFolderPath, string documentName);
 
         /// <summary>
+        /// Completely removes a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to remove completely.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        bool DeleteDocument(string repoFolderPath, string documentName);
+
+        /// <summary>
+        /// Removes the current version of a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>   
+        /// <returns>True if successful, False if not.</returns>
+        bool DeleteDocumentVersion(string repoFolderPath, string documentName);
+
+        /// <summary>
         /// Retrieves the permission on a repository document for a specific user login or group name.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>

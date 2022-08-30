@@ -228,6 +228,36 @@ namespace PDRepository.Documents
         }
 
         /// <summary>
+        /// Completely removes a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to remove completely.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        public bool DeleteDocument(string repoFolderPath, string documentName)
+        {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return DeleteFolderDocument(repoFolderPath, documentName);
+        }
+
+        /// <summary>
+        /// Removes the current version of a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>   
+        /// <returns>True if successful, False if not.</returns>
+        public bool DeleteDocumentVersion(string repoFolderPath, string documentName)
+        {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return DeleteFolderDocumentVersion(repoFolderPath, documentName);
+        }
+
+        /// <summary>
         /// Retrieves the permission on a repository document for a specific user login or group name.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder that contains the document.</param>
