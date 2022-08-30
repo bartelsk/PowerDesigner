@@ -70,13 +70,19 @@ namespace PDRepository.Documents
             return GetFolderDocumentInfo(repoFolderPath, documentName);
         }
 
-        public void CheckInDocument(string repoFolderPath, string fileName)
+        /// <summary>
+        /// Checks in a file in the specified repository folder. Overwrites the existing document (if any) and freezes it.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder in which to add the file.</param>
+        /// <param name="fileName">The fully-qualified name of the file.</param>
+        /// <param name="documentVersion">Contains the current document version number if the check-in was successful.</param>
+        public void CheckInDocument(string repoFolderPath, string fileName, out string documentVersion)
         {
             if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
             if (string.IsNullOrEmpty(fileName)) ThrowArgumentNullException(fileName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
-            CheckInFolderDocument(repoFolderPath, fileName);
+            CheckInFolderDocument(repoFolderPath, fileName, out documentVersion);
         }
 
         /// <summary>

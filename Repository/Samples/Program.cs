@@ -41,7 +41,7 @@ namespace PDRepository.Samples
                 //DocumentSamples.ListDocuments(client);
                 //DocumentSamples.DocumentExists(client);
                 //DocumentSamples.GetDocumentInfo(client);
-                //DocumentSamples.CheckInFile(client);
+               //DocumentSamples.CheckInFile(client);
                 //DocumentSamples.CheckOutDocument(client);
                 //DocumentSamples.CheckOutDocumentOtherVersion(client);
                 //DocumentSamples.CheckOutDocuments(client);
@@ -51,8 +51,8 @@ namespace PDRepository.Samples
                 //DocumentSamples.UnfreezeDocument(client);
                 //DocumentSamples.LockDocument(client);
                 //DocumentSamples.UnlockDocument(client);
-                //DocumentSamples.DeleteDocument(client);
-                DocumentSamples.DeleteDocumentPermission(client);
+                DocumentSamples.DeleteDocument(client);
+                //DocumentSamples.DeleteDocumentVersion(client);
                 //DocumentSamples.GetDocumentPermissions(client);
                 //DocumentSamples.SetDocumentPermission(client);
                 //DocumentSamples.DeleteDocumentPermission(client);

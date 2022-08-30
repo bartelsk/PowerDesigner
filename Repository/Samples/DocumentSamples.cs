@@ -62,11 +62,13 @@ namespace PDRepository.Samples
         public static void CheckInFile(RepositoryClient client)
         {
             string folder = "LibManSamples/Development/Resources";
-            string fileName = @"C:\Temp\MyOtherModel.pdm";
+            string fileName = @"C:\Temp\old.txt";
 
-            client.DocumentClient.CheckInDocument(folder, fileName);
+            Console.WriteLine($"Checking-in file '{ fileName }' in folder '{ folder }'...");
+            client.DocumentClient.CheckInDocument(folder, fileName, out string newDocumentVersion);
+
+            Console.WriteLine($"File checked in. Document version updated to: { newDocumentVersion }.");           
         }
-
 
         /// <summary>
         /// Checks out a document with its default name and an alternative name.

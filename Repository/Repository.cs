@@ -274,12 +274,21 @@ namespace PDRepository
             return documents;
         }
 
-        public void CheckInFolderDocument(string repoFolderPath, string fileName)
+        /// <summary>
+        /// Checks in a file in the specified repository folder. Overwrites the existing document (if any) and freezes it.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder in which to add the file.</param>
+        /// <param name="fileName">The fully-qualified name of the file.</param>
+        /// <param name="documentVersion">Contains the current document version number if the check-in was successful.</param>
+        public void CheckInFolderDocument(string repoFolderPath, string fileName, out string documentVersion)
         {
             StoredObject item = GetFolder(repoFolderPath);
             RepositoryFolder folder = (RepositoryFolder)item;
-            BaseObject obj = folder.CheckInDocument(fileName, (int)SRmgMergeMode.SRmgMergeNoAutoResolve, out string actions, out string conflicts, string.Empty, out BaseObject changeList);
+            BaseObject obj = folder.CheckInDocument(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, out _, out _, string.Empty, out _);
 
+            StoredObject newDocument = (StoredObject)obj;
+            Document document = ParseStoredObjectInfo(newDocument);
+            documentVersion = document.Version;
         }
 
         /// <summary>

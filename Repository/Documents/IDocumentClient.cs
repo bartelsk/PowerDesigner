@@ -41,7 +41,13 @@ namespace PDRepository.Documents
         /// <returns>A <see cref="Document"/> type.</returns>
         Document GetDocumentInfo(string repoFolderPath, string documentName);
 
-        void CheckInDocument(string repoFolderPath, string fileName);
+        /// <summary>
+        /// Checks in a file in the specified repository folder. Overwrites the existing document (if any) and freezes it.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder in which to add the file.</param>
+        /// <param name="fileName">The fully-qualified name of the file.</param>
+        /// <param name="documentVersion">Contains the current document version number if the check-in was successful.</param>
+        void CheckInDocument(string repoFolderPath, string fileName, out string documentVersion);
 
         /// <summary>
         /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
