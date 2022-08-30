@@ -41,6 +41,7 @@ namespace PDRepository.Samples
                 //DocumentSamples.ListDocuments(client);
                 //DocumentSamples.DocumentExists(client);
                 //DocumentSamples.GetDocumentInfo(client);
+                DocumentSamples.CheckInFile(client);
                 //DocumentSamples.CheckOutDocument(client);
                 //DocumentSamples.CheckOutDocumentOtherVersion(client);
                 //DocumentSamples.CheckOutDocuments(client);

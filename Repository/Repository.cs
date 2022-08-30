@@ -272,7 +272,15 @@ namespace PDRepository
             ListFolderDocuments(folderPath, recursive, ref documents);
             return documents;
         }
-        
+
+        public void CheckInFolderDocument(string repoFolderPath, string fileName)
+        {
+            StoredObject item = GetFolder(repoFolderPath);
+            RepositoryFolder folder = (RepositoryFolder)item;
+            BaseObject obj = folder.CheckInDocument(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, out string actions, out string conflicts, string.Empty, out BaseObject changeList);
+
+        }
+
         /// <summary>
         /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>

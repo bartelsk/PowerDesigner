@@ -59,15 +59,24 @@ namespace PDRepository.Samples
             }
         }
 
+        public static void CheckInFile(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string fileName = @"C:\Temp\MyOtherModel.pdm";
+
+            client.DocumentClient.CheckInDocument(folder, fileName);
+        }
+
+
         /// <summary>
         /// Checks out a document with its default name and an alternative name.
         /// </summary>
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CheckOutDocument(RepositoryClient client)
         {
-            string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
-            string documentName = "CRDW_SA_StaticData";
-            string alternativeFileName = "CRDW_SA_StaticData_alt.pdm";
+            string folder = "LibManSamples/Development/PDM";
+            string documentName = "MyModel";
+            string alternativeFileName = "MyOtherModel.pdm";
 
             string targetFolder = @"C:\Temp";
 
@@ -122,7 +131,7 @@ namespace PDRepository.Samples
         /// <param name="client"></param>
         public static void CheckOutDocuments(RepositoryClient client)
         {            
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string folder = "LibManSamples/Development";
             string targetFolder = @"C:\Temp\CheckOutTest\SingleRepoFolder";
 
             // Register event handler            
@@ -138,7 +147,7 @@ namespace PDRepository.Samples
         /// <param name="client"></param>
         public static void CheckOutDocumentsRecursively(RepositoryClient client)
         {            
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string folder = "LibManSamples/Development";
             string targetFolder = @"C:\Temp\CheckOutTest\SingleTargetFolder";
 
             // Register event handler
@@ -154,7 +163,7 @@ namespace PDRepository.Samples
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CheckOutDocumentsRecursivelyMimicingRepoStructure(RepositoryClient client)
         {            
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string folder = "LibManSamples/Development";
             string targetFolder = @"C:\Temp\CheckOutTest\MimicRepoStructure";
 
             // Register event handler

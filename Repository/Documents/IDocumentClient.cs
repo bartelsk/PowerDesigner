@@ -41,6 +41,8 @@ namespace PDRepository.Documents
         /// <returns>A <see cref="Document"/> type.</returns>
         Document GetDocumentInfo(string repoFolderPath, string documentName);
 
+        void CheckInDocument(string repoFolderPath, string fileName);
+
         /// <summary>
         /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>

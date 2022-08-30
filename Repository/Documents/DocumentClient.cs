@@ -70,6 +70,15 @@ namespace PDRepository.Documents
             return GetFolderDocumentInfo(repoFolderPath, documentName);
         }
 
+        public void CheckInDocument(string repoFolderPath, string fileName)
+        {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (string.IsNullOrEmpty(fileName)) ThrowArgumentNullException(fileName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            CheckInFolderDocument(repoFolderPath, fileName);
+        }
+
         /// <summary>
         /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>
