@@ -59,15 +59,26 @@ namespace PDRepository.Samples
             }
         }
 
+        public static void CheckInFile(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string fileName = @"C:\Temp\old.txt";
+
+            Console.WriteLine($"Checking-in file '{ fileName }' in folder '{ folder }'...");
+            client.DocumentClient.CheckInDocument(folder, fileName, out string newDocumentVersion);
+
+            Console.WriteLine($"File checked in. Document version updated to: { newDocumentVersion }.");           
+        }
+
         /// <summary>
         /// Checks out a document with its default name and an alternative name.
         /// </summary>
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CheckOutDocument(RepositoryClient client)
         {
-            string folder = "Wholesale&Rural/RDW/PDM/Development/CRDW/CRDW_SA";
-            string documentName = "CRDW_SA_StaticData";
-            string alternativeFileName = "CRDW_SA_StaticData_alt.pdm";
+            string folder = "LibManSamples/Development/PDM";
+            string documentName = "MyModel";
+            string alternativeFileName = "MyOtherModel.pdm";
 
             string targetFolder = @"C:\Temp";
 
@@ -93,10 +104,12 @@ namespace PDRepository.Samples
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CheckOutDocumentOtherVersion(RepositoryClient client)
         {
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources/Extended Model Definition";            
-            string documentName = "DataVault Meta Data Profile";
-            int documentVersion = 1;
+            string folder = "LibManSamples/Development/PDM";            
+            string documentName = "MyModel";
             string targetFolder = @"C:\Temp";
+
+            int documentVersion = 2;
+            string documentVersionFileName = $"MyModel-v{ documentVersion }.pdm";
 
             // Register event handler
             client.DocumentClient.DocumentCheckedOut += DocumentCheckedOut;
@@ -106,12 +119,10 @@ namespace PDRepository.Samples
             Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' to '{ targetFolder }'...");            
             client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, documentVersion);
 
-            // Check out same document with alternative name and version
+            // Check out same document with alternative name and version           
 
-            string newFileName = $"MyProfile-v{ documentVersion }.xem";
-
-            Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' as '{ newFileName }' to '{ targetFolder }'...");
-            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, newFileName, documentVersion);
+            Console.WriteLine($"Checking out version '{ documentVersion }' of document '{ documentName }' as '{ documentVersionFileName }' to '{ targetFolder }'...");
+            client.DocumentClient.CheckOutDocument(folder, documentName, targetFolder, documentVersionFileName, documentVersion);
 
             Console.WriteLine("Check-out complete.");
         }
@@ -122,7 +133,7 @@ namespace PDRepository.Samples
         /// <param name="client"></param>
         public static void CheckOutDocuments(RepositoryClient client)
         {            
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string folder = "LibManSamples/Development";
             string targetFolder = @"C:\Temp\CheckOutTest\SingleRepoFolder";
 
             // Register event handler            
@@ -138,7 +149,7 @@ namespace PDRepository.Samples
         /// <param name="client"></param>
         public static void CheckOutDocumentsRecursively(RepositoryClient client)
         {            
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string folder = "LibManSamples/Development";
             string targetFolder = @"C:\Temp\CheckOutTest\SingleTargetFolder";
 
             // Register event handler
@@ -154,7 +165,7 @@ namespace PDRepository.Samples
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CheckOutDocumentsRecursivelyMimicingRepoStructure(RepositoryClient client)
         {            
-            string folder = "Wholesale&Rural/RDW/PDM/Development/Resources";
+            string folder = "LibManSamples/Development";
             string targetFolder = @"C:\Temp\CheckOutTest\MimicRepoStructure";
 
             // Register event handler
@@ -224,6 +235,36 @@ namespace PDRepository.Samples
 
             bool success = client.DocumentClient.UnlockDocument(folder, documentName);
             Console.WriteLine($"The document was { (!success ? "NOT " : string.Empty) }unlocked successfully.");
+        }
+
+        /// <summary>
+        /// Deletes a document.
+        /// </summary>
+        /// <param name="client"></param>
+        public static void DeleteDocument(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "old.txt";
+
+            Console.WriteLine($"Deleting document '{ documentName }' in folder '{ folder }'...");
+
+            bool success = client.DocumentClient.DeleteDocument(folder, documentName);
+            Console.WriteLine($"The document was { (!success ? "NOT " : string.Empty) }deleted successfully.");
+        }
+
+        /// <summary>
+        /// Deletes a document version.
+        /// </summary>
+        /// <param name="client"></param>
+        public static void DeleteDocumentVersion(RepositoryClient client)
+        {
+            string folder = "LibManSamples/Development/Resources";
+            string documentName = "old.txt";
+
+            Console.WriteLine($"Deleting current version of document '{ documentName }' in folder '{ folder }'...");
+
+            bool success = client.DocumentClient.DeleteDocumentVersion(folder, documentName);
+            Console.WriteLine($"The document version was { (!success ? "NOT " : string.Empty) }deleted successfully.");
         }
 
         /// <summary>

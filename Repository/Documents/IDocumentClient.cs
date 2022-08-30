@@ -42,6 +42,14 @@ namespace PDRepository.Documents
         Document GetDocumentInfo(string repoFolderPath, string documentName);
 
         /// <summary>
+        /// Checks in a file in the specified repository folder. Overwrites the existing document (if any) and freezes it.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder in which to add the file.</param>
+        /// <param name="fileName">The fully-qualified name of the file.</param>
+        /// <param name="documentVersion">Contains the current document version number if the check-in was successful.</param>
+        void CheckInDocument(string repoFolderPath, string fileName, out string documentVersion);
+
+        /// <summary>
         /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).
         /// </summary>
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
@@ -119,6 +127,22 @@ namespace PDRepository.Documents
         /// <param name="documentName">The name of the document to unfreeze.</param>        
         /// <returns>True if successful, False if not (the document may already be updateable).</returns>
         bool UnfreezeDocument(string repoFolderPath, string documentName);
+
+        /// <summary>
+        /// Completely removes a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document to remove completely.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        bool DeleteDocument(string repoFolderPath, string documentName);
+
+        /// <summary>
+        /// Removes the current version of a repository document.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder that contains the document.</param>
+        /// <param name="documentName">The name of the document.</param>   
+        /// <returns>True if successful, False if not.</returns>
+        bool DeleteDocumentVersion(string repoFolderPath, string documentName);
 
         /// <summary>
         /// Retrieves the permission on a repository document for a specific user login or group name.
