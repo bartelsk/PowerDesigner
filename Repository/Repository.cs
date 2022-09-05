@@ -505,12 +505,32 @@ namespace PDRepository
 
         #endregion
 
+        #region Users
+
+        /// <summary>
+        /// Returns a List of <see cref="User"/> types.
+        /// </summary>
+        /// <returns></returns>
+        public List<User> GetRepositoryUsers()
+        {
+            List<User> users = new List<User>();
+            ObjectCol allUsers = _con.Connection.Users;
+            foreach (RepositoryUser user in allUsers)
+            {
+                users.Add(ParseRepoUser(user));
+                // priviliges -> Groups?
+            }
+            return users;           
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
 
         /// <summary>
-        /// Generatic method for retrieving a repository (branch) folder.
+        /// Generic method for retrieving a repository (branch) folder.
         /// </summary>
         /// <param name="folderPath">A repository folder path.</param>        
         /// <returns>A <see cref="StoredObject"/> type that represents the folder.</returns>
@@ -765,6 +785,30 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Tries to parse a <see cref="RepositoryUser"/> type into a <see cref="User"/> type.
+        /// </summary>
+        /// <param name="repoUser">A <see cref="RepositoryUser"/> type.</param>
+        /// <returns>A <see cref="User"/> type.</returns>
+        private static User ParseRepoUser(RepositoryUser repoUser)
+        {
+            User user = null;
+            if (repoUser != null)
+            {
+                user = new User()
+                {
+                    Blocked = repoUser.Blocked,
+                    Comment = repoUser.Comment,
+                    Disabled = repoUser.Disabled,
+                    FullName = repoUser.FullName,
+                    LastLoginDate = repoUser.LastLoginDate,
+                    LoginName = repoUser.LoginName,
+                    Status = ParseUserStatus(repoUser.Status)
+                };
+            }
+            return user;
+        }
+
+        /// <summary>
         /// Tries to parse the specified permission into a valid PermissionType enum.
         /// </summary>
         /// <param name="permission">The permission to parse.</param>
@@ -774,6 +818,26 @@ namespace PDRepository
             if (!Enum.TryParse<PermissionTypeEnum>(permission, out PermissionTypeEnum result))
                 throw new InvalidPermissionException("Invalid permission");
             return result;
+        }
+
+        /// <summary>
+        /// Tries to parse the specified user status into a va lid UserStatus enum.
+        /// </summary>
+        /// <param name="status">The user status to parse.</param>
+        /// <returns>A <see cref="UserStatusEnum"/> enum.</returns>
+        private static UserStatusEnum ParseUserStatus(string status)
+        {
+            switch (status.ToLowerInvariant())
+            {
+                case "a":
+                    return UserStatusEnum.Active;
+                case "i":
+                    return UserStatusEnum.Inactive;
+                case "b":
+                    return UserStatusEnum.Blocked;
+                default:
+                    throw new RepositoryException("Invalid user status");
+            }
         }
 
         #endregion

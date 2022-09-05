@@ -56,6 +56,10 @@ namespace PDRepository.Samples
                 //DocumentSamples.GetDocumentPermissions(client);
                 //DocumentSamples.SetDocumentPermission(client);
                 //DocumentSamples.DeleteDocumentPermission(client);
+
+                // Run user samples
+                UserSamples.ListUsers(client);
+
             }
             catch (Exception ex)
             {

@@ -92,6 +92,7 @@
     <Compile Include="Branches\IBranchClient.cs" />
     <Compile Include="Common\Enums.cs" />
     <Compile Include="Common\Permission.cs" />
+    <Compile Include="Common\User.cs" />
     <Compile Include="Documents\DocumentClient.cs" />
     <Compile Include="Documents\IDocumentClient.cs" />
     <Compile Include="Exceptions\InvalidCredentialsException.cs" />

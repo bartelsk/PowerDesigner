@@ -2,11 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using PDRepository.Common;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDRepository.Users
 {
@@ -22,6 +18,11 @@ namespace PDRepository.Users
         public UserClient(RepositorySettings settings) : base(settings)
         {
             Connect();
+        }
+
+        public List<User> ListUsers()
+        {
+            return GetRepositoryUsers();
         }
     }
 }

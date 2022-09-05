@@ -7,4 +7,9 @@ namespace PDRepository.Common
     /// Permission types of a repository object.
     /// </summary>
     public enum PermissionTypeEnum { NotSet = -1, Listable = 0, Read = 10, Submit = 20, Write = 30, Full = 40 }
+
+    /// <summary>
+    /// The current status of a repository user.
+    /// </summary>
+    public enum UserStatusEnum {  Active, Inactive, Blocked }
 }
