@@ -20,19 +20,48 @@ namespace PDRepository.Users
             Connect();
         }
 
+        /// <summary>
+        /// Lists the available users.
+        /// </summary>
+        /// <returns>A List with <see cref="User"/> types.</returns>
         public List<User> ListUsers()
         {
             return GetRepositoryUsers();
         }
 
+        /// <summary>
+        /// Lists the available groups.
+        /// </summary>
+        /// <returns>A List with <see cref="Group"/> types.</returns>
         public List<Group> ListGroups()
         {
             return GetRepositoryGroups();
         }
 
-        public void CreateGroup(string name)
+        /// <summary>
+        /// Creates a group and assigns the specified rights.
+        /// </summary>
+        /// <param name="name">The name of the group.</param>
+        /// <param name="rights">A <see cref="UserRightsEnum"/> type.</param>
+        public void CreateGroup(string name, UserRightsEnum rights)
         {
-            CreateRepositoryGroup(name);
+            if (string.IsNullOrEmpty(name)) ThrowArgumentNullException(name);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            CreateRepositoryGroup(name, rights);
+        }
+
+        /// <summary>
+        /// Returns the group rights as a semi-colon separated string.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A string with group rights.</returns>
+        public string GetGroupRights(string groupName)
+        {
+            if (string.IsNullOrEmpty(groupName)) ThrowArgumentNullException(groupName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return GetRepositoryGroupRights(groupName);
         }
     }
 }

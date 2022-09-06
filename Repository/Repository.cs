@@ -5,9 +5,11 @@ using PDRepository.Common;
 using PDRepository.Exceptions;
 using PdRMG;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace PDRepository
 {
@@ -508,9 +510,9 @@ namespace PDRepository
         #region Users / Groups
 
         /// <summary>
-        /// Returns a List of <see cref="User"/> types.
+        /// Lists the available users.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A List with <see cref="User"/> types.</returns>
         public List<User> GetRepositoryUsers()
         {
             List<User> users = new List<User>();
@@ -523,6 +525,10 @@ namespace PDRepository
             return users;           
         }
 
+        /// <summary>
+        /// Lists the available repository groups.
+        /// </summary>
+        /// <returns>A List with <see cref="Group"/> types.</returns>
         public List<Group> GetRepositoryGroups()
         {
             List<Group> groups = new List<Group>();
@@ -534,17 +540,43 @@ namespace PDRepository
             return groups;
         }
 
-        public void CreateRepositoryGroup(string name)
+        /// <summary>
+        /// Returns the group rights as a semi-colon separated string.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A string with group rights.</returns>
+        public string GetRepositoryGroupRights(string groupName)
+        {
+            string result = string.Empty;
+            BaseObject repoGroup = _con.Connection.GetGroup(groupName);
+            if (repoGroup != null)
+            {                
+                Group group = ParseRepoGroup(repoGroup as RepositoryGroup);
+                result = group.Rights;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Creates a repository group and assigns the specified rights.
+        /// </summary>
+        /// <param name="name">The name of the group.</param>
+        /// <param name="rights">A <see cref="UserRightsEnum"/> type.</param>
+        public void CreateRepositoryGroup(string name, UserRightsEnum rights)
         {
             BaseObject newGroup = _con.Connection.CreateGroup();
             if (newGroup != null)
             {
                 RepositoryGroup group = (RepositoryGroup)newGroup;
                 group.GroupName = name;
-                group.GroupCode = name;
-                group.Rights = (int)SRmgUserRights.SRmgUserRightConnect;
-               
+                group.GroupCode = name;                
+                group.Rights = (int)rights;               
             }
+        }
+
+        public void DeleteRepositoryGroup(string name)
+        {
+
         }
 
         #endregion
@@ -841,11 +873,12 @@ namespace PDRepository
         {
             Group group = null;
             if (repoGroup != null)
-            {
+            {                
                 group = new Group()
                 { 
                     Description = repoGroup.ShortDescription,
-                    Name = repoGroup.Name
+                    Name = repoGroup.Name,
+                    Rights = ParseRights(repoGroup.Rights)
                 };
             }
             return group;
@@ -864,15 +897,34 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Tries to parse the specified user or group rights into a valid UserRights enum.
+        /// Tries to parse the specified user or group rights into a semi-colon separated string of rights.
         /// </summary>
         /// <param name="rights">The user or group rights to parse.</param>
-        /// <returns>A <see cref="UserRightsEnum"/> enum.</returns>
-        private static UserRightsEnum ParseRights(string rights)
+        /// <returns>A string with the parsed result.</returns>
+        private static string ParseRights(int rights)
         {
-            if (!Enum.TryParse<UserRightsEnum>(rights, out UserRightsEnum result))
-                throw new InvalidRightsException("Invalid user or group rights");
-            return result;
+            if (rights > 0)
+            {
+                BitArray b = new BitArray(new int[] { rights });
+                int[] bits = b.Cast<bool>().Select(bit => bit ? 1 : 0).ToArray();
+
+                StringBuilder sb = new StringBuilder();
+                if (bits[0] == 1) { sb.Append(";Connect"); }
+                if (bits[1] == 1) { sb.Append(";Freeze Versions"); }
+                if (bits[2] == 1) { sb.Append(";Lock Documents"); }
+                if (bits[3] == 1) { sb.Append(";Manage Branches"); }
+                if (bits[4] == 1) { sb.Append(";Manage Configurations"); }
+                if (bits[5] == 1) { sb.Append(";Manage All Documents"); }
+                if (bits[6] == 1) { sb.Append(";Manage Users & Permissions"); }
+                if (bits[7] == 1) { sb.Append(";Manage Repository"); }
+                if (bits[8] == 1) { sb.Append(";Edit on Web"); }
+                if (bits[9] == 1) { sb.Append(";Edit Extensions on Web"); }
+                return sb.ToString().Substring(1);
+            }
+            else
+            {
+                return "None";
+            }
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace PDRepository.Common
     /// </summary>
     public enum UserRightsEnum 
     { 
-        NotSet = 0,
+        None = 0,
 
         /// <summary>
         /// Connect to the repository.

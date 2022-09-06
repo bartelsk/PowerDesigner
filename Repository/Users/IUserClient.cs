@@ -12,10 +12,30 @@ namespace PDRepository.Users
     /// </summary>
     public interface IUserClient : IDisposable
     {
+        /// <summary>
+        /// Lists the available users.
+        /// </summary>
+        /// <returns>A List with <see cref="User"/> types.</returns>
         List<User> ListUsers();
 
+        /// <summary>
+        /// Lists the available groups.
+        /// </summary>
+        /// <returns>A List with <see cref="Group"/> types.</returns>
         List<Group> ListGroups();
 
-        void CreateGroup(string name);
+        /// <summary>
+        /// Creates a group and assigns the specified rights.
+        /// </summary>
+        /// <param name="name">The name of the group.</param>
+        /// <param name="rights">A <see cref="UserRightsEnum"/> type.</param>
+        void CreateGroup(string name, UserRightsEnum rights);
+
+        /// <summary>
+        /// Returns the group rights as a semi-colon separated string.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A string with group rights.</returns>
+        string GetGroupRights(string groupName);
     }
 }

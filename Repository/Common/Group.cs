@@ -17,5 +17,10 @@ namespace PDRepository.Common
         /// The short description of the group.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Specifies group rights.
+        /// </summary>
+        public string Rights { get; set; }
     }
 }
