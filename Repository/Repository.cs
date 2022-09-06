@@ -505,7 +505,7 @@ namespace PDRepository
 
         #endregion
 
-        #region Users
+        #region Users / Groups
 
         /// <summary>
         /// Returns a List of <see cref="User"/> types.
@@ -521,6 +521,17 @@ namespace PDRepository
                 // priviliges -> Groups?
             }
             return users;           
+        }
+
+        public List<Group> GetRepositoryGroups()
+        {
+            List<Group> groups = new List<Group>();
+            ObjectCol allGroups = _con.Connection.Groups;
+            foreach (RepositoryGroup group in allGroups)
+            {
+                groups.Add(ParseRepoGroup(group));                
+            }
+            return groups;
         }
 
         #endregion
@@ -806,6 +817,25 @@ namespace PDRepository
                 };
             }
             return user;
+        }
+
+        /// <summary>
+        /// Tries to parse a <see cref="RepositoryGroup"/> type into a <see cref="Group"/> type.
+        /// </summary>
+        /// <param name="repoGroup">A <see cref="RepositoryGroup"/> type.</param>
+        /// <returns>A <see cref="Group"/> type.</returns>
+        private static Group ParseRepoGroup(RepositoryGroup repoGroup)
+        {
+            Group group = null;
+            if (repoGroup != null)
+            {
+                group = new Group()
+                { 
+                    Description = repoGroup.ShortDescription,
+                    Name = repoGroup.Name
+                };
+            }
+            return group;
         }
 
         /// <summary>

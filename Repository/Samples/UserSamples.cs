@@ -24,5 +24,20 @@ namespace PDRepository.Samples
 
             users.Take(25).ToList().ForEach(u => Console.WriteLine($"Name: { u.FullName } - Status: { u.Status }"));
         }
+
+        /// <summary>
+        /// Retrieve all users but only display the first 25 users.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void ListGroups(RepositoryClient client)
+        {
+            Console.WriteLine("Retrieving groups...\r\n");
+
+            List<Group> groups = client.UserClient.ListGroups();
+
+            Console.WriteLine("Listing groups...\r\n");
+            groups.ForEach(g => Console.WriteLine($"Name: { g.Name } - Description: { g.Description }"));
+        }
+
     }
 }

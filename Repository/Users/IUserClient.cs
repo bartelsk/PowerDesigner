@@ -13,5 +13,7 @@ namespace PDRepository.Users
     public interface IUserClient : IDisposable
     {
         List<User> ListUsers();
+
+        List<Group> ListGroups();
     }
 }

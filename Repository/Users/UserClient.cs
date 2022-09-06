@@ -24,5 +24,10 @@ namespace PDRepository.Users
         {
             return GetRepositoryUsers();
         }
+
+        public List<Group> ListGroups()
+        {
+            return GetRepositoryGroups();
+        }
     }
 }
