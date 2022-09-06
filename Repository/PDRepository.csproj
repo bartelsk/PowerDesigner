@@ -98,6 +98,7 @@
     <Compile Include="Documents\IDocumentClient.cs" />
     <Compile Include="Exceptions\InvalidCredentialsException.cs" />
     <Compile Include="Exceptions\InvalidPermissionException.cs" />
+    <Compile Include="Exceptions\InvalidRightsException.cs" />
     <Compile Include="Exceptions\NoRepositoryConnectionException.cs" />
     <Compile Include="Common\Branch.cs" />
     <Compile Include="Common\CheckOutEventArgs.cs" />

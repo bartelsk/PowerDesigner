@@ -39,5 +39,10 @@ namespace PDRepository.Samples
             groups.ForEach(g => Console.WriteLine($"Name: { g.Name } - Description: { g.Description }"));
         }
 
+        public static void CreateGroup(RepositoryClient client)
+        {
+            client.UserClient.CreateGroup("hello");
+        }
+
     }
 }

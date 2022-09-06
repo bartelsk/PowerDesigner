@@ -534,6 +534,19 @@ namespace PDRepository
             return groups;
         }
 
+        public void CreateRepositoryGroup(string name)
+        {
+            BaseObject newGroup = _con.Connection.CreateGroup();
+            if (newGroup != null)
+            {
+                RepositoryGroup group = (RepositoryGroup)newGroup;
+                group.GroupName = name;
+                group.GroupCode = name;
+                group.Rights = (int)SRmgUserRights.SRmgUserRightConnect;
+               
+            }
+        }
+
         #endregion
 
         #endregion
@@ -847,6 +860,18 @@ namespace PDRepository
         {
             if (!Enum.TryParse<PermissionTypeEnum>(permission, out PermissionTypeEnum result))
                 throw new InvalidPermissionException("Invalid permission");
+            return result;
+        }
+
+        /// <summary>
+        /// Tries to parse the specified user or group rights into a valid UserRights enum.
+        /// </summary>
+        /// <param name="rights">The user or group rights to parse.</param>
+        /// <returns>A <see cref="UserRightsEnum"/> enum.</returns>
+        private static UserRightsEnum ParseRights(string rights)
+        {
+            if (!Enum.TryParse<UserRightsEnum>(rights, out UserRightsEnum result))
+                throw new InvalidRightsException("Invalid user or group rights");
             return result;
         }
 

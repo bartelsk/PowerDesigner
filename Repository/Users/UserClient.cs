@@ -29,5 +29,10 @@ namespace PDRepository.Users
         {
             return GetRepositoryGroups();
         }
+
+        public void CreateGroup(string name)
+        {
+            CreateRepositoryGroup(name);
+        }
     }
 }

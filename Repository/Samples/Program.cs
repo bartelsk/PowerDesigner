@@ -59,7 +59,8 @@ namespace PDRepository.Samples
 
                 // Run user samples
                 //UserSamples.ListUsers(client);
-                UserSamples.ListGroups(client);
+                //UserSamples.ListGroups(client);
+                UserSamples.CreateGroup(client);
                 
             }
             catch (Exception ex)

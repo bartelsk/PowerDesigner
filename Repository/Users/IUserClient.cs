@@ -15,5 +15,7 @@ namespace PDRepository.Users
         List<User> ListUsers();
 
         List<Group> ListGroups();
+
+        void CreateGroup(string name);
     }
 }
