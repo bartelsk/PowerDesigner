@@ -40,6 +40,22 @@ namespace PDRepository.Samples
         }
 
         /// <summary>
+        /// Determines whether a group exists.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void GroupExists(RepositoryClient client)
+        {
+            Console.WriteLine("Checking whether group exists...\r\n");
+
+            string groupName = "MyNewGroup";
+
+            bool exists = client.UserClient.GroupExists(groupName);
+            Console.WriteLine($"Group '{ groupName }' does{ (exists ? string.Empty : " not") } exist.");
+
+            Console.WriteLine("Check complete.");
+        }
+
+        /// <summary>
         /// Creates a new group.
         /// </summary>
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
@@ -68,5 +84,14 @@ namespace PDRepository.Samples
             Console.WriteLine($"Group '{ groupName }' has the following rights: { groupRights } \r\n");
         }
 
+        public static void DeleteGroup(RepositoryClient client)
+        {
+            string groupName = "MyNewGroup";
+
+            Console.WriteLine($"Deleting group '{ groupName }'...\r\n");
+            client.UserClient.DeleteGroup(groupName);
+
+            Console.WriteLine($"Group '{ groupName }' has been deleted.\r\n");
+        }
     }
 }

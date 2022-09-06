@@ -39,6 +39,19 @@ namespace PDRepository.Users
         }
 
         /// <summary>
+        /// Determines whether a group exists.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>True if the group exists, False if not.</returns>
+        public bool GroupExists(string groupName)
+        {
+            if (string.IsNullOrEmpty(groupName)) ThrowArgumentNullException(groupName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return RepositoryGroupExists(groupName);
+        }
+
+        /// <summary>
         /// Creates a group and assigns the specified rights.
         /// </summary>
         /// <param name="name">The name of the group.</param>
@@ -62,6 +75,18 @@ namespace PDRepository.Users
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             return GetRepositoryGroupRights(groupName);
+        }
+
+        /// <summary>
+        /// Deletes a repository group.
+        /// </summary>
+        /// <param name="groupName">The name of the group to delete.</param>
+        public void DeleteGroup(string groupName)
+        {
+            if (string.IsNullOrEmpty(groupName)) ThrowArgumentNullException(groupName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            DeleteRepositoryGroup(groupName);
         }
     }
 }

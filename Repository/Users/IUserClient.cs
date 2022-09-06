@@ -25,6 +25,13 @@ namespace PDRepository.Users
         List<Group> ListGroups();
 
         /// <summary>
+        /// Determines whether a group exists.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>True if the group exists, False if not.</returns>
+        bool GroupExists(string groupName);
+
+        /// <summary>
         /// Creates a group and assigns the specified rights.
         /// </summary>
         /// <param name="name">The name of the group.</param>
@@ -37,5 +44,11 @@ namespace PDRepository.Users
         /// <param name="groupName">The name of the group.</param>
         /// <returns>A string with group rights.</returns>
         string GetGroupRights(string groupName);
+
+        /// <summary>
+        /// Deletes a repository group.
+        /// </summary>
+        /// <param name="groupName">The name of the group to delete.</param>
+        void DeleteGroup(string groupName);
     }
 }

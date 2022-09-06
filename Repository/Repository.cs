@@ -541,7 +541,18 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Returns the group rights as a semi-colon separated string.
+        /// Determines whether a repository group exists.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>True if the group exists, False if not.</returns>
+        public bool RepositoryGroupExists(string groupName)
+        {
+            BaseObject repoGroup = _con.Connection.GetGroup(groupName);            
+            return (repoGroup != null);
+        }
+
+        /// <summary>
+        /// Returns the repository group rights as a semi-colon separated string.
         /// </summary>
         /// <param name="groupName">The name of the group.</param>
         /// <returns>A string with group rights.</returns>
@@ -564,19 +575,29 @@ namespace PDRepository
         /// <param name="rights">A <see cref="UserRightsEnum"/> type.</param>
         public void CreateRepositoryGroup(string name, UserRightsEnum rights)
         {
+            if (RepositoryGroupExists(name))
+                throw new RepositoryException($"A group with name '{ name }' already exists.");
+            
             BaseObject newGroup = _con.Connection.CreateGroup();
             if (newGroup != null)
             {
                 RepositoryGroup group = (RepositoryGroup)newGroup;
                 group.GroupName = name;
-                group.GroupCode = name;                
-                group.Rights = (int)rights;               
-            }
+                group.GroupCode = name;
+                group.Rights = (int)rights;
+            }            
         }
 
-        public void DeleteRepositoryGroup(string name)
+        /// <summary>
+        /// Deletes a repository group.
+        /// </summary>
+        /// <param name="groupName">The name of the group to delete.</param>
+        public void DeleteRepositoryGroup(string groupName)
         {
+            if (!RepositoryGroupExists(groupName))
+                throw new RepositoryException($"A group with name '{ groupName }' does not exist.");
 
+            _con.Connection.DeleteGroup(groupName);
         }
 
         #endregion
@@ -903,6 +924,7 @@ namespace PDRepository
         /// <returns>A string with the parsed result.</returns>
         private static string ParseRights(int rights)
         {
+            if (rights < 0) throw new InvalidRightsException("Invalid rights");
             if (rights > 0)
             {
                 BitArray b = new BitArray(new int[] { rights });

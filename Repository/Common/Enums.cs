@@ -6,13 +6,48 @@ namespace PDRepository.Common
     /// <summary>
     /// Permission types of a repository object.
     /// </summary>
-    public enum PermissionTypeEnum { NotSet = -1, Listable = 0, Read = 10, Submit = 20, Write = 30, Full = 40 }
+    public enum PermissionTypeEnum 
+    { 
+        /// <summary>
+        /// Permission has not been set.
+        /// </summary>
+        NotSet = -1,
+
+        /// <summary>
+        /// View the document or folder in the repository browser and in search results. 
+        /// Without this permission, the folder or document is hidden from the user.
+        /// </summary>
+        Listable = 0, 
+        
+        /// <summary>
+        /// Read-only access to the document or folder.
+        /// </summary>
+        Read = 10, 
+        
+        /// <summary>
+        /// Permission to check-in a document.
+        /// </summary>
+        Submit = 20, 
+        
+        /// <summary>
+        /// Permission to write to the document or folder.
+        /// </summary>
+        Write = 30, 
+        
+        /// <summary>
+        /// Full access on all repository objects.
+        /// </summary>
+        Full = 40 
+    }
 
     /// <summary>
     /// Permission types of a repository user or group.
     /// </summary>
     public enum UserRightsEnum 
     { 
+        /// <summary>
+        /// No rights.
+        /// </summary>
         None = 0,
 
         /// <summary>
@@ -71,5 +106,21 @@ namespace PDRepository.Common
     /// <summary>
     /// The status of a repository user.
     /// </summary>
-    public enum UserStatusEnum {  Active, Inactive, Blocked }
+    public enum UserStatusEnum 
+    {  
+        /// <summary>
+        /// The user account is active.
+        /// </summary>
+        Active, 
+
+        /// <summary>
+        /// The user account is inactive.
+        /// </summary>
+        Inactive, 
+
+        /// <summary>
+        /// The user account is blocked.
+        /// </summary>
+        Blocked 
+    }
 }
