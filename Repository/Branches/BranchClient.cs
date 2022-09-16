@@ -15,8 +15,8 @@ namespace PDRepository.Branches
         /// <summary>
         /// Creates a new instance of the <see cref="BranchClient"/> class.
         /// </summary>
-        /// <param name="settings">The current <see cref="RepositorySettings"/>.</param>
-        public BranchClient(RepositorySettings settings) : base(settings)
+        /// <param name="settings">The current repository <see cref="ConnectionSettings"/>.</param>
+        public BranchClient(ConnectionSettings settings) : base(settings)
         {
             Connect();
         }       

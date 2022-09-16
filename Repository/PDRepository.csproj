@@ -107,7 +107,7 @@
     <Compile Include="Repository.cs" />
     <Compile Include="RepositoryConnection.cs" />
     <Compile Include="Exceptions\RepositoryException.cs" />
-    <Compile Include="Common\RepositorySettings.cs" />
+    <Compile Include="Common\ConnectionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryClient.cs" />
     <Compile Include="Users\IUserClient.cs" />

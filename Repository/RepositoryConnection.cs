@@ -14,7 +14,7 @@ namespace PDRepository
     {
         private bool disposedValue;
         private static readonly Lazy<RepositoryConnection> _connection = new Lazy<RepositoryConnection>(() => new RepositoryConnection());
-        private RepositorySettings _settings;
+        private ConnectionSettings _connectionSettings;
         private PdCommon.Application _app;
         private PdRMG.RepositoryConnection _pdRepoCon;
 
@@ -83,28 +83,28 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Sets the current <see cref="RepositorySettings"/>.
+        /// Sets the current repository <see cref="ConnectionSettings"/>.
         /// </summary>
-        public RepositorySettings Settings
+        public ConnectionSettings Settings
         {
             set
             {
-                if (_settings == null)
+                if (_connectionSettings == null)
                 {
-                    _settings = value;
+                    _connectionSettings = value;
                 }
             }
         }
 
         /// <summary>
-        /// Creates a repository connection with the current <see cref="RepositorySettings"/>.
+        /// Creates a repository connection with the current <see cref="ConnectionSettings"/>.
         /// </summary>
         public void Connect()
         {
             if (_app != null)
             {
                 _pdRepoCon = (PdRMG.RepositoryConnection)_app.RepositoryConnection;
-                if (!_pdRepoCon.Open("", _settings.User, _settings.Password))
+                if (!_pdRepoCon.Open(_connectionSettings.RepositoryDefinition, _connectionSettings.User, _connectionSettings.Password))
                 {
                     throw new InvalidCredentialsException("Could not connect to the repository: invalid credentials.");
                 }                

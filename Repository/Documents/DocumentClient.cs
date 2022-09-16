@@ -20,8 +20,8 @@ namespace PDRepository.Documents
         /// <summary>
         /// Creates a new instance of the <see cref="DocumentClient"/> class.
         /// </summary>
-        /// <param name="settings">The current <see cref="RepositorySettings"/>.</param>
-        public DocumentClient(RepositorySettings settings) : base(settings)
+        /// <param name="settings">The current repository <see cref="ConnectionSettings"/>.</param>
+        public DocumentClient(ConnectionSettings settings) : base(settings)
         {
             Connect();
         }

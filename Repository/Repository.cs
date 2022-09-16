@@ -24,7 +24,7 @@ namespace PDRepository
 
         #region Constructor / Destructor
 
-        protected Repository(RepositorySettings settings)
+        protected Repository(ConnectionSettings settings)
         {
             _con = RepositoryConnection.Instance;
             _con.Settings = settings;
@@ -85,7 +85,7 @@ namespace PDRepository
         #region Public methods
 
         /// <summary>
-        /// Creates a repository connection with the current <see cref="RepositorySettings"/>.
+        /// Creates a repository connection with the current repository <see cref="ConnectionSettings"/>.
         /// </summary>
         public void Connect()
         {

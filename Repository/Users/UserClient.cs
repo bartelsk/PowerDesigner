@@ -14,8 +14,8 @@ namespace PDRepository.Users
         /// <summary>
         /// Creates a new instance of the <see cref="UserClient"/> class.
         /// </summary>
-        /// <param name="settings">The current <see cref="RepositorySettings"/>.</param>
-        public UserClient(RepositorySettings settings) : base(settings)
+        /// <param name="settings">The current repository <see cref="ConnectionSettings"/>.</param>
+        public UserClient(ConnectionSettings settings) : base(settings)
         {
             Connect();
         }

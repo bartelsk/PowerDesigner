@@ -16,14 +16,17 @@ namespace PDRepository
     /// </summary>
     public class RepositoryClient : IDisposable
     {
+        protected readonly ConnectionSettings _currentConnectionSettings;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositoryClient"/> class.
         /// </summary>
         /// <param name="settings">A RepositorySettings instance.</param>
-        protected RepositoryClient(RepositorySettings settings)
+        protected RepositoryClient(ConnectionSettings settings)
         {
+            _currentConnectionSettings = settings;
             this.BranchClient = new BranchClient(settings);
-            this.DocumentClient = new DocumentClient(settings);            
+            this.DocumentClient = new DocumentClient(settings);
             this.UserClient = new UserClient(settings);
         }
 
@@ -36,12 +39,12 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Creates a PowerDesigner client and connects to the repository with the specified <see cref="RepositorySettings"/>.
+        /// Creates a PowerDesigner client and connects to the repository with the specified repository <see cref="ConnectionSettings"/>.
         /// Please note: this can take a few seconds depending on the speed and health of the repository.
         /// </summary>
         /// <param name="settings">A RepositorySettings instance.</param>      
-        public static RepositoryClient CreateClient(RepositorySettings settings)
-        {
+        public static RepositoryClient CreateClient(ConnectionSettings settings)
+        {            
             return new RepositoryClient(settings);
         }
 
@@ -54,20 +57,21 @@ namespace PDRepository
         /// Entry point to Documents
         /// </summary>
         public IDocumentClient DocumentClient { get; }
-        
+
         /// <summary>
         /// Entry point to Users
         /// </summary>
         public IUserClient UserClient { get; }
 
         /// <summary>
-        /// Disposes the <see cref="RepositoryClient"/> class.
+        /// Returns the name of the repository definition used at connection time.
         /// </summary>
-        public void Dispose()
+        public string RepositoryDefinitionName
         {
-            BranchClient?.Dispose();
-            DocumentClient?.Dispose();            
-            UserClient?.Dispose();
+            get
+            {
+                return _currentConnectionSettings.RepositoryDefinition;
+            }
         }
 
         /// <summary>
@@ -82,5 +86,15 @@ namespace PDRepository
                 return fileVersion.FileVersion;
             }
         }
+
+        /// <summary>
+        /// Disposes the <see cref="RepositoryClient"/> class.
+        /// </summary>
+        public void Dispose()
+        {
+            BranchClient?.Dispose();
+            DocumentClient?.Dispose();
+            UserClient?.Dispose();
+        }               
     }
 }
