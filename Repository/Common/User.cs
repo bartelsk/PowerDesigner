@@ -41,6 +41,11 @@ namespace PDRepository.Common
         public string LoginName { get; set; }
 
         /// <summary>
+        /// Specifies user rights.
+        /// </summary>
+        public string Rights { get; set; }
+
+        /// <summary>
         /// The user account status.
         /// </summary>
         public UserStatusEnum Status { get; set; }

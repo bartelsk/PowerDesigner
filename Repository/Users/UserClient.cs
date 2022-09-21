@@ -32,14 +32,82 @@ namespace PDRepository.Users
         /// <summary>
         /// Determines whether a user exists.
         /// </summary>
-        /// <param name="userName">The name of the user.</param>
+        /// <param name="loginName">The login name of the user.</param>
         /// <returns>True if the user exists, False if not.</returns>
-        public bool UserExists(string userName)
+        public bool UserExists(string loginName)
         {
-            if (string.IsNullOrEmpty(userName)) ThrowArgumentNullException(userName);
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
-            return RepositoryUserExists(userName);
+            return RepositoryUserExists(loginName);
+        }
+
+        /// <summary>
+        /// Creates a user and assigns the specified rights.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="fullName">The real name of the user.</param>
+        /// <param name="emailAddress">The email address of the user (optional).</param>
+        /// <param name="temporaryPassword">Contains the temporary password of the newly created user.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        public void CreateUser(string loginName, string fullName, string emailAddress, out string temporaryPassword, UserOrGroupRightsEnum rights)
+        {
+            CreateUser(loginName, fullName, emailAddress, out temporaryPassword, rights, null);
+        }
+
+        /// <summary>
+        /// Creates a user and assigns the specified rights.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="fullName">The real name of the user.</param>
+        /// <param name="emailAddress">The email address of the user (optional).</param>
+        /// <param name="temporaryPassword">Contains the temporary password of the newly created user.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        /// <param name="groupName">The name of the group to which to add the user.</param>
+        public void CreateUser(string loginName, string fullName, string emailAddress, out string temporaryPassword, UserOrGroupRightsEnum rights, string groupName)
+        {
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (string.IsNullOrEmpty(fullName)) ThrowArgumentNullException(fullName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            CreateRepositoryUser(loginName, fullName, emailAddress, out temporaryPassword, rights, groupName);
+        }
+
+        public void AddUserToGroup(string loginName, string groupName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RemoveUserFromGroup(string loginName, string groupName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetUserRights(string loginName, UserOrGroupRightsEnum rights)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string GetUserRights(string loginName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string GetUserGroups(string loginName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Deletes a user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user to delete.</param>
+        public void DeleteUser(string loginName)
+        {
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            DeleteRepositoryUser(loginName);
         }
 
         /// <summary>
@@ -68,8 +136,8 @@ namespace PDRepository.Users
         /// Creates a group and assigns the specified rights.
         /// </summary>
         /// <param name="name">The name of the group.</param>
-        /// <param name="rights">A <see cref="UserRightsEnum"/> type.</param>
-        public void CreateGroup(string name, UserRightsEnum rights)
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        public void CreateGroup(string name, UserOrGroupRightsEnum rights)
         {
             if (string.IsNullOrEmpty(name)) ThrowArgumentNullException(name);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
@@ -90,8 +158,13 @@ namespace PDRepository.Users
             return GetRepositoryGroupRights(groupName);
         }
 
+        public void SetGroupRights(string groupName, UserOrGroupRightsEnum rights)
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
-        /// Deletes a repository group.
+        /// Deletes a group.
         /// </summary>
         /// <param name="groupName">The name of the group to delete.</param>
         public void DeleteGroup(string groupName)

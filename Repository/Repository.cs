@@ -519,8 +519,9 @@ namespace PDRepository
             ObjectCol allUsers = _con.Connection.Users;
             foreach (RepositoryUser user in allUsers)
             {
-                users.Add(ParseRepoUser(user));
-                // priviliges -> Groups?
+                // user rights are currently only the rights assigned directly to the user
+                // they do not include the inherited group rights yet.
+                users.Add(ParseRepoUser(user));                
             }
             return users;           
         }
@@ -528,12 +529,64 @@ namespace PDRepository
         /// <summary>
         /// Determines whether a repository user exists.
         /// </summary>
-        /// <param name="userName">The name of the user.</param>
+        /// <param name="loginName">The login name of the user.</param>
         /// <returns>True if the user exists, False if not.</returns>
-        public bool RepositoryUserExists(string userName)
+        public bool RepositoryUserExists(string loginName)
         {
-            BaseObject repoUser = _con.Connection.GetUser(userName);
+            BaseObject repoUser = _con.Connection.GetUser(loginName);
             return (repoUser != null);
+        }
+
+        /// <summary>
+        /// Creates a repository user and assigns the specified rights.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="fullName">The real name of the user.</param>
+        /// <param name="emailAddress">The email address of the user (optional).</param>
+        /// <param name="temporaryPassword">Contains the temporary password of the newly created user.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        /// <param name="groupName">The name of the group to which to add the user (optional).</param>
+        public void CreateRepositoryUser(string loginName, string fullName, string emailAddress, out string temporaryPassword, UserOrGroupRightsEnum rights, string groupName)
+        {
+            if (RepositoryUserExists(loginName))
+                throw new RepositoryException($"A user with login name '{ loginName }' already exists.");
+
+            if (!string.IsNullOrEmpty(groupName) && !RepositoryGroupExists(groupName))
+                throw new RepositoryException($"A group with name '{ groupName }' does not exist.");
+
+            temporaryPassword = _con.Connection.GeneratePassword();
+            BaseObject newUser = _con.Connection.CreateUser();
+            if (newUser != null)
+            {
+                RepositoryUser user = (RepositoryUser)newUser;
+                user.LoginName = loginName;
+                user.FullName = fullName;
+                user.EmailAddress = emailAddress;                
+                user.SetPassword(temporaryPassword);
+                user.Rights = (int)rights;
+
+                if (!string.IsNullOrEmpty(groupName))
+                {
+                    BaseObject repoGroup = ParseUserOrGroup(groupName);
+                    if (repoGroup != null)
+                    {
+                        RepositoryGroup group = (RepositoryGroup)repoGroup;
+                        group.AddMember(user.LoginName);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deletes a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user to delete.</param>
+        public void DeleteRepositoryUser(string loginName)
+        {
+            if (!RepositoryUserExists(loginName))
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            _con.Connection.DeleteUser(loginName);
         }
 
         /// <summary>
@@ -583,8 +636,8 @@ namespace PDRepository
         /// Creates a repository group and assigns the specified rights.
         /// </summary>
         /// <param name="name">The name of the group.</param>
-        /// <param name="rights">A <see cref="UserRightsEnum"/> type.</param>
-        public void CreateRepositoryGroup(string name, UserRightsEnum rights)
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        public void CreateRepositoryGroup(string name, UserOrGroupRightsEnum rights)
         {
             if (RepositoryGroupExists(name))
                 throw new RepositoryException($"A group with name '{ name }' already exists.");
@@ -890,6 +943,7 @@ namespace PDRepository
                     FullName = repoUser.FullName,
                     LastLoginDate = repoUser.LastLoginDate,
                     LoginName = repoUser.LoginName,
+                    Rights = ParseRights(repoUser.Rights), // don't do that here, but use the private function to get user rights
                     Status = ParseUserStatus(repoUser.Status)
                 };
             }

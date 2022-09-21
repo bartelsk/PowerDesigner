@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 namespace PDRepository.Samples
 {
-    static class UserSamples
-    {
+    static class UserAndGroupSamples
+    {        
         /// <summary>
         /// Retrieve all users but only display the first 25 users.
         /// </summary>
@@ -22,7 +22,7 @@ namespace PDRepository.Samples
 
             Console.WriteLine("Listing first 25 users...\r\n");
 
-            users.Take(25).ToList().ForEach(u => Console.WriteLine($"Name: { u.FullName } - Status: { u.Status }"));
+            users.Take(25).ToList().ForEach(u => Console.WriteLine($"Name: { u.FullName } - Status: { u.Status } - Rights: { u.Rights } "));
         }
 
         /// <summary>
@@ -33,12 +33,63 @@ namespace PDRepository.Samples
         {
             Console.WriteLine("Checking whether user exists...\r\n");
 
-            string userName = "AUser";
+            string loginName = "UserA";
 
-            bool exists = client.UserClient.UserExists(userName);
-            Console.WriteLine($"User '{ userName }' does{ (exists ? string.Empty : " not") } exist.");
+            bool exists = client.UserClient.UserExists(loginName);
+            Console.WriteLine($"A user with login name '{ loginName }' does{ (exists ? string.Empty : " not") } exist.");
 
             Console.WriteLine("Check complete.");
+        }
+
+        /// <summary>
+        /// Creates a user.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void CreateUser(RepositoryClient client)
+        {
+            string loginName = "UserA";
+            string fullName = "My Full Name";
+            string emailAddress = "UserA@company.com";
+            UserOrGroupRightsEnum userRights = UserOrGroupRightsEnum.Connect | UserOrGroupRightsEnum.FreezeVersions;
+
+            Console.WriteLine($"Creating user with login name '{ loginName }'...\r\n");
+            
+            client.UserClient.CreateUser(loginName, fullName, emailAddress, out string temporaryPassword, userRights);
+
+            Console.WriteLine($"User '{ loginName }' created with temporary password '{ temporaryPassword }'.\r\n");
+        }
+
+        /// <summary>
+        /// Creates a user and adds it to a group.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void CreateUserAndAddToGroup(RepositoryClient client)
+        {
+            string loginName = "UserA";
+            string fullName = "My Full Name";
+            string groupName = "AGroup";
+            string emailAddress = "UserA@company.com";
+            UserOrGroupRightsEnum userRights = UserOrGroupRightsEnum.Connect | UserOrGroupRightsEnum.EditPortalObjects;
+
+            Console.WriteLine($"Creating user with login name '{ loginName }' in group '{ groupName }'...\r\n");
+
+            client.UserClient.CreateUser(loginName, fullName, emailAddress, out string temporaryPassword, userRights, groupName);
+
+            Console.WriteLine($"User '{ loginName }' created with temporary password '{ temporaryPassword }' in group '{ groupName }'.\r\n");
+        }
+
+        /// <summary>
+        /// Deletes a user.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void DeleteUser(RepositoryClient client)
+        {
+            string loginName = "UserA";
+
+            Console.WriteLine($"Deleting user with login name '{ loginName }'...\r\n");
+            client.UserClient.DeleteUser(loginName);
+
+            Console.WriteLine($"User '{ loginName }' has been deleted.\r\n");
         }
 
         /// <summary>
@@ -77,8 +128,8 @@ namespace PDRepository.Samples
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void CreateGroup(RepositoryClient client)
         {
-            string groupName = "MyNewGroup";
-            UserRightsEnum groupRights = UserRightsEnum.Connect | UserRightsEnum.FreezeVersions | UserRightsEnum.ManageBranches;
+            string groupName = "AGroup";
+            UserOrGroupRightsEnum groupRights = UserOrGroupRightsEnum.Connect | UserOrGroupRightsEnum.FreezeVersions | UserOrGroupRightsEnum.ManageBranches;
             
             Console.WriteLine($"Creating group '{ groupName }'...\r\n");
             client.UserClient.CreateGroup(groupName, groupRights);
@@ -92,7 +143,7 @@ namespace PDRepository.Samples
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void GetGroupRights(RepositoryClient client)
         {
-            string groupName = "MyNewGroup";            
+            string groupName = "AGroup";            
 
             Console.WriteLine($"Retrieving rights for group '{ groupName }'...\r\n");
             string groupRights = client.UserClient.GetGroupRights(groupName);
@@ -102,7 +153,7 @@ namespace PDRepository.Samples
 
         public static void DeleteGroup(RepositoryClient client)
         {
-            string groupName = "MyNewGroup";
+            string groupName = "AGroup";
 
             Console.WriteLine($"Deleting group '{ groupName }'...\r\n");
             client.UserClient.DeleteGroup(groupName);

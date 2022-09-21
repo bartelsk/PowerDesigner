@@ -63,14 +63,18 @@ namespace PDRepository.Samples
                 //DocumentSamples.DeleteDocumentPermission(client);
 
                 // Run group / user samples                
-                //UserSamples.ListGroups(client);
-                //UserSamples.GroupExists(client);
-                //UserSamples.CreateGroup(client);
-                //UserSamples.GetGroupRights(client);
-                //UserSamples.DeleteGroup(client);
+                //UserAndGroupSamples.ListGroups(client);
+                //UserAndGroupSamples.GroupExists(client);
+                //UserAndGroupSamples.CreateGroup(client);
+                //UserAndGroupSamples.GetGroupRights(client);
+                //UserAndGroupSamples.DeleteGroup(client);
 
-                //UserSamples.ListUsers(client);
-                UserSamples.UserExists(client);
+                //UserAndGroupSamples.ListUsers(client);
+                //UserAndGroupSamples.UserExists(client);
+                //UserAndGroupSamples.CreateUser(client);
+                //UserAndGroupSamples.DeleteUser(client);
+                //UserAndGroupSamples.CreateUserAndAddToGroup(client);
+
 
             }
             catch (Exception ex)

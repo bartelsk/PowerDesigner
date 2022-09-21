@@ -43,7 +43,7 @@ namespace PDRepository.Common
     /// <summary>
     /// Permission types of a repository user or group.
     /// </summary>
-    public enum UserRightsEnum 
+    public enum UserOrGroupRightsEnum 
     { 
         /// <summary>
         /// No rights.
