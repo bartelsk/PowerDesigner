@@ -30,6 +30,19 @@ namespace PDRepository.Users
         }
 
         /// <summary>
+        /// Determines whether a user exists.
+        /// </summary>
+        /// <param name="userName">The name of the user.</param>
+        /// <returns>True if the user exists, False if not.</returns>
+        public bool UserExists(string userName)
+        {
+            if (string.IsNullOrEmpty(userName)) ThrowArgumentNullException(userName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return RepositoryUserExists(userName);
+        }
+
+        /// <summary>
         /// Lists the available groups.
         /// </summary>
         /// <returns>A List with <see cref="Group"/> types.</returns>

@@ -70,6 +70,7 @@ namespace PDRepository.Samples
                 //UserSamples.DeleteGroup(client);
 
                 //UserSamples.ListUsers(client);
+                UserSamples.UserExists(client);
 
             }
             catch (Exception ex)

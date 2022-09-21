@@ -19,6 +19,13 @@ namespace PDRepository.Users
         List<User> ListUsers();
 
         /// <summary>
+        /// Determines whether a user exists.
+        /// </summary>
+        /// <param name="userName">The name of the user.</param>
+        /// <returns>True if the user exists, False if not.</returns>
+        bool UserExists(string userName);
+
+        /// <summary>
         /// Lists the available groups.
         /// </summary>
         /// <returns>A List with <see cref="Group"/> types.</returns>

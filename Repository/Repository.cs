@@ -526,6 +526,17 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Determines whether a repository user exists.
+        /// </summary>
+        /// <param name="userName">The name of the user.</param>
+        /// <returns>True if the user exists, False if not.</returns>
+        public bool RepositoryUserExists(string userName)
+        {
+            BaseObject repoUser = _con.Connection.GetUser(userName);
+            return (repoUser != null);
+        }
+
+        /// <summary>
         /// Lists the available repository groups.
         /// </summary>
         /// <returns>A List with <see cref="Group"/> types.</returns>

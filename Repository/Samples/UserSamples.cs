@@ -26,6 +26,22 @@ namespace PDRepository.Samples
         }
 
         /// <summary>
+        /// Determines whether a user exists.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void UserExists(RepositoryClient client)
+        {
+            Console.WriteLine("Checking whether user exists...\r\n");
+
+            string userName = "AUser";
+
+            bool exists = client.UserClient.UserExists(userName);
+            Console.WriteLine($"User '{ userName }' does{ (exists ? string.Empty : " not") } exist.");
+
+            Console.WriteLine("Check complete.");
+        }
+
+        /// <summary>
         /// Retrieve all groups but only display the first 10 groups.
         /// </summary>
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
@@ -47,7 +63,7 @@ namespace PDRepository.Samples
         {
             Console.WriteLine("Checking whether group exists...\r\n");
 
-            string groupName = "MyNewGroup";
+            string groupName = "AGroup";
 
             bool exists = client.UserClient.GroupExists(groupName);
             Console.WriteLine($"Group '{ groupName }' does{ (exists ? string.Empty : " not") } exist.");
