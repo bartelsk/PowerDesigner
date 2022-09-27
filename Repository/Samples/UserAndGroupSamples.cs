@@ -76,7 +76,7 @@ namespace PDRepository.Samples
             client.UserClient.CreateUser(loginName, fullName, emailAddress, out string temporaryPassword, userRights, groupName);
 
             Console.WriteLine($"User '{ loginName }' created with temporary password '{ temporaryPassword }' in group '{ groupName }'.\r\n");
-        }
+        }        
 
         /// <summary>
         /// Deletes a user.
@@ -103,7 +103,7 @@ namespace PDRepository.Samples
             List<Group> groups = client.UserClient.ListGroups();
 
             Console.WriteLine("Listing first 10 groups...\r\n");
-            groups.Take(10).ToList().ForEach(g => Console.WriteLine($"Name: { g.Name } - Description: { g.Description } - Rights: { g.Rights } "));
+            groups.Take(10).ToList().ForEach(g => Console.WriteLine($"Name: { g.Name } - Description: { g.Description } - Rights: { g.Rights }"));
         }
 
         /// <summary>
@@ -151,6 +151,10 @@ namespace PDRepository.Samples
             Console.WriteLine($"Group '{ groupName }' has the following rights: { groupRights } \r\n");
         }
 
+        /// <summary>
+        /// Deletes a group.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void DeleteGroup(RepositoryClient client)
         {
             string groupName = "AGroup";
@@ -159,6 +163,20 @@ namespace PDRepository.Samples
             client.UserClient.DeleteGroup(groupName);
 
             Console.WriteLine($"Group '{ groupName }' has been deleted.\r\n");
+        }
+
+        /// <summary>
+        /// Retrieves a list of user groups.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void GetUserGroups(RepositoryClient client)
+        {
+            string loginName = "DoornA";
+
+            Console.WriteLine($"Listing groups of which user '{ loginName }' is a member...\r\n");
+
+            List<Group> groups = client.UserClient.GetUserGroups(loginName);
+            groups.ForEach(g => Console.WriteLine($"Group name: { g.Name } - Description: { g.Description } - Rights: { g.Rights }"));
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace PDRepository.Users
 {
     /// <summary>
-    /// This class contains methods to work with PowerDesigner repository users.
+    /// This class contains methods to work with PowerDesigner repository users and groups.
     /// </summary>
     public class UserClient : Repository, IUserClient
     {
@@ -73,14 +73,45 @@ namespace PDRepository.Users
             CreateRepositoryUser(loginName, fullName, emailAddress, out temporaryPassword, rights, groupName);
         }
 
+        /// <summary>
+        /// Adds a repository user to a repository group.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="groupName">The name of the group to which to add the user.</param>
         public void AddUserToGroup(string loginName, string groupName)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (string.IsNullOrEmpty(groupName)) ThrowArgumentNullException(groupName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            AddUserToRepositoryGroup(loginName, groupName);
         }
 
+        /// <summary>
+        /// Removes a repository user from a repository group.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="groupName">The name of the group from which to remove the user.</param>
         public void RemoveUserFromGroup(string loginName, string groupName)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (string.IsNullOrEmpty(groupName)) ThrowArgumentNullException(groupName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            RemoveUserFromRepositoryGroup(loginName, groupName);
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Group"/> objects of which the specified user is a member.       
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <returns>A List with <see cref="Group"/> objects.</returns>
+        public List<Group> GetUserGroups(string loginName)
+        {
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return GetRepositoryUserGroups(loginName);
         }
 
         public void SetUserRights(string loginName, UserOrGroupRightsEnum rights)
@@ -93,15 +124,10 @@ namespace PDRepository.Users
             throw new System.NotImplementedException();
         }
 
-        public string GetUserGroups(string loginName)
-        {
-            throw new System.NotImplementedException();
-        }
-
         /// <summary>
         /// Blocks a repository user.
         /// </summary>
-        /// <param name="loginName">The login name of the user.</param>  
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
         public void BlockUser(string loginName)
         {
             if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
@@ -113,7 +139,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Unblocks a repository user.
         /// </summary>
-        /// <param name="loginName">The login name of the user.</param>  
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
         public void UnblockUser(string loginName)
         {
             if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
@@ -125,7 +151,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Deletes a user.
         /// </summary>
-        /// <param name="loginName">The login name of the user to delete.</param>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
         public void DeleteUser(string loginName)
         {
             if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);

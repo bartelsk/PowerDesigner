@@ -46,32 +46,47 @@ namespace PDRepository.Users
         /// <param name="groupName">The name of the group to which to add the user.</param>
         void CreateUser(string loginName, string fullName, string emailAddress, out string temporaryPassword, UserOrGroupRightsEnum rights, string groupName);
 
+        /// <summary>
+        /// Adds a repository user to a repository group.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="groupName">The name of the group to which to add the user.</param>
         void AddUserToGroup(string loginName, string groupName);
 
+        /// <summary>
+        /// Removes a repository user from a repository group.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="groupName">The name of the group from which to remove the user.</param>
         void RemoveUserFromGroup(string loginName, string groupName);
+
+        /// <summary>
+        /// Returns a list of <see cref="Group"/> objects of which the specified user is a member.       
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <returns>A List with <see cref="Group"/> objects.</returns>
+        List<Group> GetUserGroups(string loginName);
 
         void SetUserRights(string loginName, UserOrGroupRightsEnum rights);
 
-        string GetUserRights(string loginName);
-
-        string GetUserGroups(string loginName);
+        string GetUserRights(string loginName);        
 
         /// <summary>
         /// Blocks a repository user.
         /// </summary>
-        /// <param name="loginName">The login name of the user.</param>  
+        /// <param name="loginName">The name with which the user connects to the repository.</param> 
         void BlockUser(string loginName);
 
         /// <summary>
         /// Unblocks a repository user.
         /// </summary>
-        /// <param name="loginName">The login name of the user.</param>  
+        /// <param name="loginName">The name with which the user connects to the repository.</param>  
         void UnblockUser(string loginName);
 
         /// <summary>
         /// Deletes a user.
         /// </summary>
-        /// <param name="loginName">The login name of the user to delete.</param>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
         void DeleteUser(string loginName);
         
         /// <summary>

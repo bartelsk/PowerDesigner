@@ -59,7 +59,7 @@ namespace PDRepository
         public IDocumentClient DocumentClient { get; }
 
         /// <summary>
-        /// Entry point to Users
+        /// Entry point to Users and Groups
         /// </summary>
         public IUserClient UserClient { get; }
 

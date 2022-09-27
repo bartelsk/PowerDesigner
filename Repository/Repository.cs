@@ -566,14 +566,74 @@ namespace PDRepository
 
                 if (!string.IsNullOrEmpty(groupName))
                 {
-                    BaseObject repoGroup = ParseUserOrGroup(groupName);
+                    RepositoryGroup repoGroup = GetGroup(groupName);
                     if (repoGroup != null)
                     {
-                        RepositoryGroup group = (RepositoryGroup)repoGroup;
-                        group.AddMember(user.LoginName);
+                        repoGroup.AddMember(user.LoginName);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds a repository user to a repository group.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="groupName">The name of the group to which to add the user.</param>
+        public void AddUserToRepositoryGroup(string loginName, string groupName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ groupName }' does not exist.");
+
+            repoGroup.AddMember(repoUser.LoginName);
+        }
+
+        /// <summary>
+        /// Removes a repository user from a repository group.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="groupName">The name of the group from which to remove the user.</param>
+        public void RemoveUserFromRepositoryGroup(string loginName, string groupName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ groupName }' does not exist.");
+
+            repoGroup.RemoveMember(repoUser.LoginName);
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Group"/> objects of which the specified user is a member.       
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <returns>A List with <see cref="Group"/> objects.</returns> 
+        public List<Group> GetRepositoryUserGroups(string loginName)
+        {
+            List<Group> userGroups = new List<Group>();
+
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            foreach (RepositoryGroup repoGroup in repoUser.Groups)
+            {
+                userGroups.Add(new Group() 
+                { 
+                    Description = repoGroup.ShortDescription,
+                    Name = repoGroup.GroupName,
+                    Rights = ParseRights(repoGroup.Rights)                
+                });                
+            }
+            return userGroups;            
         }
 
         /// <summary>
