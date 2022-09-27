@@ -99,6 +99,30 @@ namespace PDRepository.Users
         }
 
         /// <summary>
+        /// Blocks a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>  
+        public void BlockUser(string loginName)
+        {
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            BlockRepositoryUser(loginName);
+        }
+
+        /// <summary>
+        /// Unblocks a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>  
+        public void UnblockUser(string loginName)
+        {
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            UnblockRepositoryUser(loginName);
+        }
+
+        /// <summary>
         /// Deletes a user.
         /// </summary>
         /// <param name="loginName">The login name of the user to delete.</param>

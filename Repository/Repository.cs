@@ -532,9 +532,8 @@ namespace PDRepository
         /// <param name="loginName">The login name of the user.</param>
         /// <returns>True if the user exists, False if not.</returns>
         public bool RepositoryUserExists(string loginName)
-        {
-            BaseObject repoUser = _con.Connection.GetUser(loginName);
-            return (repoUser != null);
+        {            
+            return (GetUser(loginName) != null);
         }
 
         /// <summary>
@@ -578,6 +577,32 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Blocks a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>  
+        public void BlockRepositoryUser(string loginName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            repoUser.Blocked = true;
+        }
+
+        /// <summary>
+        /// Unblocks a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>        
+        public void UnblockRepositoryUser(string loginName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            repoUser.Blocked = false;
+        }
+
+        /// <summary>
         /// Deletes a repository user.
         /// </summary>
         /// <param name="loginName">The login name of the user to delete.</param>
@@ -610,9 +635,8 @@ namespace PDRepository
         /// <param name="groupName">The name of the group.</param>
         /// <returns>True if the group exists, False if not.</returns>
         public bool RepositoryGroupExists(string groupName)
-        {
-            BaseObject repoGroup = _con.Connection.GetGroup(groupName);            
-            return (repoGroup != null);
+        {            
+            return (GetGroup(groupName) != null);
         }
 
         /// <summary>
@@ -623,10 +647,10 @@ namespace PDRepository
         public string GetRepositoryGroupRights(string groupName)
         {
             string result = string.Empty;
-            BaseObject repoGroup = _con.Connection.GetGroup(groupName);
+            RepositoryGroup repoGroup = GetGroup(groupName);            
             if (repoGroup != null)
             {                
-                Group group = ParseRepoGroup(repoGroup as RepositoryGroup);
+                Group group = ParseRepoGroup(repoGroup);
                 result = group.Rights;
             }
             return result;
@@ -821,27 +845,37 @@ namespace PDRepository
             return Path.Combine(targetFolder, info.ExtractionFileName);            
         }
 
-      private RepositoryUser GetUser(string loginName)
-      {
-         RepositoryUser user = null;
-         BaseObject repoUser = _con.Connection.GetUser(loginName);
-         if (repoUser != null)
-         {
-            user = (RepositoryUser)repoUser;
-         }
-         return user;
-      }
+        /// <summary>
+        /// Returns a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>
+        /// <returns>A <see cref="RepositoryUser"/> type.</returns>
+        private RepositoryUser GetUser(string loginName)
+        {
+            RepositoryUser user = null;
+            BaseObject repoUser = _con.Connection.GetUser(loginName);
+            if (repoUser != null)
+            {
+                user = (RepositoryUser)repoUser;
+            }
+            return user;
+        }
 
-      private RepositoryGroup GetGroup(string groupName)
-      {
-         RepositoryGroup group = null;
-         BaseObject repoGroup = _con.Connection.GetGroup(groupName);
-         if (repoGroup != null)
-         {
-            group = (RepositoryGroup)repoGroup;
-         }
-         return group;
-      }
+        /// <summary>
+        /// Returns a repository group.
+        /// </summary>
+        /// <param name="groupName">The group name.</param>
+        /// <returns>A <see cref="RepositoryGroup"/> type.</returns>
+        private RepositoryGroup GetGroup(string groupName)
+        {
+            RepositoryGroup group = null;
+            BaseObject repoGroup = _con.Connection.GetGroup(groupName);
+            if (repoGroup != null)
+            {
+                group = (RepositoryGroup)repoGroup;
+            }
+            return group;
+        }
 
         /// <summary>
         /// Tries to parse the specified user or group name.
