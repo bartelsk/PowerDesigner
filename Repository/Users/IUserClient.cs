@@ -56,6 +56,10 @@ namespace PDRepository.Users
 
         string GetUserGroups(string loginName);
 
+        bool BlockUser(string loginName);
+
+        bool UnblockUser(string loginName);
+
         /// <summary>
         /// Deletes a user.
         /// </summary>

@@ -821,6 +821,28 @@ namespace PDRepository
             return Path.Combine(targetFolder, info.ExtractionFileName);            
         }
 
+      private RepositoryUser GetUser(string loginName)
+      {
+         RepositoryUser user = null;
+         BaseObject repoUser = _con.Connection.GetUser(loginName);
+         if (repoUser != null)
+         {
+            user = (RepositoryUser)repoUser;
+         }
+         return user;
+      }
+
+      private RepositoryGroup GetGroup(string groupName)
+      {
+         RepositoryGroup group = null;
+         BaseObject repoGroup = _con.Connection.GetGroup(groupName);
+         if (repoGroup != null)
+         {
+            group = (RepositoryGroup)repoGroup;
+         }
+         return group;
+      }
+
         /// <summary>
         /// Tries to parse the specified user or group name.
         /// </summary>
