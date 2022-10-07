@@ -121,7 +121,10 @@ namespace PDRepository.Users
 
         public string GetUserRights(string loginName)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return GetRepositoryUserRights(loginName);            
         }
 
         /// <summary>

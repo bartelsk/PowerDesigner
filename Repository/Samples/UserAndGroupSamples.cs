@@ -178,5 +178,15 @@ namespace PDRepository.Samples
             List<Group> groups = client.UserClient.GetUserGroups(loginName);
             groups.ForEach(g => Console.WriteLine($"Group name: { g.Name } - Description: { g.Description } - Rights: { g.Rights }"));
         }
+
+        public static void GetUserRights(RepositoryClient client)
+        {
+            string loginName = "Alfred.Douma";
+
+            Console.WriteLine($"Listing user rights of user '{ loginName }'...\r\n");
+            string userRights = client.UserClient.GetUserRights(loginName);
+
+            Console.WriteLine($"User '{ loginName }' has the following rights: { userRights } \r\n");
+        }
     }
 }

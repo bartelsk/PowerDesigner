@@ -75,7 +75,8 @@ namespace PDRepository.Samples
                 //UserAndGroupSamples.GetGroupRights(client);
                 //UserAndGroupSamples.DeleteGroup(client);
 
-                UserAndGroupSamples.GetUserGroups(client);
+                //UserAndGroupSamples.GetUserGroups(client);
+                UserAndGroupSamples.GetUserRights(client);
 
             }
             catch (Exception ex)

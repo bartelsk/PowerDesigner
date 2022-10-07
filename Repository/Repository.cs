@@ -636,6 +636,20 @@ namespace PDRepository
             return userGroups;            
         }
 
+        public string GetRepositoryUserRights(string loginName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            int rights = repoUser.Rights;
+            foreach (RepositoryGroup repoGroup in repoUser.Groups)
+            {
+                rights |= repoGroup.Rights;                
+            }
+            return ParseRights(rights);
+        }
+
         /// <summary>
         /// Blocks a repository user.
         /// </summary>
