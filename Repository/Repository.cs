@@ -636,6 +636,11 @@ namespace PDRepository
             return userGroups;            
         }
 
+        /// <summary>
+        /// Returns the repository user rights as a semi-colon separated string.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <returns>A string with group rights.</returns>
         public string GetRepositoryUserRights(string loginName)
         {
             RepositoryUser repoUser = GetUser(loginName);
@@ -643,11 +648,36 @@ namespace PDRepository
                 throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
 
             int rights = repoUser.Rights;
+
+            // Add inherited rights 
             foreach (RepositoryGroup repoGroup in repoUser.Groups)
             {
                 rights |= repoGroup.Rights;                
-            }
+            }   
             return ParseRights(rights);
+        }
+
+        /// <summary>
+        /// Assigns the specified rights to a user.
+        /// Please note this method does not affect inherited group rights (if any).
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        /// <param name="replaceExisting">When true, replaces the existing user rights with the specified ones. When false, the specified rights will be added to the existing user rights.</param>
+        public void SetRepositoryUserRights(string loginName, UserOrGroupRightsEnum rights, bool replaceExisting)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+                        
+            if (replaceExisting)
+            {
+                repoUser.Rights = (int)rights;
+            }
+            else
+            {
+                repoUser.Rights |= (int)rights;
+            }            
         }
 
         /// <summary>
@@ -719,15 +749,36 @@ namespace PDRepository
         /// <param name="groupName">The name of the group.</param>
         /// <returns>A string with group rights.</returns>
         public string GetRepositoryGroupRights(string groupName)
+        {            
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ repoGroup }' does not exist.");
+
+            Group group = ParseRepoGroup(repoGroup);
+            return group.Rights;
+        }
+
+        /// <summary>
+        /// Assigns the specified rights to a repository group.
+        /// Please note this method does not alter the rights of the individual users in the group (if any).
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        /// <param name="replaceExisting">When true, replaces the existing group rights with the specified ones. When false, the specified rights will be added to the existing group rights.</param>
+        public void SetRepositoryGroupRights(string groupName, UserOrGroupRightsEnum rights, bool replaceExisting)
         {
-            string result = string.Empty;
-            RepositoryGroup repoGroup = GetGroup(groupName);            
-            if (repoGroup != null)
-            {                
-                Group group = ParseRepoGroup(repoGroup);
-                result = group.Rights;
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ repoGroup }' does not exist.");
+
+            if (replaceExisting)
+            {
+                repoGroup.Rights = (int)rights;
             }
-            return result;
+            else
+            {
+                repoGroup.Rights |= (int)rights;
+            }                
         }
 
         /// <summary>

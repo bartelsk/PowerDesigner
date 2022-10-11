@@ -152,6 +152,36 @@ namespace PDRepository.Samples
         }
 
         /// <summary>
+        /// Assigns additional group rights.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void AddGroupRights(RepositoryClient client)
+        {
+            string groupName = "AGroup";
+            UserOrGroupRightsEnum rights = UserOrGroupRightsEnum.EditPortalObjects | UserOrGroupRightsEnum.EditPortalExtensions;
+
+            Console.WriteLine($"Assigning additional group rights to group '{ groupName }'...\r\n");
+            client.UserClient.SetGroupRights(groupName, rights, false);
+
+            Console.WriteLine($"Rights of group '{ groupName }' have been updated. \r\n");
+        }
+
+        /// <summary>
+        /// Clears the available group rights and assigns new ones.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void ReplaceGroupRights(RepositoryClient client)
+        {
+            string groupName = "AGroup";
+            UserOrGroupRightsEnum rights = UserOrGroupRightsEnum.ManageUsers;
+
+            Console.WriteLine($"Replacing group rights of group '{ groupName }'...\r\n");
+            client.UserClient.SetGroupRights(groupName, rights, true);
+
+            Console.WriteLine($"Rights of group '{ groupName }' have been updated. \r\n");
+        }
+
+        /// <summary>
         /// Deletes a group.
         /// </summary>
         /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
@@ -179,6 +209,10 @@ namespace PDRepository.Samples
             groups.ForEach(g => Console.WriteLine($"Group name: { g.Name } - Description: { g.Description } - Rights: { g.Rights }"));
         }
 
+        /// <summary>
+        /// Retrieves user rights.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
         public static void GetUserRights(RepositoryClient client)
         {
             string loginName = "Alfred.Douma";
@@ -187,6 +221,36 @@ namespace PDRepository.Samples
             string userRights = client.UserClient.GetUserRights(loginName);
 
             Console.WriteLine($"User '{ loginName }' has the following rights: { userRights } \r\n");
+        }
+
+        /// <summary>
+        /// Assigns additional user rights.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void AddUserRights(RepositoryClient client)
+        {
+            string loginName = "Alfred.Douma";
+            UserOrGroupRightsEnum rights = UserOrGroupRightsEnum.EditPortalObjects | UserOrGroupRightsEnum.EditPortalExtensions;
+
+            Console.WriteLine($"Assigning additional user rights to user '{ loginName }'...\r\n");
+            client.UserClient.SetUserRights(loginName, rights, false);
+
+            Console.WriteLine($"Rights of user '{ loginName }' have been updated. \r\n");
+        }
+
+        /// <summary>
+        /// Clears the available user rights and assigns new ones.
+        /// </summary>
+        /// <param name="client">An instance of the <see cref="RepositoryClient"/>.</param>
+        public static void ReplaceUserRights(RepositoryClient client)
+        {
+            string loginName = "Alfred.Douma";
+            UserOrGroupRightsEnum rights = UserOrGroupRightsEnum.Connect;
+
+            Console.WriteLine($"Replacing user rights of user '{ loginName }'...\r\n");
+            client.UserClient.SetUserRights(loginName, rights, true);
+
+            Console.WriteLine($"Rights of user '{ loginName }' have been updated. \r\n");
         }
     }
 }

@@ -21,7 +21,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Determines whether a user exists.
         /// </summary>
-        /// <param name="loginName">The login name of the user.</param>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
         /// <returns>True if the user exists, False if not.</returns>
         bool UserExists(string loginName);
 
@@ -47,14 +47,14 @@ namespace PDRepository.Users
         void CreateUser(string loginName, string fullName, string emailAddress, out string temporaryPassword, UserOrGroupRightsEnum rights, string groupName);
 
         /// <summary>
-        /// Adds a repository user to a repository group.
+        /// Adds a user to a group.
         /// </summary>
         /// <param name="loginName">The name with which the user connects to the repository.</param>
         /// <param name="groupName">The name of the group to which to add the user.</param>
         void AddUserToGroup(string loginName, string groupName);
 
         /// <summary>
-        /// Removes a repository user from a repository group.
+        /// Removes a user from a group.
         /// </summary>
         /// <param name="loginName">The name with which the user connects to the repository.</param>
         /// <param name="groupName">The name of the group from which to remove the user.</param>
@@ -67,18 +67,30 @@ namespace PDRepository.Users
         /// <returns>A List with <see cref="Group"/> objects.</returns>
         List<Group> GetUserGroups(string loginName);
 
-        void SetUserRights(string loginName, UserOrGroupRightsEnum rights);
+        /// <summary>
+        /// Assigns the specified rights to a user.
+        /// Please note this method does not affect inherited group rights (if any).
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        /// <param name="replaceExisting">When true, replaces the existing user rights with the specified ones. When false, the specified rights will be added to the existing user rights.</param>
+        void SetUserRights(string loginName, UserOrGroupRightsEnum rights, bool replaceExisting);
 
+        /// <summary>
+        /// Returns the user rights as a semi-colon separated string.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <returns>A string with user rights.</returns>
         string GetUserRights(string loginName);        
 
         /// <summary>
-        /// Blocks a repository user.
+        /// Blocks a user.
         /// </summary>
         /// <param name="loginName">The name with which the user connects to the repository.</param> 
         void BlockUser(string loginName);
 
         /// <summary>
-        /// Unblocks a repository user.
+        /// Unblocks a user.
         /// </summary>
         /// <param name="loginName">The name with which the user connects to the repository.</param>  
         void UnblockUser(string loginName);
@@ -116,7 +128,14 @@ namespace PDRepository.Users
         /// <returns>A string with group rights.</returns>
         string GetGroupRights(string groupName);
 
-        void SetGroupRights(string groupName, UserOrGroupRightsEnum rights);
+        /// <summary>
+        /// Assigns the specified rights to a group.
+        /// Please note this method does not alter the rights of the individual users in the group (if any).
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        /// <param name="replaceExisting">When true, replaces the existing group rights with the specified ones. When false, the specified rights will be added to the existing group rights.</param>
+        void SetGroupRights(string groupName, UserOrGroupRightsEnum rights, bool replaceExisting);
 
         /// <summary>
         /// Deletes a group.

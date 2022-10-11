@@ -72,11 +72,15 @@ namespace PDRepository.Samples
                 //UserAndGroupSamples.ListGroups(client);
                 //UserAndGroupSamples.GroupExists(client);
                 //UserAndGroupSamples.CreateGroup(client);
-                //UserAndGroupSamples.GetGroupRights(client);
                 //UserAndGroupSamples.DeleteGroup(client);
+                //UserAndGroupSamples.GetGroupRights(client);
+                //UserAndGroupSamples.AddGroupRights(client);                
+                //UserAndGroupSamples.ReplaceGroupRights(client);                
 
                 //UserAndGroupSamples.GetUserGroups(client);
-                UserAndGroupSamples.GetUserRights(client);
+                //UserAndGroupSamples.GetUserRights(client);
+                //UserAndGroupSamples.AddUserRights(client);                
+                //UserAndGroupSamples.ReplaceUserRights(client);                
 
             }
             catch (Exception ex)
