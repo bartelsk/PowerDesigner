@@ -127,6 +127,7 @@ namespace PDRepository.Users
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             SetRepositoryUserRights(loginName, rights, replaceExisting);
+            Refresh();            
         }
 
         /// <summary>
@@ -239,6 +240,7 @@ namespace PDRepository.Users
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             SetRepositoryGroupRights(groupName, rights, replaceExisting);
+            Refresh();
         }
 
         /// <summary>

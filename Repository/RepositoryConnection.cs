@@ -128,5 +128,16 @@ namespace PDRepository
                 }
             }
         }
+
+        /// <summary>
+        /// Refreshes the repository connection.
+        /// </summary>
+        public void Refresh()
+        {
+            if (_pdRepoCon != null)
+            {
+                _pdRepoCon.Refresh();
+            }
+        }
     }
 }

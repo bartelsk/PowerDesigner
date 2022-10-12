@@ -115,6 +115,14 @@ namespace PDRepository
             }
         }
 
+        /// <summary>
+        /// Refreshes the repository connection.
+        /// </summary>
+        public void Refresh()
+        {
+            _con.Refresh();
+        }
+
         #region Folders
 
         /// <summary>
