@@ -116,6 +116,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="README.md" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

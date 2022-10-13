@@ -30,10 +30,3 @@ Optional:
 
 Most of the time you can find the assemblies in `C:\Program Files\SAP\PowerDesigner 16`. Make sure the assembly versions match the version of PowerDesigner you are using.
 
-To clone the PowerDesigner Repository locally, click the "Clone in [YOUR_OS]" button above or run the following git commands:
-
-```bash
-git clone https://github.com/bartelsk/PowerDesigner
-```
-
-
