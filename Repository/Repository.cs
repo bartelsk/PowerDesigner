@@ -285,7 +285,7 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Checks in a file in the specified repository folder. Overwrites the existing document (if any) and freezes it.
+        /// Adds a file to the specified repository folder. Overwrites the existing document (if any) and freezes it.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder in which to add the file.</param>
         /// <param name="fileName">The fully-qualified name of the file.</param>
