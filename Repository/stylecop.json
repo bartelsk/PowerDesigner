@@ -1,0 +1,19 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "documentationRules": {
+      "companyName": "Karlo Bartels",	        
+	  "copyrightText": "Code by {companyName} - https://github.com/bartelsk/PowerDesigner\nLicensed under the {licenseName} license, Version {licenseVersion}. See {licenseFile} file in the project root for full license information.",
+      "variables": {
+        "licenseName": "Apache",
+		"licenseVersion": "2.0",
+        "licenseFile": "LICENSE"
+      },
+      "fileNamingConvention": "metadata",
+      "xmlHeader": false
+		},
+		"indentation": {
+			"useTabs": true
+		}
+  }
+}
