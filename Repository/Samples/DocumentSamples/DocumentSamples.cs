@@ -61,6 +61,8 @@ namespace DocumentSamples
 
             List<Document> docs = client.DocumentClient.ListDocuments(rootFolder, recursive);
             docs.ForEach(d => Console.WriteLine($"Name: {d.Name} ({d.ClassName}) - Version: {d.Version}\r\nObject type: {d.ObjectType}\r\nFrozen: {d.IsFrozen}\r\nLocked: {d.IsLocked}\r\nLocation: {d.Location}\r\nVersion comment: {d.VersionComment}\r\n\r\n"));
+
+            Assert.IsNotNull(docs);
         }
 
         /// <summary>
@@ -76,6 +78,8 @@ namespace DocumentSamples
 
             bool exists = client.DocumentClient.DocumentExists(folder, documentName);
             Console.WriteLine($"Document '{documentName}' does{(exists ? string.Empty : " not")} exist in folder '{folder}'.");
+
+            Assert.IsTrue(exists);
 
             Console.WriteLine("Check complete.");
         }
@@ -96,6 +100,7 @@ namespace DocumentSamples
             {
                 Console.WriteLine($"Name: {doc.Name} ({doc.ClassName}) - Version: {doc.Version}\r\nObject type: {doc.ObjectType}\r\nFrozen: {doc.IsFrozen}\r\nLocked: {doc.IsLocked}\r\nLocation: {doc.Location}\r\nExtraction name: {doc.ExtractionFileName}\r\nVersion comment: {doc.VersionComment}\r\n\r\n");
             }
+            Assert.IsNotNull(doc);
         }
 
         /// <summary>
