@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.32901.82
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDRepository", "PDRepository.csproj", "{ED4D5095-77B9-4E89-B4C7-720975012FF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDRepository.Samples", "Samples\PDRepository.Samples.csproj", "{4B92916B-661E-46D7-B53A-B8F207217EA6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDRepository.BranchSamples", "Samples\BranchSamples\PDRepository.BranchSamples.csproj", "{294F8001-6AF2-49F5-BDAA-11564D0B2A90}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDRepository.DocumentSamples", "Samples\DocumentSamples\PDRepository.DocumentSamples.csproj", "{8A8E14B6-A42B-4F9C-8538-85DF3FD67101}"
@@ -29,14 +27,6 @@ Global
 		{ED4D5095-77B9-4E89-B4C7-720975012FF4}.Release|Any CPU.Build.0 = Release|x64
 		{ED4D5095-77B9-4E89-B4C7-720975012FF4}.Release|x64.ActiveCfg = Release|x64
 		{ED4D5095-77B9-4E89-B4C7-720975012FF4}.Release|x64.Build.0 = Release|x64
-		{4B92916B-661E-46D7-B53A-B8F207217EA6}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{4B92916B-661E-46D7-B53A-B8F207217EA6}.Debug|Any CPU.Build.0 = Debug|x64
-		{4B92916B-661E-46D7-B53A-B8F207217EA6}.Debug|x64.ActiveCfg = Debug|x64
-		{4B92916B-661E-46D7-B53A-B8F207217EA6}.Debug|x64.Build.0 = Debug|x64
-		{4B92916B-661E-46D7-B53A-B8F207217EA6}.Release|Any CPU.ActiveCfg = Release|x64
-		{4B92916B-661E-46D7-B53A-B8F207217EA6}.Release|Any CPU.Build.0 = Release|x64
-		{4B92916B-661E-46D7-B53A-B8F207217EA6}.Release|x64.ActiveCfg = Release|x64
-		{4B92916B-661E-46D7-B53A-B8F207217EA6}.Release|x64.Build.0 = Release|x64
 		{294F8001-6AF2-49F5-BDAA-11564D0B2A90}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{294F8001-6AF2-49F5-BDAA-11564D0B2A90}.Debug|Any CPU.Build.0 = Debug|x64
 		{294F8001-6AF2-49F5-BDAA-11564D0B2A90}.Debug|x64.ActiveCfg = Debug|x64
