@@ -17,15 +17,20 @@ namespace PDRepository.Samples
                 Console.WriteLine("PowerDesigner Repository Client");
                 Console.WriteLine("===============================\r\n");
 
-                RepositorySettings settings = new RepositorySettings()
+                // Get repository connection settings
+                ConnectionSettings connectionSettings = new ConnectionSettings()
                 {
                     Password = ConfigurationManager.AppSettings["PDRepoPassword"],
+                    RepositoryDefinition = ConfigurationManager.AppSettings["PDRepoDefinition"],
                     User = ConfigurationManager.AppSettings["PDRepoUser"]
                 };
 
-                // Start PD and connect to repo
+                // Start PowerDesigner and connect to the repository
                 Console.WriteLine("Connecting...");
-                client = RepositoryClient.CreateClient(settings);
+                client = RepositoryClient.CreateClient(connectionSettings);
+
+                Console.WriteLine($"Connection successful - repository definition '{ client.RepositoryDefinitionName }'");
+                Console.WriteLine($"Client assembly version: { client.Version }\r\n");
 
                 // Run branch samples
                 //BranchSamples.ListBranches(client);
@@ -56,10 +61,31 @@ namespace PDRepository.Samples
                 //DocumentSamples.GetDocumentPermissions(client);
                 //DocumentSamples.SetDocumentPermission(client);
                 //DocumentSamples.DeleteDocumentPermission(client);
+
+                // Run user / group samples                
+                //UserAndGroupSamples.ListUsers(client);
+                //UserAndGroupSamples.UserExists(client);
+                //UserAndGroupSamples.CreateUser(client);
+                //UserAndGroupSamples.DeleteUser(client);
+                //UserAndGroupSamples.CreateUserAndAddToGroup(client);
+
+                //UserAndGroupSamples.ListGroups(client);
+                //UserAndGroupSamples.GroupExists(client);
+                //UserAndGroupSamples.CreateGroup(client);
+                //UserAndGroupSamples.DeleteGroup(client);
+                //UserAndGroupSamples.GetGroupRights(client);
+                //UserAndGroupSamples.AddGroupRights(client);                
+                //UserAndGroupSamples.ReplaceGroupRights(client);                
+
+                //UserAndGroupSamples.GetUserGroups(client);
+                //UserAndGroupSamples.GetUserRights(client);
+                //UserAndGroupSamples.AddUserRights(client);                
+                //UserAndGroupSamples.ReplaceUserRights(client);                
+
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Exception: {ex.Message}");
+                Console.Error.WriteLine(ex.Message);
             }
             finally
             {

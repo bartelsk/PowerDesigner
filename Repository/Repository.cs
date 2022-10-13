@@ -5,9 +5,11 @@ using PDRepository.Common;
 using PDRepository.Exceptions;
 using PdRMG;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace PDRepository
 {
@@ -22,7 +24,7 @@ namespace PDRepository
 
         #region Constructor / Destructor
 
-        protected Repository(RepositorySettings settings)
+        protected Repository(ConnectionSettings settings)
         {
             _con = RepositoryConnection.Instance;
             _con.Settings = settings;
@@ -83,7 +85,7 @@ namespace PDRepository
         #region Public methods
 
         /// <summary>
-        /// Creates a repository connection with the current <see cref="RepositorySettings"/>.
+        /// Creates a repository connection with the current repository <see cref="ConnectionSettings"/>.
         /// </summary>
         public void Connect()
         {
@@ -111,6 +113,14 @@ namespace PDRepository
             {
                 return _con.IsConnected;
             }
+        }
+
+        /// <summary>
+        /// Refreshes the repository connection.
+        /// </summary>
+        public void Refresh()
+        {
+            _con.Refresh();
         }
 
         #region Folders
@@ -505,12 +515,320 @@ namespace PDRepository
 
         #endregion
 
+        #region Users / Groups
+
+        /// <summary>
+        /// Lists the available users.
+        /// </summary>
+        /// <returns>A List with <see cref="User"/> types.</returns>
+        public List<User> GetRepositoryUsers()
+        {
+            List<User> users = new List<User>();
+            ObjectCol allUsers = _con.Connection.Users;
+            foreach (RepositoryUser user in allUsers)
+            {
+                // user rights are currently only the rights assigned directly to the user
+                // they do not include the inherited group rights yet.
+                users.Add(ParseRepoUser(user));                
+            }
+            return users;           
+        }
+
+        /// <summary>
+        /// Determines whether a repository user exists.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>
+        /// <returns>True if the user exists, False if not.</returns>
+        public bool RepositoryUserExists(string loginName)
+        {            
+            return (GetUser(loginName) != null);
+        }
+
+        /// <summary>
+        /// Creates a repository user and assigns the specified rights.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="fullName">The real name of the user.</param>
+        /// <param name="emailAddress">The email address of the user (optional).</param>
+        /// <param name="temporaryPassword">Contains the temporary password of the newly created user.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        /// <param name="groupName">The name of the group to which to add the user (optional).</param>
+        public void CreateRepositoryUser(string loginName, string fullName, string emailAddress, out string temporaryPassword, UserOrGroupRightsEnum rights, string groupName)
+        {
+            if (RepositoryUserExists(loginName))
+                throw new RepositoryException($"A user with login name '{ loginName }' already exists.");
+
+            if (!string.IsNullOrEmpty(groupName) && !RepositoryGroupExists(groupName))
+                throw new RepositoryException($"A group with name '{ groupName }' does not exist.");
+
+            temporaryPassword = _con.Connection.GeneratePassword();
+            BaseObject newUser = _con.Connection.CreateUser();
+            if (newUser != null)
+            {
+                RepositoryUser user = (RepositoryUser)newUser;
+                user.LoginName = loginName;
+                user.FullName = fullName;
+                user.EmailAddress = emailAddress;                
+                user.SetPassword(temporaryPassword);
+                user.Rights = (int)rights;
+
+                if (!string.IsNullOrEmpty(groupName))
+                {
+                    RepositoryGroup repoGroup = GetGroup(groupName);
+                    if (repoGroup != null)
+                    {
+                        repoGroup.AddMember(user.LoginName);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds a repository user to a repository group.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="groupName">The name of the group to which to add the user.</param>
+        public void AddUserToRepositoryGroup(string loginName, string groupName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ groupName }' does not exist.");
+
+            repoGroup.AddMember(repoUser.LoginName);
+        }
+
+        /// <summary>
+        /// Removes a repository user from a repository group.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="groupName">The name of the group from which to remove the user.</param>
+        public void RemoveUserFromRepositoryGroup(string loginName, string groupName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ groupName }' does not exist.");
+
+            repoGroup.RemoveMember(repoUser.LoginName);
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Group"/> objects of which the specified user is a member.       
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <returns>A List with <see cref="Group"/> objects.</returns> 
+        public List<Group> GetRepositoryUserGroups(string loginName)
+        {
+            List<Group> userGroups = new List<Group>();
+
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            foreach (RepositoryGroup repoGroup in repoUser.Groups)
+            {
+                userGroups.Add(new Group() 
+                { 
+                    Description = repoGroup.ShortDescription,
+                    Name = repoGroup.GroupName,
+                    Rights = ParseRights(repoGroup.Rights)                
+                });                
+            }
+            return userGroups;            
+        }
+
+        /// <summary>
+        /// Returns the repository user rights as a semi-colon separated string.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <returns>A string with group rights.</returns>
+        public string GetRepositoryUserRights(string loginName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            int rights = repoUser.Rights;
+
+            // Add inherited rights 
+            foreach (RepositoryGroup repoGroup in repoUser.Groups)
+            {
+                rights |= repoGroup.Rights;                
+            }   
+            return ParseRights(rights);
+        }
+
+        /// <summary>
+        /// Assigns the specified rights to a user.
+        /// Please note this method does not affect inherited group rights (if any).
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        /// <param name="replaceExisting">When true, replaces the existing user rights with the specified ones. When false, the specified rights will be added to the existing user rights.</param>
+        public void SetRepositoryUserRights(string loginName, UserOrGroupRightsEnum rights, bool replaceExisting)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+                        
+            if (replaceExisting)
+            {
+                repoUser.Rights = (int)rights;
+            }
+            else
+            {
+                repoUser.Rights |= (int)rights;
+            }            
+        }
+
+        /// <summary>
+        /// Blocks a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>  
+        public void BlockRepositoryUser(string loginName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            repoUser.Blocked = true;
+        }
+
+        /// <summary>
+        /// Unblocks a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>        
+        public void UnblockRepositoryUser(string loginName)
+        {
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            repoUser.Blocked = false;
+        }
+
+        /// <summary>
+        /// Deletes a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user to delete.</param>
+        public void DeleteRepositoryUser(string loginName)
+        {
+            if (!RepositoryUserExists(loginName))
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            _con.Connection.DeleteUser(loginName);
+        }
+
+        /// <summary>
+        /// Lists the available repository groups.
+        /// </summary>
+        /// <returns>A List with <see cref="Group"/> types.</returns>
+        public List<Group> GetRepositoryGroups()
+        {
+            List<Group> groups = new List<Group>();
+            ObjectCol allGroups = _con.Connection.Groups;
+            foreach (RepositoryGroup group in allGroups)
+            {
+                groups.Add(ParseRepoGroup(group));                
+            }
+            return groups;
+        }
+
+        /// <summary>
+        /// Determines whether a repository group exists.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>True if the group exists, False if not.</returns>
+        public bool RepositoryGroupExists(string groupName)
+        {            
+            return (GetGroup(groupName) != null);
+        }
+
+        /// <summary>
+        /// Returns the repository group rights as a semi-colon separated string.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A string with group rights.</returns>
+        public string GetRepositoryGroupRights(string groupName)
+        {            
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ repoGroup }' does not exist.");
+
+            Group group = ParseRepoGroup(repoGroup);
+            return group.Rights;
+        }
+
+        /// <summary>
+        /// Assigns the specified rights to a repository group.
+        /// Please note this method does not alter the rights of the individual users in the group (if any).
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        /// <param name="replaceExisting">When true, replaces the existing group rights with the specified ones. When false, the specified rights will be added to the existing group rights.</param>
+        public void SetRepositoryGroupRights(string groupName, UserOrGroupRightsEnum rights, bool replaceExisting)
+        {
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ repoGroup }' does not exist.");
+
+            if (replaceExisting)
+            {
+                repoGroup.Rights = (int)rights;
+            }
+            else
+            {
+                repoGroup.Rights |= (int)rights;
+            }                
+        }
+
+        /// <summary>
+        /// Creates a repository group and assigns the specified rights.
+        /// </summary>
+        /// <param name="name">The name of the group.</param>
+        /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
+        public void CreateRepositoryGroup(string name, UserOrGroupRightsEnum rights)
+        {
+            if (RepositoryGroupExists(name))
+                throw new RepositoryException($"A group with name '{ name }' already exists.");
+            
+            BaseObject newGroup = _con.Connection.CreateGroup();
+            if (newGroup != null)
+            {
+                RepositoryGroup group = (RepositoryGroup)newGroup;
+                group.GroupName = name;
+                group.GroupCode = name;
+                group.Rights = (int)rights;
+            }            
+        }
+
+        /// <summary>
+        /// Deletes a repository group.
+        /// </summary>
+        /// <param name="groupName">The name of the group to delete.</param>
+        public void DeleteRepositoryGroup(string groupName)
+        {
+            if (!RepositoryGroupExists(groupName))
+                throw new RepositoryException($"A group with name '{ groupName }' does not exist.");
+
+            _con.Connection.DeleteGroup(groupName);
+        }
+
+        #endregion
+
         #endregion
 
         #region Private methods
 
         /// <summary>
-        /// Generatic method for retrieving a repository (branch) folder.
+        /// Generic method for retrieving a repository (branch) folder.
         /// </summary>
         /// <param name="folderPath">A repository folder path.</param>        
         /// <returns>A <see cref="StoredObject"/> type that represents the folder.</returns>
@@ -661,6 +979,38 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Returns a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>
+        /// <returns>A <see cref="RepositoryUser"/> type.</returns>
+        private RepositoryUser GetUser(string loginName)
+        {
+            RepositoryUser user = null;
+            BaseObject repoUser = _con.Connection.GetUser(loginName);
+            if (repoUser != null)
+            {
+                user = (RepositoryUser)repoUser;
+            }
+            return user;
+        }
+
+        /// <summary>
+        /// Returns a repository group.
+        /// </summary>
+        /// <param name="groupName">The group name.</param>
+        /// <returns>A <see cref="RepositoryGroup"/> type.</returns>
+        private RepositoryGroup GetGroup(string groupName)
+        {
+            RepositoryGroup group = null;
+            BaseObject repoGroup = _con.Connection.GetGroup(groupName);
+            if (repoGroup != null)
+            {
+                group = (RepositoryGroup)repoGroup;
+            }
+            return group;
+        }
+
+        /// <summary>
         /// Tries to parse the specified user or group name.
         /// </summary>
         /// <param name="userOrGroupName">A user login name or group name.</param>
@@ -765,6 +1115,51 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Tries to parse a <see cref="RepositoryUser"/> type into a <see cref="User"/> type.
+        /// </summary>
+        /// <param name="repoUser">A <see cref="RepositoryUser"/> type.</param>
+        /// <returns>A <see cref="User"/> type.</returns>
+        private static User ParseRepoUser(RepositoryUser repoUser)
+        {
+            User user = null;
+            if (repoUser != null)
+            {
+                user = new User()
+                {
+                    Blocked = repoUser.Blocked,
+                    Comment = repoUser.Comment,
+                    Disabled = repoUser.Disabled,
+                    FullName = repoUser.FullName,
+                    LastLoginDate = repoUser.LastLoginDate,
+                    LoginName = repoUser.LoginName,
+                    Rights = ParseRights(repoUser.Rights), // don't do that here, but use the private function to get user rights
+                    Status = ParseUserStatus(repoUser.Status)
+                };
+            }
+            return user;
+        }
+
+        /// <summary>
+        /// Tries to parse a <see cref="RepositoryGroup"/> type into a <see cref="Group"/> type.
+        /// </summary>
+        /// <param name="repoGroup">A <see cref="RepositoryGroup"/> type.</param>
+        /// <returns>A <see cref="Group"/> type.</returns>
+        private static Group ParseRepoGroup(RepositoryGroup repoGroup)
+        {
+            Group group = null;
+            if (repoGroup != null)
+            {                
+                group = new Group()
+                { 
+                    Description = repoGroup.ShortDescription,
+                    Name = repoGroup.Name,
+                    Rights = ParseRights(repoGroup.Rights)
+                };
+            }
+            return group;
+        }
+
+        /// <summary>
         /// Tries to parse the specified permission into a valid PermissionType enum.
         /// </summary>
         /// <param name="permission">The permission to parse.</param>
@@ -774,6 +1169,58 @@ namespace PDRepository
             if (!Enum.TryParse<PermissionTypeEnum>(permission, out PermissionTypeEnum result))
                 throw new InvalidPermissionException("Invalid permission");
             return result;
+        }
+
+        /// <summary>
+        /// Tries to parse the specified user or group rights into a semi-colon separated string of rights.
+        /// </summary>
+        /// <param name="rights">The user or group rights to parse.</param>
+        /// <returns>A string with the parsed result.</returns>
+        private static string ParseRights(int rights)
+        {
+            if (rights < 0) throw new InvalidRightsException("Invalid rights");
+            if (rights > 0)
+            {
+                BitArray b = new BitArray(new int[] { rights });
+                int[] bits = b.Cast<bool>().Select(bit => bit ? 1 : 0).ToArray();
+
+                StringBuilder sb = new StringBuilder();
+                if (bits[0] == 1) { sb.Append(";Connect"); }
+                if (bits[1] == 1) { sb.Append(";Freeze Versions"); }
+                if (bits[2] == 1) { sb.Append(";Lock Documents"); }
+                if (bits[3] == 1) { sb.Append(";Manage Branches"); }
+                if (bits[4] == 1) { sb.Append(";Manage Configurations"); }
+                if (bits[5] == 1) { sb.Append(";Manage All Documents"); }
+                if (bits[6] == 1) { sb.Append(";Manage Users & Permissions"); }
+                if (bits[7] == 1) { sb.Append(";Manage Repository"); }
+                if (bits[8] == 1) { sb.Append(";Edit on Web"); }
+                if (bits[9] == 1) { sb.Append(";Edit Extensions on Web"); }
+                return sb.ToString().Substring(1);
+            }
+            else
+            {
+                return "None";
+            }
+        }
+
+        /// <summary>
+        /// Tries to parse the specified user status into a va lid UserStatus enum.
+        /// </summary>
+        /// <param name="status">The user status to parse.</param>
+        /// <returns>A <see cref="UserStatusEnum"/> enum.</returns>
+        private static UserStatusEnum ParseUserStatus(string status)
+        {
+            switch (status.ToLowerInvariant())
+            {
+                case "a":
+                    return UserStatusEnum.Active;
+                case "i":
+                    return UserStatusEnum.Inactive;
+                case "b":
+                    return UserStatusEnum.Blocked;
+                default:
+                    throw new RepositoryException("Invalid user status");
+            }
         }
 
         #endregion
