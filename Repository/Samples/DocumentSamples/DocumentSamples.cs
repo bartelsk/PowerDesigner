@@ -36,7 +36,8 @@ namespace DocumentSamples
             client = RepositoryClient.CreateClient(connectionSettings);
 
             Console.WriteLine($"Connection successful - repository definition '{client.RepositoryDefinitionName}'");
-            Console.WriteLine($"Client assembly version: {client.Version}\r\n");
+            Console.WriteLine($"Client assembly version: {client.Version}\r\n");            
+            Console.WriteLine("------------------------------------------------------------\r\n");
         }
 
         [TestCleanup]
