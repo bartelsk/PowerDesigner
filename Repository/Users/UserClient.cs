@@ -21,11 +21,25 @@ namespace PDRepository.Users
         }
 
         /// <summary>
+        /// Returns user information.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <returns>A <see cref="User"/> type with user information.</returns>
+        public User GetUserInfo(string loginName)
+        {
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return GetRepositoryUser(loginName);
+        }
+
+        /// <summary>
         /// Lists the available users.
         /// </summary>
         /// <returns>A List with <see cref="User"/> types.</returns>
         public List<User> ListUsers()
         {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
             return GetRepositoryUsers();
         }
 
@@ -180,11 +194,26 @@ namespace PDRepository.Users
         }
 
         /// <summary>
+        /// Returns group information.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A <see cref="Group"/> type with group information.</returns>
+        public Group GetGroupInfo(string groupName)
+        {
+            if (string.IsNullOrEmpty(groupName)) ThrowArgumentNullException(groupName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return GetRepositoryGroup(groupName);
+        }
+
+        /// <summary>
         /// Lists the available groups.
         /// </summary>
         /// <returns>A List with <see cref="Group"/> types.</returns>
         public List<Group> ListGroups()
         {
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
             return GetRepositoryGroups();
         }
 

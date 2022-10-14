@@ -13,6 +13,13 @@ namespace PDRepository.Users
     public interface IUserClient : IDisposable
     {
         /// <summary>
+        /// Returns user information.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <returns>A <see cref="User"/> type with user information.</returns>
+        User GetUserInfo(string loginName);
+
+        /// <summary>
         /// Lists the available users.
         /// </summary>
         /// <returns>A List with <see cref="User"/> types.</returns>
@@ -100,7 +107,14 @@ namespace PDRepository.Users
         /// </summary>
         /// <param name="loginName">The name with which the user connects to the repository.</param>
         void DeleteUser(string loginName);
-        
+
+        /// <summary>
+        /// Returns group information.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A <see cref="Group"/> type with group information.</returns>
+        Group GetGroupInfo(string groupName);
+
         /// <summary>
         /// Lists the available groups.
         /// </summary>

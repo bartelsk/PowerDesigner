@@ -545,6 +545,31 @@ namespace PDRepository
         #region Users / Groups
 
         /// <summary>
+        /// Returns a repository user.
+        /// </summary>
+        /// <param name="loginName">The login name of the user.</param>
+        /// <returns>A <see cref="User"/> type.</returns>
+        public User GetRepositoryUser(string loginName)
+        {             
+            RepositoryUser repoUser = GetUser(loginName);
+            if (repoUser == null)
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            User user = ParseRepoUser(repoUser);
+            user.Rights = GetRepositoryUserRights(loginName);
+
+            // Get user group membership
+            List<Group> userGroups = GetRepositoryUserGroups(loginName);
+            if (userGroups.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                userGroups.ForEach(g => sb.Append($";{g.Name}"));
+                user.GroupMembership = sb.ToString().Substring(1);
+            }            
+            return user;
+        }
+
+        /// <summary>
         /// Lists the available users.
         /// </summary>
         /// <returns>A List with <see cref="User"/> types.</returns>
@@ -552,11 +577,9 @@ namespace PDRepository
         {
             List<User> users = new List<User>();
             ObjectCol allUsers = _con.Connection.Users;
-            foreach (RepositoryUser user in allUsers)
-            {
-                // user rights are currently only the rights assigned directly to the user
-                // they do not include the inherited group rights yet.
-                users.Add(ParseRepoUser(user));                
+            foreach (RepositoryUser repoUser in allUsers)
+            {   
+                users.Add(GetRepositoryUser(repoUser.LoginName));                
             }
             return users;           
         }
@@ -568,7 +591,7 @@ namespace PDRepository
         /// <returns>True if the user exists, False if not.</returns>
         public bool RepositoryUserExists(string loginName)
         {            
-            return (GetUser(loginName) != null);
+            return GetUser(loginName) != null;
         }
 
         /// <summary>
@@ -754,6 +777,20 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Returns a repository group.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A <see cref="Group"/> type.</returns>
+        public Group GetRepositoryGroup(string groupName)
+        {
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ repoGroup }' does not exist.");
+
+            return ParseRepoGroup(repoGroup);
+        }
+
+        /// <summary>
         /// Lists the available repository groups.
         /// </summary>
         /// <returns>A List with <see cref="Group"/> types.</returns>
@@ -775,7 +812,7 @@ namespace PDRepository
         /// <returns>True if the group exists, False if not.</returns>
         public bool RepositoryGroupExists(string groupName)
         {            
-            return (GetGroup(groupName) != null);
+            return GetGroup(groupName) != null;
         }
 
         /// <summary>
@@ -784,13 +821,8 @@ namespace PDRepository
         /// <param name="groupName">The name of the group.</param>
         /// <returns>A string with group rights.</returns>
         public string GetRepositoryGroupRights(string groupName)
-        {            
-            RepositoryGroup repoGroup = GetGroup(groupName);
-            if (repoGroup == null)
-                throw new RepositoryException($"A group with name '{ repoGroup }' does not exist.");
-
-            Group group = ParseRepoGroup(repoGroup);
-            return group.Rights;
+        {   
+            return GetRepositoryGroup(groupName).Rights;
         }
 
         /// <summary>
@@ -1174,8 +1206,7 @@ namespace PDRepository
                     Disabled = repoUser.Disabled,
                     FullName = repoUser.FullName,
                     LastLoginDate = repoUser.LastLoginDate,
-                    LoginName = repoUser.LoginName,
-                    Rights = ParseRights(repoUser.Rights), // don't do that here, but use the private function to get user rights
+                    LoginName = repoUser.LoginName,                    
                     Status = ParseUserStatus(repoUser.Status)
                 };
             }
