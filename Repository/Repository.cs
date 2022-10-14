@@ -259,6 +259,33 @@ namespace PDRepository
         #region Documents
 
         /// <summary>
+        /// Determines the existence of a repository folder.
+        /// </summary>
+        /// <param name="folderPath">A repository folder path.</param>        
+        /// <returns>True if the folder exists, False if not.</returns>
+        public bool DocumentFolderExists(string folderPath)
+        {
+            return FolderExists(folderPath);
+        }
+
+        /// <summary>
+        /// Determines whether the specified document exists in the specified repository folder.
+        /// </summary>
+        /// <param name="folderPath">The repository folder in which the document should exist.</param>
+        /// <param name="documentName">The name of the document.</param>
+        /// <returns>True if the document exists in the repository folder, False if not.</returns>
+        public bool DocumentExists(string folderPath, string documentName)
+        {
+            bool documentExists = false;
+            if (FolderExists(folderPath))
+            {
+                StoredObject document = (StoredObject)GetFolder(folderPath).FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
+                documentExists = document == null;
+            }
+            return documentExists;
+        }
+
+        /// <summary>
         /// Retrieves information on a document in the specified repository folder.
         /// </summary>
         /// <param name="folderPath">The repository folder from which to retrieve the document.</param>
@@ -826,6 +853,22 @@ namespace PDRepository
         #endregion
 
         #region Private methods
+
+        /// <summary>
+        /// Generic method for determining the existence of a repository (branch) folder.
+        /// </summary>
+        /// <param name="folderPath">A repository folder path.</param>        
+        /// <returns>True if the folder exists, False if not.</returns>
+        private bool FolderExists(string folderPath)
+        {
+            StoredObject storedObject;
+            storedObject = GetRepositoryFolder(folderPath);
+            if (storedObject == null)
+            {
+                storedObject = GetRepositoryBranchFolder(folderPath);                
+            }
+            return storedObject == null;
+        }
 
         /// <summary>
         /// Generic method for retrieving a repository (branch) folder.
