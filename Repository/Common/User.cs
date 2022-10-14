@@ -49,5 +49,10 @@ namespace PDRepository.Common
         /// The user account status.
         /// </summary>
         public UserStatusEnum Status { get; set; }
+
+        /// <summary>
+        /// Specifies the groups of which the user is a member. 
+        /// </summary>
+        public string GroupMembership { get; set; }
     }
 }

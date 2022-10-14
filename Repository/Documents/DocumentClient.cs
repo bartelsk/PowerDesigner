@@ -27,6 +27,19 @@ namespace PDRepository.Documents
         }
 
         /// <summary>
+        /// Determines the existence of a repository folder.
+        /// </summary>
+        /// <param name="repoFolderPath">A repository folder path.</param>        
+        /// <returns>True if the folder exists, False if not.</returns>
+        public bool FolderExists(string repoFolderPath)
+        {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);            
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return DocumentFolderExists(repoFolderPath);
+        }
+
+        /// <summary>
         /// Determines whether a document exists in the specified repository folder.
         /// </summary>
         /// <param name="repoFolderPath">The repository folder in which the document should be located.</param>
@@ -38,7 +51,7 @@ namespace PDRepository.Documents
             if (string.IsNullOrEmpty(documentName)) ThrowArgumentNullException(documentName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
-            return (GetFolderDocumentInfo(repoFolderPath, documentName) != null);
+            return FolderDocumentExists(repoFolderPath, documentName);
         }
 
         /// <summary>

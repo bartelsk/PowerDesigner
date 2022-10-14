@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace UserAndGroupSamples
 {
@@ -79,6 +78,30 @@ namespace UserAndGroupSamples
             Console.WriteLine($"A user with login name '{loginName}' does{(exists ? string.Empty : " not")} exist.");
 
             Console.WriteLine("Check complete.");
+        }
+
+        /// <summary>
+        /// Displays user information.
+        /// </summary>
+        [TestMethod]
+        public void GetUserInformation()
+        {
+            Console.WriteLine("Getting user information...\r\n");
+
+            string loginName = "UserA";
+
+            if (client.UserClient.UserExists(loginName))
+            {
+                User user = client.UserClient.GetUserInfo(loginName);
+                Console.WriteLine($"Information for user '{user.FullName}':\r\n");
+                Console.WriteLine($"Status: {user.Status}");
+                Console.WriteLine($"Blocked: {user.Blocked}");
+                Console.WriteLine($"Comment: {user.Comment}");
+                Console.WriteLine($"Disabled: {user.Disabled}");
+                Console.WriteLine($"Last login date: {user.LastLoginDate}");
+                Console.WriteLine($"Rights: {user.Rights}");
+                Console.WriteLine($"Group membership: {user.GroupMembership}");                
+            }
         }
 
         /// <summary>
@@ -163,7 +186,24 @@ namespace UserAndGroupSamples
         }
 
         /// <summary>
-        /// Creates a new group.
+        /// Displays group information.
+        /// </summary>
+        [TestMethod]
+        public void GetGroupInformation()
+        {
+            Console.WriteLine("Getting group information...\r\n");
+
+            string groupName = "AGroup";
+
+            if (client.UserClient.GroupExists(groupName))
+            {
+                Group group = client.UserClient.GetGroupInfo(groupName);
+                Console.WriteLine($"Group name: '{group.Name}', description: '{group.Description}', rights: {group.Rights}\r\n");
+            }
+        }
+
+        /// <summary>
+        /// Creates a group.
         /// </summary>
         [TestMethod]
         public void CreateGroup()
@@ -236,7 +276,7 @@ namespace UserAndGroupSamples
         }
 
         /// <summary>
-        /// Retrieves a list of user groups.
+        /// Retrieves the groups of which the user is a member.
         /// </summary>
         [TestMethod]
         public void GetUserGroups()
@@ -245,7 +285,7 @@ namespace UserAndGroupSamples
 
             Console.WriteLine($"Listing groups of which user '{loginName}' is a member...\r\n");
 
-            List<PDRepository.Common.Group> groups = client.UserClient.GetUserGroups(loginName);
+            List<Group> groups = client.UserClient.GetUserGroups(loginName);
             groups.ForEach(g => Console.WriteLine($"Group name: {g.Name} - Description: {g.Description} - Rights: {g.Rights}"));
         }
 
