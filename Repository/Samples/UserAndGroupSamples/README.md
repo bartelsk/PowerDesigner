@@ -23,9 +23,81 @@ All samples are set up as tests that can be run by the built-in `Test Explorer` 
 Some samples assume the presence of certain users and/or groups, so do not run all tests at once! The samples are self-contained; you should first create the sample user before retrieving its properties, for example. There is no dependency on any existing user or group.
 
 ## Samples overview
-This section 
+This section lists the available samples.
 
 ### ListUsers
+
+Retrieves all users, but only displays the first 25 users.
+
+### UserExists
+
+Determines whether a user exists.
+
+### GetUserInformation
+
+Displays information on the users' status, last login date, rights and group membership.
+
+### CreateUser
+
+Creates a user.
+
+### CreateUserAndAddToGroup
+
+Creates a user and adds it to a group.
+
+### DeleteUser
+
+Deletes a user.
+
+### ListGroups
+
+Retrieve all groups, but only display the first 10 groups.
+
+### GroupExists
+
+Determines whether a group exists.
+
+### GetGroupInformation
+
+Displays group information.
+
+### CreateGroup
+
+Creates a group.
+
+### GetGroupRights
+
+Retrieves group rights.
+
+### AddGroupRights
+
+Assigns additional group rights.
+
+### ReplaceGroupRights
+
+Clears the available group rights and assigns new ones.
+
+### DeleteGroup
+
+Deletes a group.
+
+### GetUserGroups
+
+Retrieves the groups of which the user is a member.
+
+### GetUserRights
+
+Retrieves user rights.
+
+### AddUserRights
+
+Assigns additional user rights.
+
+### ReplaceUserRights
+
+Clears the available user rights and assigns new ones.
+
+
 
 
 

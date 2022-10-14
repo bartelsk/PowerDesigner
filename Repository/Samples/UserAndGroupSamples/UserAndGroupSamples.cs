@@ -203,7 +203,7 @@ namespace UserAndGroupSamples
         }
 
         /// <summary>
-        /// Creates a new group.
+        /// Creates a group.
         /// </summary>
         [TestMethod]
         public void CreateGroup()
@@ -276,7 +276,7 @@ namespace UserAndGroupSamples
         }
 
         /// <summary>
-        /// Retrieves a list of user groups.
+        /// Retrieves the groups of which the user is a member.
         /// </summary>
         [TestMethod]
         public void GetUserGroups()
