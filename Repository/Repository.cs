@@ -274,13 +274,13 @@ namespace PDRepository
         /// <param name="folderPath">The repository folder in which the document should exist.</param>
         /// <param name="documentName">The name of the document.</param>
         /// <returns>True if the document exists in the repository folder, False if not.</returns>
-        public bool DocumentExists(string folderPath, string documentName)
+        public bool FolderDocumentExists(string folderPath, string documentName)
         {
             bool documentExists = false;
             if (FolderExists(folderPath))
             {
                 StoredObject document = (StoredObject)GetFolder(folderPath).FindChildByPath(documentName, (int)PdRMG_Classes.cls_StoredObject);
-                documentExists = document == null;
+                documentExists = document != null;
             }
             return documentExists;
         }
@@ -867,7 +867,7 @@ namespace PDRepository
             {
                 storedObject = GetRepositoryBranchFolder(folderPath);                
             }
-            return storedObject == null;
+            return storedObject != null;
         }
 
         /// <summary>

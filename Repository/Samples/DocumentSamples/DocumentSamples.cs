@@ -95,10 +95,18 @@ namespace DocumentSamples
             string folder = "LibManSamples/Development/Resources";
             string documentName = "settings-git.txt";
 
-            Document doc = client.DocumentClient.GetDocumentInfo(folder, documentName);
-            if (doc != null)
+            Document doc = null;
+            if (client.DocumentClient.DocumentExists(folder, documentName))
             {
-                Console.WriteLine($"Name: {doc.Name} ({doc.ClassName}) - Version: {doc.Version}\r\nObject type: {doc.ObjectType}\r\nFrozen: {doc.IsFrozen}\r\nLocked: {doc.IsLocked}\r\nLocation: {doc.Location}\r\nExtraction name: {doc.ExtractionFileName}\r\nVersion comment: {doc.VersionComment}\r\n\r\n");
+                doc = client.DocumentClient.GetDocumentInfo(folder, documentName);
+                if (doc != null)
+                {
+                    Console.WriteLine($"Name: {doc.Name} ({doc.ClassName}) - Version: {doc.Version}\r\nObject type: {doc.ObjectType}\r\nFrozen: {doc.IsFrozen}\r\nLocked: {doc.IsLocked}\r\nLocation: {doc.Location}\r\nExtraction name: {doc.ExtractionFileName}\r\nVersion comment: {doc.VersionComment}\r\n\r\n");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Document '{documentName}' does not exist in folder '{folder}'");
             }
             Assert.IsNotNull(doc);
         }
