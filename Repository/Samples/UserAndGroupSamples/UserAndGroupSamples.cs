@@ -163,7 +163,7 @@ namespace UserAndGroupSamples
         {
             Console.WriteLine("Retrieving groups...\r\n");
 
-            List<PDRepository.Common.Group> groups = client.UserClient.ListGroups();
+            List<Group> groups = client.UserClient.ListGroups();
 
             Console.WriteLine("Listing first 10 groups...\r\n");
             groups.Take(10).ToList().ForEach(g => Console.WriteLine($"Name: {g.Name} - Description: {g.Description} - Rights: {g.Rights}"));

@@ -94,7 +94,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <AdditionalFiles Include="stylecop.json" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
