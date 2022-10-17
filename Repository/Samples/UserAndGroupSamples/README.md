@@ -97,6 +97,23 @@ Assigns additional user rights.
 
 Clears the available user rights and assigns new ones.
 
+## User and group rights
+
+The following user and group rights (privileges) are available:
+- `Connect`: connect to the repository
+- `FreezeVersions`: freeze and unfreeze document versions
+- `LockVersions`: lock and unlock documents to prevent other users from making changes to them
+- `ManageBranches`: create repository branches
+- `ManageConfigurations`: create sets of repository documents
+- `ManageAllDocuments`: perform any action on any document version. Implicitly includes `Full` permission on all repository documents.
+- `ManageUsers`: create, modify, and delete repository users and groups, grant them rights, and add them to groups. Users with this right can list all repository documents and set permissions on them without needing explicit `Full` permission.
+- `ManageRepository`: create, upgrade, and delete the repository database
+- `EditPortalObjects`: create and edit diagrams in PowerDesigner Web        
+- `EditPortalExtensions`: create and edit custom properties in PowerDesigner Web
+
+When there are no explicit rights available, the right `None` is used.
+
+These permissions can be found in the [UserOrGroupRightsEnum](../../Common/Enums.cs) enum.
 
 
 
