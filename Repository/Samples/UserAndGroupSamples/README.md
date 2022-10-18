@@ -20,7 +20,7 @@ Configure the [App.config](App.config) file in this folder to point to the prope
 ## Running the samples
 All samples are set up as tests that can be run by the built-in `Test Explorer` of Visual Studio. If the `Test Explorer` window is not visible, go to the `VIEW` menu and click `Test Explorer`.
 
-Some samples assume the presence of certain users and/or groups, so do not run all tests at once! The samples are self-contained; you should first create the sample user before retrieving its properties, for example. There is no dependency on any existing user or group.
+Some samples assume the presence of certain users and/or groups, so do not run all tests at once! The samples are self-contained; you should first run the `CreateUser` sample before retrieving its rights by running the `GetUserRights` sample, for example. There is no dependency on any existing user or group.
 
 ## Samples overview
 This section lists the available samples.
@@ -112,6 +112,11 @@ The following user and group rights (privileges) are available:
 - `EditPortalExtensions`: create and edit custom properties in PowerDesigner Web
 
 When there are no explicit rights available, the right `None` is used.
+
+Permissions can be combined to set multiple rights at once by `OR`-ing them together. The following snippet shows how to set the `Connect` and `FreezeVersions` rights in one go: 
+
+`UserOrGroupRightsEnum` rights = `UserOrGroupRightsEnum.Connect` | `UserOrGroupRightsEnum.FreezeVersions`;
+
 
 These permissions can be found in the [UserOrGroupRightsEnum](../../Common/Enums.cs) enum.
 

@@ -18,7 +18,7 @@ Configure the [App.config](App.config) file in this folder to point to the prope
 ## Running the samples
 All samples are set up as tests that can be run by the built-in `Test Explorer` of Visual Studio. If the `Test Explorer` window is not visible, go to the `VIEW` menu and click `Test Explorer`.
 
-Some samples assume the presence of certain users and/or groups, so do not run all tests at once! The samples are self-contained; you should first create the sample user before retrieving its properties, for example. There is no dependency on any existing user or group.
+Some samples assume the presence of certain branches and/or folders, so do not run all tests at once! The samples are self-contained; you should first run the `CreateBranch` sample before getting its permissions in the `GetBranchPermissions` sample, for example. There is no dependency on any existing branch.
 
 ## Samples overview
 This section lists the available branch samples.
@@ -66,7 +66,7 @@ The following permissions are available:
 
 When there are no explicit permissions available, the permission `NotSet` is used.
 
-These permissions can be found in the [PermissionTypeEnum](../../Common/Enums.cs) enum.
+These permissions can be found in the [PermissionTypeEnum](../../Common/Enums.cs) enum. The samples `GetBranchPermissions` and `SetBranchPermissions` samples showcase its usage.
 
 ## Important notes about branch creation
 
