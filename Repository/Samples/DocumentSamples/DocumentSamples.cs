@@ -324,7 +324,7 @@ namespace DocumentSamples
         }
 
         /// <summary>
-        /// Retrieves the permission on a document for a specific user or group.
+        /// Retrieves the permission of a document for a specific user or group.
         /// </summary>      
         [TestMethod]
         public void GetDocumentPermissions()

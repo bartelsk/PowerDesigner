@@ -61,7 +61,7 @@ namespace PDRepository.Common
         FreezeVersions = 2,
 
         /// <summary>
-        /// Lock documents to prevent other users from making changes to them.
+        /// Lock and unlock documents to prevent other users from making changes to them.
         /// </summary>
         LockVersions = 4,
 

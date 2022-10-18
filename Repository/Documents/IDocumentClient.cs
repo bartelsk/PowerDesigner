@@ -24,6 +24,8 @@ namespace PDRepository.Documents
         /// <returns>True if the folder exists, False if not.</returns>
         bool FolderExists(string repoFolderPath);
 
+        /// createfolder method        
+        
         /// <summary>
         /// Determines whether a document exists in the specified repository folder.
         /// </summary>
