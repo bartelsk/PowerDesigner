@@ -24,8 +24,25 @@ namespace PDRepository.Documents
         /// <returns>True if the folder exists, False if not.</returns>
         bool FolderExists(string repoFolderPath);
 
-        /// createfolder method        
-        
+        /// <summary>
+        /// Creates a repository folder.
+        /// </summary>
+        /// <param name="repoFolderPath">The parent repository folder path.</param>
+        /// <param name="folderName">The name of the new folder.</param>
+        /// <returns>True if successful, False if not.</returns>        
+        bool CreateFolder(string repoFolderPath, string folderName);
+
+        /// <summary>
+        /// Deletes a repository folder. 
+        /// This method cannot be used to delete a repository branch folder.
+        /// </summary>
+        /// <remarks>
+        /// The deletion may fail if the folder is not empty.
+        /// </remarks>
+        /// <param name="repoFolderPath">The repository folder that should be deleted.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        bool DeleteFolder(string repoFolderPath);
+
         /// <summary>
         /// Determines whether a document exists in the specified repository folder.
         /// </summary>
