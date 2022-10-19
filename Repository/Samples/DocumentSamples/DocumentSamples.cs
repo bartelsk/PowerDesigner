@@ -112,12 +112,43 @@ namespace DocumentSamples
         }
 
         /// <summary>
+        /// Creates a repository folder.
+        /// </summary>
+        [TestMethod]
+        public void CreateDocumentFolder()
+        {
+            string parentFolder = "LibManSamples/Development";
+            string newFolder = "ResourcesNew";
+
+            Console.WriteLine($"Creating folder '{parentFolder + " / " + newFolder}'...\r\n");
+            bool success = client.DocumentClient.CreateFolder(parentFolder, newFolder);
+            
+            Console.WriteLine($"The folder was {(!success ? "NOT " : string.Empty)}created successfully.");
+            Assert.IsTrue(success);
+        }
+
+        /// <summary>
+        /// Deletes a repository folder.
+        /// </summary>
+        [TestMethod]
+        public void DeleteDocumentFolder()
+        {
+            string folder = "LibManSamples/Development/ResourcesNew";
+
+            Console.WriteLine($"Deleting folder '{folder}'...\r\n");
+            bool success = client.DocumentClient.DeleteFolder(folder);
+
+            Console.WriteLine($"The folder was {(!success ? "NOT " : string.Empty)}deleted successfully.");
+            Assert.IsTrue(success);
+        }
+
+        /// <summary>
         /// Adds a file to the repository.
         /// </summary>
         [TestMethod]
         public void CheckInFile()
         {
-            string folder = "LibManSamples/Development/Resources";
+            string folder = "LibManSamples/Development/ResourcesNew";
             string fileName = @"C:\Temp\old.txt";
 
             Console.WriteLine($"Checking-in file '{fileName}' in folder '{folder}'...");

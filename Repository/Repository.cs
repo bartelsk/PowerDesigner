@@ -155,7 +155,61 @@ namespace PDRepository
                 folder = (RepositoryBranchFolder)baseFolder;
             }
             return folder;
-        }       
+        }
+
+        /// <summary>
+        /// Creates a repository folder.
+        /// </summary>
+        /// <param name="folderPath">The parent repository folder path.</param>
+        /// <param name="folderName">The name of the new folder.</param>
+        /// <returns>True if successful, False if not.</returns>
+        public bool CreateRepositoryFolder(string folderPath, string folderName)
+        {
+            BaseObject newFolder = null;
+            string newFolderPath = folderPath + "/" + folderName;
+            
+            if (FolderExists(newFolderPath))
+                throw new RepositoryException($"Folder '{ newFolderPath }' already exists.");
+
+            StoredObject folderObject = GetFolder(folderPath);
+            switch (folderObject.ClassKind)
+            {
+                case (int)PdRMG_Classes.cls_RepositoryFolder:
+                    RepositoryFolder folder = (RepositoryFolder)folderObject;
+                    newFolder = folder.CreateFolder(folderName);
+                    break;
+                case (int)PdRMG_Classes.cls_RepositoryBranchFolder:
+                    RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)folderObject;
+                    newFolder = branchFolder.CreateFolder(folderName);   
+                    break;
+            }
+            return newFolder != null;
+        }
+
+        /// <summary>
+        /// Deletes a repository folder. 
+        /// This method cannot be used to delete a repository branch folder.
+        /// </summary>
+        /// <remarks>
+        /// The deletion may fail if the folder is not empty.
+        /// </remarks>
+        /// <param name="folderPath">A repository folder path.</param>        
+        /// <returns>True if successful, False if not.</returns>
+        public bool DeleteRepositoryFolder(string folderPath)
+        {
+            RepositoryFolder folder = GetRepositoryFolder(folderPath);
+            if (folder == null)
+                ThrowFolderNotFoundException(folderPath);
+
+            if (folder.ChildObjects.Count > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return folder.DeleteEmptyFolder();
+            }
+        }
 
         #endregion
 

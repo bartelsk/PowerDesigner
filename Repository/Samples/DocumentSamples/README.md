@@ -11,6 +11,7 @@ The Document samples showcase examples of:
 
 * Listing documents
 * Checking document existence
+* Create and delete document folders
 * Get document information
 * Checking-in and checking-out documents
 * Freezing and unfreezing documents
@@ -42,6 +43,14 @@ Determines whether a document exists in a particular repository folder.
 ### GetDocumentInfo
 
 Retrieves document information. Returns a [Document](#document-information) object.
+
+### CreateDocumentFolder
+
+Creates a repository document folder.
+
+### DeleteDocumentFolder
+
+Deletes a repository document folder.
 
 ### CheckInFile
 
