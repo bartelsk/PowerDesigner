@@ -10,7 +10,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
    [Command(Name = "status", Description = "Returns the user account status.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
    class Status : CmdBase
    {
-      [Option(CommandOptionType.SingleValue, ShortName = "l", LongName = "login-name", Description = "Specifies the login name of the user.", ValueName = "Login name", ShowInHelpText = true)]
+      [Option(CommandOptionType.SingleValue, ShortName = "l", LongName = "login-name", Description = "Specifies the login name of the user.", ValueName = "login name", ShowInHelpText = true)]
       public string LoginName { get; set; }
 
       public Status(IConsole console)

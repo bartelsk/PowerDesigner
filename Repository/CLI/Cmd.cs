@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace PDRepository.CLI
 {
    [Command(Name = "pdr", Description = "PowerDesigner Repository CLI", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-   [VersionOptionFromMember("--version", ShortName = "v", LongName = "version", MemberName = nameof(GetVersion))]
+   [VersionOptionFromMember("--version", ShortName = "v", LongName = "version", MemberName = nameof(GetVersion), ShowInHelpText = false)]
    [Subcommand(
       typeof(Branch),
       typeof(User)
