@@ -7,17 +7,17 @@ using System;
 
 namespace PDRepository.CLI.Commands.User
 {
-   [Command(Name = "user", Description = "Contains commands related to repository users.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-   [Subcommand(
-      typeof(Create),
-      typeof(Status),
-      typeof(Unlock)
-   )]
-   class User : CmdBase
-   {
-      public User(IConsole console)
-      {
-         _console = console;
-      }
-   }
+    [Command(Name = "user", Description = "Contains commands related to repository users.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Subcommand(
+       typeof(Create),
+       typeof(Status),
+       typeof(Unlock)
+    )]
+    class User : CmdBase
+    {
+        public User(IConsole console)
+        {
+            _console = console;
+        }
+    }
 }

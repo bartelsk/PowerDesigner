@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace PDRepository.CLI
 {
-   class Program
-   {
-      private static async Task<int> Main(string[] args)
-      {
-         try
-         {
-            return await CommandLineApplication.ExecuteAsync<Cmd>(args);
-         }
-         catch(Exception ex)
-         {
-            Console.WriteLine(ex.Message);
-            return 1;
-         }
-      }
-   }
+    class Program
+    {
+        private static async Task<int> Main(string[] args)
+        {
+            try
+            {
+                return await CommandLineApplication.ExecuteAsync<Cmd>(args);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 1;
+            }
+        }
+    }
 }

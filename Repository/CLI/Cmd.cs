@@ -10,29 +10,28 @@ using System.Threading.Tasks;
 
 namespace PDRepository.CLI
 {
-   [Command(Name = "pdr", Description = "PowerDesigner Repository CLI", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-   [VersionOptionFromMember("--version", ShortName = "v", LongName = "version", MemberName = nameof(GetVersion), ShowInHelpText = false)]
-   [Subcommand(
-      typeof(Branch),
-      typeof(User)
-   )]
-   class Cmd : CmdBase
-   {
-      public Cmd(IConsole console)
-      {
-         _console = console;
-      }
+    [Command(Name = "pdr", Description = "PowerDesigner Repository CLI", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [VersionOptionFromMember("--version", ShortName = "v", LongName = "version", MemberName = nameof(GetVersion), ShowInHelpText = false)]
+    [Subcommand(
+       typeof(Branch),
+       typeof(User)
+    )]
+    class Cmd : CmdBase
+    {
+        public Cmd(IConsole console)
+        {
+            _console = console;
+        }
 
-      protected override Task<int> OnExecute(CommandLineApplication app)
-      {
-         // this shows help even if the --help option isn't specified
-         app.ShowHelp();
-         return Task.FromResult(0);
-      }
+        protected override Task<int> OnExecute(CommandLineApplication app)
+        {
+            app.ShowHelp();
+            return Task.FromResult(0);
+        }
 
-      private static string GetVersion()
-      {
-         return Assembly.GetExecutingAssembly().GetName().Version.ToString(4);         
-      }
-   }
+        private static string GetVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
+        }
+    }
 }

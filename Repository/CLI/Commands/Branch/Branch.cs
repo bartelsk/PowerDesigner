@@ -7,16 +7,16 @@ using System;
 
 namespace PDRepository.CLI.Commands.Branch
 {
-   [Command(Name = "branch", Description = "Contains commands related to repository branches.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-   [Subcommand(
-      typeof(Create),         
-      typeof(List)
-   )]
-   class Branch : CmdBase
-   {
-      public Branch(IConsole console)
-      {
-         _console = console;
-      }
-   }
+    [Command(Name = "branch", Description = "Contains commands related to repository branches.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Subcommand(
+       typeof(Create),
+       typeof(List)
+    )]
+    class Branch : CmdBase
+    {
+        public Branch(IConsole console)
+        {
+            _console = console;
+        }
+    }
 }
