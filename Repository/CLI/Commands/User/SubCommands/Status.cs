@@ -35,14 +35,32 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         {
             try
             {
-                Output("Hello from user status!");
-                                
-                Output($"RepoDef: { RepoDefinition } - RepoUser: { RepoUser } - RepoPassword: { RepoPassword }");
+                OutputToConsole("Retrieving user account status", ConsoleColor.Yellow);                              
+                
+                if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
+                {
+                    Output("Retrieving status...\r\n");
 
-                // check actual status
-                Output($"Login name: { LoginName }");
-
-
+                    if (_client.UserClient.UserExists(LoginName))
+                    {
+                        Common.User user = _client.UserClient.GetUserInfo(LoginName);
+                        
+                        Output($"User '{ user.FullName }':");
+                        Output(new String('-', user.FullName.Length + 8));
+                        
+                        Output($"\r\nStatus: { user.Status }");
+                        Output($"Blocked: { user.Blocked }");
+                        Output($"Comment: { user.Comment }");
+                        Output($"Disabled: { user.Disabled }");
+                        Output($"Last login date: { user.LastLoginDate }");
+                        Output($"Rights: { user.Rights.Replace(";", ", ") }");
+                        Output($"Group membership: { user.GroupMembership.Replace(";", ", ") }");
+                    }
+                    else
+                    {
+                        OutputToConsole($"A user with login name '{ LoginName }' does not exist.", ConsoleColor.Red);
+                    }
+                }
                 return 0;
             }
             catch (Exception ex)

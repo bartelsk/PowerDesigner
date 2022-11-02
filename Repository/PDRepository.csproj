@@ -66,16 +66,8 @@
       <HintPath>packages\PowerDesigner.Interop.16.7.2.66211\lib\x64\Interop.PdCommon.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Interop.PdPDM, Version=16.7.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\PowerDesigner.Interop.16.7.2.66211\lib\x64\Interop.PdPDM.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="Interop.PdRMG, Version=16.7.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>packages\PowerDesigner.Interop.PdRMG.16.7.2.66211\lib\x64\Interop.PdRMG.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.PdWSP, Version=16.7.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\PowerDesigner.Interop.16.7.2.66211\lib\x64\Interop.PdWSP.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
