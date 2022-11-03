@@ -1,10 +1,29 @@
-# PowerDesigner Repository Client Library
+<h1 align="center">PowerDesigner Repository Client Library</h1>
 
-This library enables managed access from any .NET language to the PowerDesigner Repository through COM Interop.
+<p align="center">
+  <br>
+  <img src="PDR.png" alt="PowerDesigner Repository Client Library logo" width="140px" height="140px"/>
+  <br><br>
+  <i>The PowerDesigner Repository Client Library enables managed access <br>from any .NET language to the PowerDesigner Repository through COM Interop.</i>
+  <br>
+</p>
 
-## License
+<p align="center">  
+  <a href="https://github.com/bartelsk/PowerDesigner/blob/main/LICENSE">
+    <img src="" alt="Apache 2 license" />
+  </a>
+</p>
 
-- The PowerDesigner Repository Client Library is licensed under the [Apache License, Version 2.0](/LICENSE).
+<hr>
+
+## Introduction
+
+The PowerDesigner Repository Client Library allows you to:
+- Work with documents (models, extensions, et cetera)
+- Manage users and groups
+- Create and delete branches
+
+all from the comfort of .NET! :heart_eyes:
 
 ## Usage
 
@@ -24,9 +43,5 @@ In order to build the library, you will have to add references to the following 
 - Interop.PdCommon
 - Interop.PdRMG (Repository Management)
 
-Optional:
-- Interop.PdPDM (Physical Data Models)
-- Interop.PdWSP (Workspace)
-
-Most of the time you can find the assemblies in `C:\Program Files\SAP\PowerDesigner 16`. Make sure the assembly versions match the version of PowerDesigner you are using.
+Most of the time you can find these assemblies in the installation folder `C:\Program Files\SAP\PowerDesigner 16`. Make sure the assembly versions match the version of PowerDesigner you are using.
 
