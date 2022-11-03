@@ -18,10 +18,12 @@
 
 ## Introduction
 
-This PowerDesigner Repository CLI enables interaction with the PowerDesigner Repository from the command line. It allows:
-- working with documents, such as check-in and check-out, lock and freeze and get / set permissions
-- 
+This PowerDesigner Repository CLI enables interaction with the PowerDesigner Repository from the command line. It can:
+- Work with documents (models, extensions, et cetera)
+- Manage users and groups
+- Create and delete branches
 
-## License
+## Prerequisites
+Please refer to the prerequisites in the [README](../README.md) file in the root of this repository.
 
-- The PowerDesigner Repository Client Library is licensed under the [Apache License, Version 2.0](/LICENSE).
+## Quickstart
