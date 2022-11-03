@@ -4,7 +4,7 @@
   <br>
   <img src="PDR-CLI.png" alt="PowerDesigner Repository CLI logo" width="140px" height="140px"/>
   <br><br>
-  <i>The PowerDesigner Repository CLI is a command-line interface tool that allows you to interact with the PowerDesigner repository directly from a command shell.</i>
+  <i>The PowerDesigner Repository CLI is a command-line interface tool that allows you <br>to interact with the PowerDesigner repository directly from a command shell.</i>
   <br>
 </p>
 
@@ -16,9 +16,11 @@
 
 <hr>
 
-## Documentation
+## Introduction
 
-Hello
+This PowerDesigner Repository CLI enables interaction with the PowerDesigner Repository from the command line. It allows:
+- working with documents, such as check-in and check-out, lock and freeze and get / set permissions
+- 
 
 ## License
 
