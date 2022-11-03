@@ -2,16 +2,19 @@
 
 <p align="center">
   <br>
-  <img src="/docs/images/cli-logo.png" alt="PowerDesigner Repository CLI logo" width="100px" height="108px"/>
+  <img src="PDR-CLI.png" alt="PowerDesigner Repository CLI logo" width="140px" height="140px"/>
   <br><br>
   <i>The PowerDesigner Repository CLI is a command-line interface tool that allows you to interact with the PowerDesigner repository directly from a command shell.</i>
   <br>
 </p>
 
-<p align="center">
-  <a href="https://github.com/bartelsk/PowerDesigner/Repository/CLI"><strong>cli.pdr.io</strong></a>
-  <br>
+<p align="center">  
+  <a href="https://github.com/bartelsk/PowerDesigner/blob/main/LICENSE">
+    <img src="" alt="Apache 2 license" />
+  </a>
 </p>
+
+<hr>
 
 ## Documentation
 
