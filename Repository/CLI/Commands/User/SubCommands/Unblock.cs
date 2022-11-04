@@ -23,7 +23,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         public string RepoPassword { get; set; }
 
         [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "l", LongName = "login-name", Description = "Specifies the login name of the user for which to get its status.", ValueName = "login name", ShowInHelpText = true)]
+        [Option(CommandOptionType.SingleValue, ShortName = "l", LongName = "login-name", Description = "Specifies the login name of the user to unblock.", ValueName = "login name", ShowInHelpText = true)]
         public string LoginName { get; set; }
 
         public Unblock(IConsole console)

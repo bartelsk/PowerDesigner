@@ -27,3 +27,100 @@ This PowerDesigner Repository CLI enables interaction with the PowerDesigner Rep
 Please refer to the prerequisites in the [README](../README.md) file in the root of this repository.
 
 ## Quickstart
+
+TODO
+<br>
+
+## Commands
+
+Work seamlessly with the PowerDesigner repository from the command line.
+<br>
+
+## User commands
+
+The following user commands are available:
+- [Create](#create)
+- [Status](#status)
+- [Unblock](#unblock)
+
+### Create
+
+Creates a user and adds the user account to a group.
+
+```bash
+pdr user create [options]
+``` 
+
+**Options** 
+
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository.
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository.
+
+**Examples**
+
+```bash
+# TODO
+``` 
+
+### Status
+
+Returns the user account status.
+
+```bash
+pdr user status [options]
+``` 
+
+**Options** 
+
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository.
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository.
+- ``-l``, ``--login-name``
+    - Specifies the login name of the user for which to get its status.
+
+**Examples**
+
+```bash
+# Retrieves the user status
+$ pdr user status --login-name UserA --repo-user Admin --repo-password P@ssw0rd
+
+# Retrieves the user status while using a repository definition
+$ pdr user status -l UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+``` 
+
+### Unblock
+
+Unblocks a user account.
+
+
+```bash
+pdr user unblock [options]
+``` 
+
+**Options** 
+
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository.
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository.
+- ``-l``, ``--login-name``
+    - Specifies the login name of the user to unblock.
+
+**Examples**
+
+```bash
+# Unblock a user 
+$ pdr user unblock --login-name UserA --repo-user Admin --repo-password P@ssw0rd
+
+# Unblock a user while using a repository definition
+$ pdr user unblock -l UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+``` 
