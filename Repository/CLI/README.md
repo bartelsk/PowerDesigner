@@ -88,10 +88,10 @@ pdr user status [options]
 **Examples**
 
 ```bash
-# Retrieves the user status
+# Retrieves the status for user 'UserA'
 $ pdr user status --login-name UserA --repo-user Admin --repo-password P@ssw0rd
 
-# Retrieves the user status while using a repository definition
+# Retrieves the user status while using a repository definition and the single-dash convention
 $ pdr user status -l UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
 ``` 
 
@@ -118,9 +118,9 @@ pdr user unblock [options]
 **Examples**
 
 ```bash
-# Unblock a user 
+# Unblocks user 'UserA'
 $ pdr user unblock --login-name UserA --repo-user Admin --repo-password P@ssw0rd
 
-# Unblock a user while using a repository definition
+# Unblock a user while using a repository definition and the single-dash convention
 $ pdr user unblock -l UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
 ``` 
