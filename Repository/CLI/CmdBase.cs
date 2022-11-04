@@ -4,7 +4,6 @@
 using McMaster.Extensions.CommandLineUtils;
 using PDRepository.Common;
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace PDRepository.CLI
@@ -37,12 +36,10 @@ namespace PDRepository.CLI
                     _client = RepositoryClient.CreateClient(connectionSettings);
                 });
 
-                Output("\r\nConnection:", ConsoleColor.Magenta);
+                Output("\r\nConnection:\r\n", ConsoleColor.Magenta);
                 Output("  Status: connected", ConsoleColor.DarkGreen);
-                Output($"  Repository definition: { (string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName) }\r\n", ConsoleColor.DarkGreen);
-                                
-                //Output($"\r\nPowerDesigner Repository CLI version: { Assembly.GetExecutingAssembly().GetName().Version.ToString(4) }");
-                //Output($"PowerDesigner Repository Client Library version: { _client.Version }\r\n");
+                Output($"  Repository definition: '{ (string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName) }'", ConsoleColor.DarkGreen);
+                Output($"  Repository client library version: { _client.Version }\r\n", ConsoleColor.DarkGreen);
 
                 connected = true;
             }
@@ -68,9 +65,14 @@ namespace PDRepository.CLI
             Output(data, foregroundColor, ConsoleColor.Black);
         }
 
-        protected void OutputTableRow<T>(string property, T value, ConsoleColor foregroundColor = ConsoleColor.White)
+        protected void OutputTableRow<T>(string property, T value, int tabCount = 2, ConsoleColor foregroundColor = ConsoleColor.White)
         {
-            Output($"  { property }\t\t{ value }", foregroundColor);
+            Output($"  { property }{ new String('\t', tabCount) }{ value }", foregroundColor);
+        }
+
+        protected void OutputTableRowCSV(string data, string separator, ConsoleColor foregroundColor = ConsoleColor.White)
+        {
+            Output($"  { data.Replace(separator, "\r\n  ") }", foregroundColor);
         }
 
         protected void OutputTableRowSeparator(char separator, int amount)
