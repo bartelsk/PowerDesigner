@@ -37,14 +37,12 @@ namespace PDRepository.CLI
                     _client = RepositoryClient.CreateClient(connectionSettings);
                 });
 
-                OutputToConsole($"Connection successful!", ConsoleColor.Green);
-                if (!string.IsNullOrEmpty(repoDefinition))
-                {
-                    OutputToConsole($"Using repository definition '{ _client.RepositoryDefinitionName }'", ConsoleColor.Green);
-                }
-
-                Output($"\r\nPowerDesigner Repository CLI version: { Assembly.GetExecutingAssembly().GetName().Version.ToString(4) }");
-                Output($"PowerDesigner Repository Client Library version: { _client.Version }\r\n");
+                Output("\r\nConnection:", ConsoleColor.Magenta);
+                Output("  Status: connected", ConsoleColor.DarkGreen);
+                Output($"  Repository definition: { (string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName) }\r\n", ConsoleColor.DarkGreen);
+                                
+                //Output($"\r\nPowerDesigner Repository CLI version: { Assembly.GetExecutingAssembly().GetName().Version.ToString(4) }");
+                //Output($"PowerDesigner Repository Client Library version: { _client.Version }\r\n");
 
                 connected = true;
             }
@@ -62,17 +60,32 @@ namespace PDRepository.CLI
 
         protected void Output(string data)
         {
-            OutputToConsole(data);
+            Output(data, ConsoleColor.White, ConsoleColor.Black);
         }
 
-        protected void OutputToConsole(string data, ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
+        protected void Output(string data, ConsoleColor foregroundColor = ConsoleColor.White)
+        {
+            Output(data, foregroundColor, ConsoleColor.Black);
+        }
+
+        protected void OutputTableRow<T>(string property, T value, ConsoleColor foregroundColor = ConsoleColor.White)
+        {
+            Output($"  { property }\t\t{ value }", foregroundColor);
+        }
+
+        protected void OutputTableRowSeparator(char separator, int amount)
+        {
+            Output($"  { new String(separator, amount) }");
+        }
+
+        protected void Output(string data, ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
         {
             _console.BackgroundColor = backgroundColor;
             _console.ForegroundColor = foregroundColor;
             _console.Out.WriteLine(data);
             _console.ResetColor();
-        }
-
+        }        
+        
         protected void OutputError(string message)
         {
             _console.BackgroundColor = ConsoleColor.Red;

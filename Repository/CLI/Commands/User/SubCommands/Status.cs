@@ -35,30 +35,49 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         {
             try
             {
-                OutputToConsole("Retrieving user account status", ConsoleColor.Yellow);                              
+                Output("Retrieving user account status", ConsoleColor.DarkYellow);                              
                 
                 if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
                 {
-                    Output("Retrieving status...\r\n");
+                    Output("Retrieving user account...");
 
                     if (_client.UserClient.UserExists(LoginName))
                     {
                         Common.User user = _client.UserClient.GetUserInfo(LoginName);
-                        
-                        Output($"User '{ user.FullName }':");
-                        Output(new String('-', user.FullName.Length + 8));
-                        
-                        Output($"\r\nStatus: { user.Status }");
-                        Output($"Blocked: { user.Blocked }");
-                        Output($"Comment: { user.Comment }");
-                        Output($"Disabled: { user.Disabled }");
-                        Output($"Last login date: { user.LastLoginDate }");
-                        Output($"Rights: { user.Rights.Replace(";", ", ") }");
-                        Output($"Group membership: { user.GroupMembership.Replace(";", ", ") }");
+
+                        Output("\r\nUser details:", ConsoleColor.Magenta);                        
+
+                        //Output(new String('-', user.FullName.Length + 8));
+
+                        OutputTableRow("Property", "Value", ConsoleColor.DarkGreen);
+                        OutputTableRow("--------", "-----", ConsoleColor.DarkGreen);
+
+                        OutputTableRow("Name", user.FullName);
+                        OutputTableRow("Status", user.Status);
+                        OutputTableRow("Blocked", user.Blocked);
+                        OutputTableRow("Comment", user.Comment);
+                        OutputTableRow("Disabled", user.Disabled);
+                        OutputTableRow("Last login", user.LastLoginDate);
+
+                        Output("\r\nUser rights:", ConsoleColor.Magenta);
+
+                        OutputTableRow("Right", "Value", ConsoleColor.DarkGreen);
+                        OutputTableRow("-----", "-----", ConsoleColor.DarkGreen);
+
+                        //Output("\r\n  Property               Value", ConsoleColor.DarkGreen);
+                        //Output("  ----------------------------", ConsoleColor.DarkGreen);
+
+                        //Output($"  Status                 { user.Status }");
+                        //Output($"  Blocked                { user.Blocked }");
+                        ////Output($"Comment: { user.Comment }");
+                        //Output($"Disabled: { user.Disabled }");
+                        //Output($"Last login date: { user.LastLoginDate }");
+                        //Output($"Rights: { user.Rights.Replace(";", ", ") }");
+                        //Output($"Group membership: { user.GroupMembership.Replace(";", ", ") }");
                     }
                     else
                     {
-                        OutputToConsole($"A user with login name '{ LoginName }' does not exist.", ConsoleColor.Red);
+                        Output($"A user with login name '{ LoginName }' does not exist.", ConsoleColor.Red);
                     }
                 }
                 return 0;
@@ -69,5 +88,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                 return 1;
             }
         }
+        
+        
     }
 }
