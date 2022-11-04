@@ -36,7 +36,7 @@ namespace PDRepository.CLI
                     _client = RepositoryClient.CreateClient(connectionSettings);
                 });
 
-                Output("\r\nConnection:\r\n", ConsoleColor.Magenta);
+                Output("\r\nConnection:\r\n", ConsoleColor.Blue);
                 Output("  Status: connected", ConsoleColor.DarkGreen);
                 Output($"  Repository definition: '{ (string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName) }'", ConsoleColor.DarkGreen);
                 Output($"  Repository client library version: { _client.Version }\r\n", ConsoleColor.DarkGreen);

@@ -45,7 +45,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
                         Common.User user = _client.UserClient.GetUserInfo(LoginName);
 
-                        Output("User details:\r\n", ConsoleColor.Magenta);
+                        Output("User details:\r\n", ConsoleColor.Blue);
                         OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
                         OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
 
