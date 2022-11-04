@@ -31,7 +31,12 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         {
             try
             {
-                Output("Hello from user create!");
+                Output("Creating user account", ConsoleColor.Yellow);
+
+                if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
+                {
+                    
+                }
                 return 0;
             }
             catch (Exception ex)

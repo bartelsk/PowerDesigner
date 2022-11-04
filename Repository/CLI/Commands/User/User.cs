@@ -11,7 +11,7 @@ namespace PDRepository.CLI.Commands.User
     [Subcommand(
        typeof(Create),
        typeof(Status),
-       typeof(Unlock)
+       typeof(Unblock)
     )]
     class User : CmdBase
     {

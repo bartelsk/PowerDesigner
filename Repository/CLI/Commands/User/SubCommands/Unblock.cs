@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace PDRepository.CLI.Commands.User.SubCommands
 {
-    [Command(Name = "unlock", Description = "Unlocks a user account.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-    class Unlock : CmdBase
+    [Command(Name = "unblock", Description = "Unblocks a user account.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    class Unblock : CmdBase
     {
         [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
         public string RepoDefinition { get; set; }
@@ -22,7 +22,11 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
         public string RepoPassword { get; set; }
 
-        public Unlock(IConsole console)
+        [Required]
+        [Option(CommandOptionType.SingleValue, ShortName = "l", LongName = "login-name", Description = "Specifies the login name of the user for which to get its status.", ValueName = "login name", ShowInHelpText = true)]
+        public string LoginName { get; set; }
+
+        public Unblock(IConsole console)
         {
             _console = console;
         }
@@ -31,7 +35,29 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         {
             try
             {
-                Output("Hello from user unlock!");
+                Output("Unblocking user account", ConsoleColor.Yellow);
+
+                if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
+                {
+                    if (_client.UserClient.UserExists(LoginName))
+                    {
+                        _client.UserClient.UnblockUser(LoginName);
+
+                        Common.User user = _client.UserClient.GetUserInfo(LoginName);
+
+                        Output("User details:\r\n", ConsoleColor.Magenta);
+                        OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
+                        OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
+
+                        OutputTableRow("Status", user.Status);
+                        OutputTableRow("Blocked", user.Blocked);
+                        OutputTableRow("Disabled", user.Disabled);
+                    }
+                    else
+                    {
+                        Output($"A user with login name '{ LoginName }' does not exist.", ConsoleColor.Red);
+                    }
+                }
                 return 0;
             }
             catch (Exception ex)

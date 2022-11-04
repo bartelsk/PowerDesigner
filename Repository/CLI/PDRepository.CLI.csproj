@@ -82,7 +82,7 @@
     <Compile Include="Commands\Branch\SubCommands\List.cs" />
     <Compile Include="Commands\User\SubCommands\Create.cs" />
     <Compile Include="Commands\User\SubCommands\Status.cs" />
-    <Compile Include="Commands\User\SubCommands\Unlock.cs" />
+    <Compile Include="Commands\User\SubCommands\Unblock.cs" />
     <Compile Include="Commands\User\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
