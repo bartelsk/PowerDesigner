@@ -24,7 +24,7 @@ This PowerDesigner Repository CLI enables interaction with the PowerDesigner Rep
 - Create and delete branches
 
 ## Prerequisites
-Please refer to the prerequisites in the [README](../README.md) file in the root of this repository.
+Please refer to the prerequisites in the [README](../README.md#prerequisites) file in the root of this repository.
 
 ## Quickstart
 
@@ -34,6 +34,16 @@ TODO
 ## Commands
 
 Work seamlessly with the PowerDesigner repository from the command line.
+ 
+All commands require at least two parameters: the login name of the account that is used to connect to the repository and its password.
+This is necessary because the [PowerDesigner Repository Client Library](../README.md) uses an active database connection to the repository. 
+The CLI does not maintain this connection as it is stateless.
+
+Currently, the CLI supports the following commands related to:
+- [Users](#user-commands)
+- [Branches](#branch-commands)
+
+Below you will find a detailed description of the available commands and their options.
 <br>
 
 ## User commands
@@ -51,14 +61,14 @@ Creates a user and adds the user account to a group.
 pdr user create [options]
 ``` 
 
-**Options** 
+**Optional** 
 
 - ``-rd``, ``--repo-definition``
      - Specifies the repository definition used to connect to the repository (optional).
 - ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository.
+    - The login name of the account that is used to connect to the repository (required).
 - ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository.
+    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
@@ -76,14 +86,14 @@ pdr user status [options]
 
 **Options** 
 
+- ``-l``, ``--login-name``
+    - Specifies the login name of the user for which to get its status (required).
 - ``-rd``, ``--repo-definition``
      - Specifies the repository definition used to connect to the repository (optional).
 - ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository.
+    - The login name of the account that is used to connect to the repository (required).
 - ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository.
-- ``-l``, ``--login-name``
-    - Specifies the login name of the user for which to get its status.
+    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
@@ -99,21 +109,20 @@ $ pdr user status -l UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
 
 Unblocks a user account.
 
-
 ```bash
 pdr user unblock [options]
 ``` 
 
 **Options** 
 
+- ``-l``, ``--login-name``
+    - Specifies the login name of the user to unblock (required).
 - ``-rd``, ``--repo-definition``
      - Specifies the repository definition used to connect to the repository (optional).
 - ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository.
+    - The login name of the account that is used to connect to the repository (required).
 - ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository.
-- ``-l``, ``--login-name``
-    - Specifies the login name of the user to unblock.
+    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
@@ -123,4 +132,56 @@ $ pdr user unblock --login-name UserA --repo-user Admin --repo-password P@ssw0rd
 
 # Unblock a user while using a repository definition and the single-dash convention
 $ pdr user unblock -l UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+``` 
+
+## Branch commands
+
+The following branch commands are available:
+- [Create](#create)
+- [List](#list)
+
+### Create
+
+Creates a branch and and assigns access rights.
+
+```bash
+pdr branch create [options]
+``` 
+
+**Optional** 
+
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository (required).
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository (required).
+
+**Examples**
+
+```bash
+# TODO
+``` 
+
+### List
+
+Enumerates existing branches.
+
+```bash
+pdr branch list [options]
+``` 
+
+**Optional** 
+
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository (required).
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository (required).
+
+**Examples**
+
+```bash
+# TODO
 ``` 
