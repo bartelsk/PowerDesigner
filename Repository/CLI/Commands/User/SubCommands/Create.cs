@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
+using PDRepository.Common;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -21,6 +22,14 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         [Required]
         [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
         public string RepoPassword { get; set; }
+                
+        [Option(CommandOptionType.SingleValue, ShortName = "ur", LongName = "user-right", Description = "The rights for the new user.", ValueName = "rights", ShowInHelpText = true)]
+        public UserOrGroupRightsEnum UserRights { get; set; }
+
+        [Required]
+        [EmailAddress]        
+        [Option(CommandOptionType.SingleValue, ShortName = "ue", LongName = "email-address", Description = "The email address of the new user.", ValueName = "email", ShowInHelpText = true)]
+        public string EmailAddress { get; set; }
 
         public Create(IConsole console)
         {
