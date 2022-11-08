@@ -86,7 +86,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                     }
                     else
                     {
-                        Output($"A user with login name '{ LoginName }' already exists.", ConsoleColor.Red);
+                        OutputError($"A user with login name '{ LoginName }' already exists.");
                     }
                 }
                 return 0;
