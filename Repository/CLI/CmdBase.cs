@@ -50,6 +50,19 @@ namespace PDRepository.CLI
             return connected;
         }
 
+        protected UserOrGroupRightsEnum ParseUserOrGroupRights(string[] rights)
+        {
+            UserOrGroupRightsEnum parsedRights = UserOrGroupRightsEnum.None;
+            for (int i = 0; i < rights.Length; i++)
+            {
+                if (Enum.TryParse(rights[i], true, out UserOrGroupRightsEnum result))
+                {
+                    parsedRights |= result;
+                }
+            }            
+            return parsedRights;
+        }
+
         protected void OnException(Exception ex)
         {
             OutputError(ex.Message);
