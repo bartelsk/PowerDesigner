@@ -24,11 +24,20 @@ This PowerDesigner Repository CLI enables interaction with the PowerDesigner Rep
 - Create and delete branches
 
 ## Prerequisites
-Please refer to the prerequisites in the [README](../README.md#prerequisites) file in the root of this repository.
+Please refer to the prerequisites and build instructions in the [README](../README.md#prerequisites) file in the root of this repository.
 
 ## Quickstart
 
-TODO
+Build the main solution in `Debug` or `Release` mode and copy the files in the respective `bin\x64\Debug` or `bin\x64\Release` folder to a location convenient to you.
+Open a command prompt for that location and type:
+
+```
+pdr --help
+```
+
+to view the available commands and their options. 
+
+The following section lists the available commands in more detail.
 <br>
 
 ## Commands
@@ -43,7 +52,7 @@ Currently, the CLI supports the following commands related to:
 - [Users](#user-commands)
 - [Branches](#branch-commands)
 
-Below you will find a detailed description of the available commands and their options.
+More commands are expected to be added in the near future.
 <br>
 
 ## User commands
