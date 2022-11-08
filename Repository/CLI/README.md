@@ -55,14 +55,36 @@ The following user commands are available:
 
 ### Create
 
-Creates a user and adds the user account to a group.
+Creates a user and and optionally adds the user account to an existing group.
 
 ```bash
 pdr user create [options]
 ``` 
 
-**Optional** 
+**Options** 
 
+- ``-ln``, ``--login-name``
+    - Specifies the login name for the new user (required).
+- ``-fn``, ``--full-name``
+    - The real name of the new user (required).
+- ``-ue``, ``--email-address``
+    - The email address of the new user (required).
+- ``-ur``, ``--user-right``
+    - The rights for the new user (optional). Can be specified multiple times for compound rights.
+    - Allowed values are: 
+      - None
+      - Connect
+      - FreezeVersions
+      - LockVersions
+      - ManageBranches
+      - ManageConfigurations
+      - ManageAllDocuments
+      - ManageUsers
+      - ManageRepository
+      - EditPortalObjects
+      - EditPortalExtensions
+- ``-ug``, ``--group``
+    - The name of the group to which to add the user (optional). Group rights will be inherited by the new user.
 - ``-rd``, ``--repo-definition``
      - Specifies the repository definition used to connect to the repository (optional).
 - ``-ru``, ``--repo-user``
@@ -73,7 +95,14 @@ pdr user create [options]
 **Examples**
 
 ```bash
-# TODO
+# Create a user with 'Connect' rights
+$ pdr user create --login-name JWilliams --full-name "John Williams" --email-address john@williams.com --user-right Connect --repo-user Admin --repo-password P@ssw0rd
+
+# Create a user with 'Connect' and 'ManageUsers' rights using the single-dash convention
+$ pdr user create -ln JWilliams -fn "John Williams" -ue john@williams.com -ur Connect -ur ManageUsers -ru Admin -rp P@ssw0rd
+
+# Create a user with 'Connect' and 'ManageUsers' rights and add him to the 'Developers' groups while using a repository definition and the single-dash convention
+$ pdr user create -ln JWilliams -fn "John Williams" -ue john@williams.com -ur Connect -ur ManageUsers -ug Developers -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
 ``` 
 
 ### Status
