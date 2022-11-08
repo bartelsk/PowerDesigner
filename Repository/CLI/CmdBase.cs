@@ -110,6 +110,17 @@ namespace PDRepository.CLI
             Output($"  { new String(separator, amount) }");
         }
 
+        protected void OutputUserRightsAndGroupPermissions(Common.User user)
+        {
+            Output("\r\nUser privileges:\r\n", ConsoleColor.Blue);
+            Output("  Rights\r\n  ------", ConsoleColor.DarkGreen);
+            OutputTableRowCSV(user.Rights, ";");
+
+            Output("\r\nGroup memberships:\r\n", ConsoleColor.Blue);
+            Output("  Groups\r\n  ------", ConsoleColor.DarkGreen);
+            OutputTableRowCSV(user.GroupMembership, ";");
+        }
+
         protected void Output(string data, ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
         {
             _console.BackgroundColor = backgroundColor;

@@ -56,13 +56,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                         OutputTableRow("Disabled", user.Disabled);
                         OutputTableRow("Last login date", user.LastLoginDate, 1);
 
-                        Output("\r\nUser privileges:\r\n", ConsoleColor.Blue);
-                        Output("  Rights\r\n  ------", ConsoleColor.DarkGreen);
-                        OutputTableRowCSV(user.Rights, ";");
-
-                        Output("\r\nGroup memberships:\r\n", ConsoleColor.Blue);                        
-                        Output("  Groups\r\n  ------", ConsoleColor.DarkGreen);
-                        OutputTableRowCSV(user.GroupMembership, ";");
+                        OutputUserRightsAndGroupPermissions(user);
                     }
                     else
                     {

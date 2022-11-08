@@ -82,13 +82,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                         OutputTableRow("Temporary password", temporaryPassword, 1);
                         OutputTableRow("Status", user.Status);
 
-                        Output("\r\nUser privileges:\r\n", ConsoleColor.Blue);
-                        Output("  Rights\r\n  ------", ConsoleColor.DarkGreen);
-                        OutputTableRowCSV(user.Rights, ";");
-
-                        Output("\r\nGroup memberships:\r\n", ConsoleColor.Blue);
-                        Output("  Groups\r\n  ------", ConsoleColor.DarkGreen);
-                        OutputTableRowCSV(user.GroupMembership, ";");
+                        OutputUserRightsAndGroupPermissions(user);
                     }
                     else
                     {
