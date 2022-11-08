@@ -18,6 +18,13 @@ namespace PDRepository.CLI
             return Task.FromResult(0);
         }
 
+        /// <summary>
+        /// Creates a connection to the repository.
+        /// </summary>
+        /// <param name="repoDefinition">The name of the repository definition.</param>
+        /// <param name="repoUser">The name of the repository user.</param>
+        /// <param name="repoPassword">The password of the repository user.</param>
+        /// <returns></returns>
         protected async Task<bool> ConnectAsync(string repoDefinition, string repoUser, string repoPassword)
         {
             bool connected = false;
@@ -50,18 +57,28 @@ namespace PDRepository.CLI
             return connected;
         }
 
+        /// <summary>
+        /// Parses the specified array with user or group rights into a <see cref="UserOrGroupRightsEnum"/>.
+        /// </summary>
+        /// <param name="rights">An array containing user or group rights.</param>
+        /// <returns>A <see cref="UserOrGroupRightsEnum"/>.</returns>
         protected UserOrGroupRightsEnum ParseUserOrGroupRights(string[] rights)
         {
             UserOrGroupRightsEnum parsedRights = UserOrGroupRightsEnum.None;
-            for (int i = 0; i < rights.Length; i++)
+            if (rights != null)
             {
-                if (Enum.TryParse(rights[i], true, out UserOrGroupRightsEnum result))
+                for (int i = 0; i < rights.Length; i++)
                 {
-                    parsedRights |= result;
+                    if (Enum.TryParse(rights[i], true, out UserOrGroupRightsEnum result))
+                    {
+                        parsedRights |= result;
+                    }
                 }
-            }            
+            }
             return parsedRights;
         }
+
+        #region Output
 
         protected void OnException(Exception ex)
         {
@@ -108,5 +125,7 @@ namespace PDRepository.CLI
             _console.Error.WriteLine(message);
             _console.ResetColor();
         }
+
+        #endregion
     }
 }

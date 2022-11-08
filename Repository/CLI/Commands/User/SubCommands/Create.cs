@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
+using PDRepository.Common;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -35,8 +36,9 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         [Option(CommandOptionType.SingleValue, ShortName = "ue", LongName = "email-address", Description = "The email address of the new user.", ValueName = "email", ShowInHelpText = true)]
         public string EmailAddress { get; set; }
 
-        [Option(CommandOptionType.MultipleValue, ShortName = "ur", LongName = "user-right", ValueName = "rights", ShowInHelpText = true,
-            Description = "The rights for the new user. Allowed values are: None, Connect, FreezeVersions, LockVersions, ManageBranches, ManageConfigurations, ManageAllDocuments, ManageUsers, ManageRepository, EditPortalObjects, EditPortalExtensions (optional).")]
+        [Option(CommandOptionType.MultipleValue, ShortName = "ur", LongName = "user-right", ValueName = "rights", ShowInHelpText = true, Description =
+            "The rights for the new user. Can be specified multiple times for compound rights. Allowed values are: None, Connect, FreezeVersions, LockVersions, ManageBranches, ManageConfigurations, ManageAllDocuments, ManageUsers, ManageRepository, EditPortalObjects, EditPortalExtensions (optional)."
+        )]
         public string[] UserRights { get; set; }
 
         [Option(CommandOptionType.SingleValue, ShortName = "ug", LongName = "group", Description = "The name of the group to which to add the user (optional).", ValueName = "group", ShowInHelpText = true)]
@@ -53,9 +55,45 @@ namespace PDRepository.CLI.Commands.User.SubCommands
             {
                 Output("Creating user account", ConsoleColor.Yellow);
 
+                UserOrGroupRightsEnum userRights = ParseUserOrGroupRights(UserRights);
+
                 if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
                 {
-                    
+                    if (!_client.UserClient.UserExists(LoginName))
+                    {
+                        string temporaryPassword;
+                        if (string.IsNullOrEmpty(Group))
+                        {
+                            _client.UserClient.CreateUser(LoginName, FullName, EmailAddress, out temporaryPassword, userRights);
+                        }
+                        else
+                        {
+                            _client.UserClient.CreateUser(LoginName, FullName, EmailAddress, out temporaryPassword, userRights, Group);
+                        }
+
+                        Common.User user = _client.UserClient.GetUserInfo(LoginName);
+
+                        Output("\r\nNew user details:\r\n", ConsoleColor.Blue);
+                        OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
+                        OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
+
+                        OutputTableRow("Full name", user.FullName);
+                        OutputTableRow("Login name", user.LoginName);
+                        OutputTableRow("Temporary password", temporaryPassword, 1);
+                        OutputTableRow("Status", user.Status);
+
+                        Output("\r\nUser privileges:\r\n", ConsoleColor.Blue);
+                        Output("  Rights\r\n  ------", ConsoleColor.DarkGreen);
+                        OutputTableRowCSV(user.Rights, ";");
+
+                        Output("\r\nGroup memberships:\r\n", ConsoleColor.Blue);
+                        Output("  Groups\r\n  ------", ConsoleColor.DarkGreen);
+                        OutputTableRowCSV(user.GroupMembership, ";");
+                    }
+                    else
+                    {
+                        Output($"A user with login name '{ LoginName }' already exists.", ConsoleColor.Red);
+                    }
                 }
                 return 0;
             }
