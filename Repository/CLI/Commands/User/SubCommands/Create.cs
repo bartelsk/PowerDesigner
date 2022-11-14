@@ -12,17 +12,6 @@ namespace PDRepository.CLI.Commands.User.SubCommands
     [Command(Name = "create", Description = "Creates a user and optionally adds the user account to an existing group.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     class Create : CmdBase
     {
-        [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
-        public string RepoDefinition { get; set; }
-
-        [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "ru", LongName = "repo-user", Description = "The login name of the account that is used to connect to the repository.", ValueName = "login name", ShowInHelpText = true)]
-        public string RepoUser { get; set; }
-
-        [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
-        public string RepoPassword { get; set; }
-
         [Required]
         [Option(CommandOptionType.SingleValue, ShortName = "ln", LongName = "login-name", Description = "Specifies the login name for the new user.", ValueName = "login name", ShowInHelpText = true)]
         public string LoginName { get; set; }
@@ -42,7 +31,18 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         public string[] UserRights { get; set; }
 
         [Option(CommandOptionType.SingleValue, ShortName = "ug", LongName = "group", Description = "The name of the group to which to add the user (optional).", ValueName = "group", ShowInHelpText = true)]
-        public string Group { get; set; }       
+        public string Group { get; set; }
+
+        [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
+        public string RepoDefinition { get; set; }
+
+        [Required]
+        [Option(CommandOptionType.SingleValue, ShortName = "ru", LongName = "repo-user", Description = "The login name of the account that is used to connect to the repository.", ValueName = "login name", ShowInHelpText = true)]
+        public string RepoUser { get; set; }
+
+        [Required]
+        [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
+        public string RepoPassword { get; set; }         
 
         public Create(IConsole console)
         {

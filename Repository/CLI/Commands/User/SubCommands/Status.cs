@@ -11,6 +11,10 @@ namespace PDRepository.CLI.Commands.User.SubCommands
     [Command(Name = "status", Description = "Returns the user account status.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     class Status : CmdBase
     {
+        [Required]
+        [Option(CommandOptionType.SingleValue, ShortName = "l", LongName = "login-name", Description = "Specifies the login name of the user for which to get its status.", ValueName = "login name", ShowInHelpText = true)]
+        public string LoginName { get; set; }
+
         [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
         public string RepoDefinition { get; set; }
 
@@ -21,11 +25,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         [Required]
         [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
         public string RepoPassword { get; set; }
-
-        [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "l", LongName = "login-name", Description = "Specifies the login name of the user for which to get its status.", ValueName = "login name", ShowInHelpText = true)]
-        public string LoginName { get; set; }
-
+       
         public Status(IConsole console)
         {
             _console = console;
