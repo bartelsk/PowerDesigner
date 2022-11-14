@@ -5,6 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PDRepository.CLI.Commands.Branch.SubCommands
@@ -47,13 +48,18 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
 
                     if (branches != null)
                     {
+                        int maxLength = branches.Max(b => b.Name.Length);
+                        int padding = 3;
+
                         Output("\r\nBranch details:\r\n", ConsoleColor.Blue);
-                        OutputTableRow("Name", "Relative path", 4, ConsoleColor.DarkGreen);
-                        OutputTableRow("----", "-------------", 4, ConsoleColor.DarkGreen);
+                        OutputTableRowSpace("Name", "Relative path", maxLength, padding, ConsoleColor.DarkGreen);
+                        OutputTableRowSpace("----", "-------------", maxLength, padding, ConsoleColor.DarkGreen);
+
+                        
 
                         branches.ForEach(b =>
                         {
-                            OutputTableRow(b.Name, b.RelativePath, 1);
+                            OutputTableRowSpace(b.Name, b.RelativePath, maxLength, padding);
 
                         });
                     }

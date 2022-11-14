@@ -100,6 +100,11 @@ namespace PDRepository.CLI
             Output($"  { property }{ new String('\t', tabCount) }{ value }", foregroundColor);
         }
 
+        protected void OutputTableRowSpace<T>(string property, T value, int maxSpaces, int padding, ConsoleColor foregroundColor = ConsoleColor.White)
+        {
+            Output($"  { property }{ new String(' ', maxSpaces - property.Length + padding) }{ value }", foregroundColor);
+        }
+
         protected void OutputTableRowCSV(string data, string separator, ConsoleColor foregroundColor = ConsoleColor.White)
         {
             Output($"  { data.Replace(separator, "\r\n  ") }", foregroundColor);
