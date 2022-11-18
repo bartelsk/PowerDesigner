@@ -231,25 +231,12 @@ namespace PDRepository.CLI.Output
         /// </summary>
         private void WriteHorizontalTable()
         {
-            int columnCount = 2;
-            for (int col = 0; col < columnCount; col++)
-            {
-                int rowIndex = 0;
-                foreach (var row in _rows)
-                {
-                    Column tableCell = row.Columns.Where(c => c.Index == col).Single();
-                    if (rowIndex == 0)
-                    {
-                        Output($"{GetTablePadding()}{tableCell.Value}: ", tableCell.Color);
-                    }
-                    else
-                    {
-                        Output($"{tableCell.Value}", tableCell.Color);
-                        Output(Environment.NewLine);
-                    }
-                    rowIndex++;
-                }
-            }
+         foreach (var row in _rows)
+         {
+            Output($"{ GetTablePadding() }{ row.Columns[0].Value }: ", row.Columns[0].Color);
+            Output($"{ row.Columns[1].Value }", row.Columns[1].Color);
+            Output(Environment.NewLine);
+         }
         }
 
         /// <summary>
