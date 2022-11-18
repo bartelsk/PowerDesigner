@@ -30,7 +30,7 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
 
         [Required]
         [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
-        public string RepoPassword { get; set; }        
+        public string RepoPassword { get; set; }
 
         public List(IConsole console)
         {
@@ -49,30 +49,16 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
 
                     if (branches != null)
                     {
-                        
-                        Output("\r\nBranch details:\r\n", ConsoleColor.Magenta);
+                        Output("\r\nBranch details:\r\n", ConsoleColor.Yellow);
 
-                  using (TableWriter writer = new TableWriter(_console, padding: 4))
-                  {
-                     writer.StartTable(branches);
-                     writer.AddHeaderRow(branches, ConsoleColor.DarkCyan);
-                     
-                     writer.AddRows(branches);
-                     writer.WriteTable();
-                  }
+                        using (TableWriter writer = new TableWriter(_console, padding: 2))
+                        {
+                            writer.StartTable(branches);
+                            writer.AddHeaderRow(branches, ConsoleColor.Blue);
 
-
-
-                  //OutputTableRowSpace("Name", "Relative path", maxLength, padding, ConsoleColor.DarkGreen);
-                  //      OutputTableRowSpace("----", "-------------", maxLength, padding, ConsoleColor.DarkGreen);
-
-                        
-
-                  //      branches.ForEach(b =>
-                  //      {
-                  //          OutputTableRowSpace(b.Name, b.RelativePath, maxLength, padding);
-
-                  //      });
+                            writer.AddRows(branches);
+                            writer.WriteTable();
+                        }                        
                     }
                     else
                     {

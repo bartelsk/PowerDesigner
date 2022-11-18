@@ -43,7 +43,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
         [Required]
         [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
-        public string RepoPassword { get; set; }         
+        public string RepoPassword { get; set; }
 
         public Create(IConsole console)
         {
@@ -74,49 +74,20 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
                         Common.User user = _client.UserClient.GetUserInfo(LoginName);
 
-                        Output("\r\nNew user details:\r\n", ConsoleColor.Magenta);
+                        Output("\r\nNew user details:\r\n", ConsoleColor.Yellow);
 
-                  using (TableWriter writer = new TableWriter(_console, padding: 4))
-                  {
-                     writer.StartTable(2);
+                        using (TableWriter writer = new TableWriter(_console, padding: 2))
+                        {
+                            writer.StartTable(2);
+                            WriteTableHeader(writer, "Property", "Value", ConsoleColor.Blue, ConsoleColor.Blue);
 
-                     writer.StartRow(true);
-                     writer.AddColumn("Property", ConsoleColor.DarkCyan);
-                     writer.AddColumn("Value", ConsoleColor.DarkCyan);                     
-                     writer.EndRow();
-
-                     writer.StartRow();                    
-                     writer.AddColumn("Full name");
-                     writer.AddColumn(user.FullName);
-                     writer.EndRow();
-
-                     writer.StartRow();
-                     writer.AddColumn("Login name");
-                     writer.AddColumn(user.LoginName);
-                     writer.EndRow();
-
-                     writer.StartRow();
-                     writer.AddColumn("Temporary password");
-                     writer.AddColumn(temporaryPassword);
-                     writer.EndRow();
-
-                     writer.StartRow();
-                     writer.AddColumn("Status");
-                     writer.AddColumn(user.Status.ToString());
-                     writer.EndRow();
-
-                     writer.WriteTable();
-                  }
-
-
-
-                  //OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
-                  //      OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
-
-                  //      OutputTableRow("Full name", user.FullName);
-                  //      OutputTableRow("Login name", user.LoginName);
-                  //      OutputTableRow("Temporary password", temporaryPassword, 1);
-                  //      OutputTableRow("Status", user.Status);
+                            WriteRow(writer, "Full name", user.FullName);
+                            WriteRow(writer, "Login name", user.LoginName);
+                            WriteRow(writer, "Temporary password", temporaryPassword);
+                            WriteRow(writer, "Status", user.Status, valueColor: (user.Status.ToString().ToLowerInvariant() == "active") ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
+                            
+                            writer.WriteTable();
+                        }
 
                         OutputUserRightsAndGroupPermissions(user);
                     }

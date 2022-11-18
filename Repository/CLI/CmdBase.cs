@@ -44,32 +44,29 @@ namespace PDRepository.CLI
                     _client = RepositoryClient.CreateClient(connectionSettings);
                 });
 
+                //using (TableWriter writer = new TableWriter(_console, true, padding: 4))
+                //{
+                //    writer.StartTable(2);
 
-            using (TableWriter writer = new TableWriter(_console, true,  padding: 4))
-            {
-               writer.StartTable(2);
+                //    writer.StartRow();
+                //    writer.AddColumn("Status");
+                //    writer.AddColumn("Repository definition");
+                //    writer.AddColumn("Repository client library version");
+                //    writer.EndRow();
 
-               writer.StartRow();
-               writer.AddColumn("Status");
-               writer.AddColumn("Repository definition");
-               writer.AddColumn("Repository client library version");
-               writer.EndRow();
+                //    writer.StartRow();
+                //    writer.AddColumn("connected", ConsoleColor.DarkGreen);
+                //    writer.AddColumn($"'{(string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName)}'", ConsoleColor.DarkGreen);
+                //    writer.AddColumn(_client.Version);
+                //    writer.EndRow();
 
-               writer.StartRow();
-               writer.AddColumn("connected", ConsoleColor.DarkGreen);
-               writer.AddColumn($"'{(string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName)}'", ConsoleColor.DarkGreen);
-               writer.AddColumn(_client.Version);
-               writer.EndRow();
+                //    writer.WriteTable();
+                //}
 
-               writer.WriteTable();
-            }
-
-
-
-            //Output("\r\nConnection:\r\n", ConsoleColor.Blue);
-            //    Output("  Status: connected", ConsoleColor.DarkGreen);
-            //    Output($"  Repository definition: '{ (string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName) }'", ConsoleColor.DarkGreen);
-            //    Output($"  Repository client library version: { _client.Version }\r\n", ConsoleColor.DarkGreen);
+                Output("\r\nConnection:\r\n", ConsoleColor.Blue);
+                Output("  Status: connected", ConsoleColor.DarkGreen);
+                Output($"  Repository definition: '{ (string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName) }'", ConsoleColor.DarkGreen);
+                Output($"  Repository client library version: { _client.Version }\r\n", ConsoleColor.DarkGreen);
 
                 connected = true;
             }
@@ -102,7 +99,7 @@ namespace PDRepository.CLI
         }
 
         #region Output
-            
+
         protected void OnException(Exception ex)
         {
             OutputError(ex.Message);
@@ -117,53 +114,56 @@ namespace PDRepository.CLI
         {
             Output(data, foregroundColor, ConsoleColor.Black);
         }
-
-        //protected void OutputTableRow<T>(string property, T value, int tabCount = 2, ConsoleColor foregroundColor = ConsoleColor.White)
-        //{
-        //    Output($"  { property }{ new String('\t', tabCount) }{ value }", foregroundColor);
-        //}
-
-        //protected void OutputTableRowSpace<T>(string property, T value, int maxSpaces, int padding, ConsoleColor foregroundColor = ConsoleColor.White)
-        //{
-        //    Output($"  { property }{ new String(' ', maxSpaces - property.Length + padding) }{ value }", foregroundColor);
-        //}
-
-        //protected void OutputTableRowCSV(string data, string separator, ConsoleColor foregroundColor = ConsoleColor.White)
-        //{
-        //    Output($"  { data.Replace(separator, "\r\n  ") }", foregroundColor);
-        //}
-
-        //protected void OutputTableRowSeparator(char separator, int amount)
-        //{
-        //    Output($"  { new String(separator, amount) }");
-        //}
-
+        
         protected void OutputUserRightsAndGroupPermissions(Common.User user)
         {
-            
-            
-         using (TableWriter writer = new TableWriter(_console, padding: 4))
-         {
-            Output("\r\nUser privileges:\r\n", ConsoleColor.Magenta);
+            Output("\r\nUser privileges:\r\n", ConsoleColor.Yellow);
+            OutputCSVAsTable(user.Rights, ';', "Rights");
 
-            writer.StartTable(1);
+            Output("\r\nGroup memberships:\r\n", ConsoleColor.Yellow);
+            OutputCSVAsTable(user.GroupMembership, ';', "Groups");            
+        }
+
+        protected void OutputTypeAsTable<T>(T source)
+        {
+            using (TableWriter writer = new TableWriter(_console, padding: 2))
+            {
+                writer.StartTable(source);
+                writer.AddHeaderRow(source, ConsoleColor.Blue);
+                writer.AddRow(source);
+                writer.WriteTable();
+            }
+        }
+
+        protected void OutputCSVAsTable(string csvData, char separator, string columnHeader)
+        {
+            using (TableWriter writer = new TableWriter(_console, padding: 2))
+            {
+                writer.StartTable(1);
+                writer.StartRow(true);
+                writer.AddColumn(columnHeader, ConsoleColor.Blue);
+                writer.EndRow();
+
+                writer.AddCSVData(csvData, separator);
+
+                writer.WriteTable();               
+            }
+        }
+
+        protected void WriteTableHeader(TableWriter writer, string columnName1, string columnName2, ConsoleColor column1Color = ConsoleColor.Gray, ConsoleColor column2Color = ConsoleColor.Gray)
+        {
             writer.StartRow(true);
-            writer.AddColumn("Rights", ConsoleColor.DarkCyan);
+            writer.AddColumn(columnName1, column1Color);
+            writer.AddColumn(columnName2, column2Color);
             writer.EndRow();
+        }
 
-            writer.AddCSVData(user.Rights, ';');            
-            writer.WriteTable();
-
-            Output("\r\nGroup memberships:\r\n", ConsoleColor.Blue);
-
-            writer.StartTable(1);
-            writer.StartRow(true);
-            writer.AddColumn("Groups", ConsoleColor.DarkCyan);
+        protected void WriteRow<T>(TableWriter writer, string property, T value, ConsoleColor propertyColor = ConsoleColor.Gray, ConsoleColor valueColor = ConsoleColor.Gray)
+        {
+            writer.StartRow();
+            writer.AddColumn(property, propertyColor);
+            writer.AddColumn(value.ToString(), valueColor);
             writer.EndRow();
-
-            writer.AddCSVData(user.GroupMembership, ';');
-            writer.WriteTable();
-         }
         }
 
         protected void Output(string data, ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
@@ -172,8 +172,8 @@ namespace PDRepository.CLI
             _console.ForegroundColor = foregroundColor;
             _console.Out.WriteLine(data);
             _console.ResetColor();
-        }        
-        
+        }
+
         protected void OutputError(string message)
         {
             _console.BackgroundColor = ConsoleColor.Red;

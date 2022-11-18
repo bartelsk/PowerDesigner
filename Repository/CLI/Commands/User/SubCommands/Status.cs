@@ -46,26 +46,22 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                     {
                         Common.User user = _client.UserClient.GetUserInfo(LoginName);
 
-                        Output("\r\nUser details:\r\n", ConsoleColor.Magenta);
+                        Output("\r\nUser details:\r\n", ConsoleColor.Yellow);
 
-                     using (TableWriter writer = new TableWriter(_console, padding: 4))
-                     {
-                        writer.StartTable(user);
+                        using (TableWriter writer = new TableWriter(_console, padding: 2))
+                        {
+                            writer.StartTable(2);    
+                            WriteTableHeader(writer, "Property", "Value", ConsoleColor.Blue, ConsoleColor.Blue);
 
-                        writer.AddHeaderRow(user, ConsoleColor.DarkCyan);
-                        writer.AddRow(user);
-                        writer.WriteTable();
-                     }
+                            WriteRow(writer, "Name", user.FullName);
+                            WriteRow(writer, "Comment", (!string.IsNullOrEmpty(user.Comment) ? user.Comment : "(none)"));
+                            WriteRow(writer, "Status", user.Status, valueColor: (user.Status.ToString().ToLowerInvariant() == "active") ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
+                            WriteRow(writer, "Blocked", user.Blocked);
+                            WriteRow(writer, "Disabled", user.Disabled);
+                            WriteRow(writer, "Last login date", user.LastLoginDate);
 
-                        // OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
-                        //OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
-
-                        //OutputTableRow("Name", user.FullName, 3);
-                        //OutputTableRow("Comment", (!string.IsNullOrEmpty(user.Comment) ? user.Comment : "(none)"));
-                        //OutputTableRow("Status", user.Status);
-                        //OutputTableRow("Blocked", user.Blocked);                        
-                        //OutputTableRow("Disabled", user.Disabled);
-                        //OutputTableRow("Last login date", user.LastLoginDate, 1);
+                            writer.WriteTable();
+                        }
 
                         OutputUserRightsAndGroupPermissions(user);
                     }

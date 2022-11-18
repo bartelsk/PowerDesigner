@@ -46,43 +46,19 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
                         Common.User user = _client.UserClient.GetUserInfo(LoginName);
 
-                        Output("User details:\r\n", ConsoleColor.Magenta);
+                        Output("User details:\r\n", ConsoleColor.Yellow);
 
-                  using (TableWriter writer = new TableWriter(_console, padding: 4))
-                  {
-                     writer.StartTable(2);
+                        using (TableWriter writer = new TableWriter(_console, padding: 2))
+                        {
+                            writer.StartTable(2);
+                            WriteTableHeader(writer, "Property", "Value", ConsoleColor.Blue, ConsoleColor.Blue);
 
-                     writer.StartRow(true);
-                     writer.AddColumn("Property", ConsoleColor.DarkCyan);
-                     writer.AddColumn("Value", ConsoleColor.DarkCyan);
-                     writer.EndRow();
+                            WriteRow(writer, "Status", user.Status, valueColor: (user.Status.ToString().ToLowerInvariant() == "active") ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
+                            WriteRow(writer, "Blocked", user.Blocked);
+                            WriteRow(writer, "Disabled", user.Disabled);
 
-                     writer.StartRow();
-                     writer.AddColumn("Status");
-                     writer.AddColumn(user.Status.ToString());
-                     writer.EndRow();
-
-
-                     writer.StartRow();
-                     writer.AddColumn("Blocked");
-                     writer.AddColumn(user.Blocked.ToString());
-                     writer.EndRow();
-
-                     writer.StartRow();
-                     writer.AddColumn("Disabled");
-                     writer.AddColumn(user.Disabled.ToString());
-                     writer.EndRow();
-
-                    
-                     writer.WriteTable();
-                  }
-
-                  //OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
-                  //      OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
-
-                  //      OutputTableRow("Status", user.Status);
-                  //      OutputTableRow("Blocked", user.Blocked);
-                  //      OutputTableRow("Disabled", user.Disabled);
+                            writer.WriteTable();
+                        }
                     }
                     else
                     {
