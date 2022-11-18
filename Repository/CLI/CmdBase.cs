@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
+using PDRepository.CLI.Output;
 using PDRepository.Common;
 using System;
 using System.Threading.Tasks;
@@ -43,10 +44,32 @@ namespace PDRepository.CLI
                     _client = RepositoryClient.CreateClient(connectionSettings);
                 });
 
-                Output("\r\nConnection:\r\n", ConsoleColor.Blue);
-                Output("  Status: connected", ConsoleColor.DarkGreen);
-                Output($"  Repository definition: '{ (string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName) }'", ConsoleColor.DarkGreen);
-                Output($"  Repository client library version: { _client.Version }\r\n", ConsoleColor.DarkGreen);
+
+            using (TableWriter writer = new TableWriter(_console, true,  padding: 4))
+            {
+               writer.StartTable(2);
+
+               writer.StartRow();
+               writer.AddColumn("Status");
+               writer.AddColumn("Repository definition");
+               writer.AddColumn("Repository client library version");
+               writer.EndRow();
+
+               writer.StartRow();
+               writer.AddColumn("connected", ConsoleColor.DarkGreen);
+               writer.AddColumn($"'{(string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName)}'", ConsoleColor.DarkGreen);
+               writer.AddColumn(_client.Version);
+               writer.EndRow();
+
+               writer.WriteTable();
+            }
+
+
+
+            //Output("\r\nConnection:\r\n", ConsoleColor.Blue);
+            //    Output("  Status: connected", ConsoleColor.DarkGreen);
+            //    Output($"  Repository definition: '{ (string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName) }'", ConsoleColor.DarkGreen);
+            //    Output($"  Repository client library version: { _client.Version }\r\n", ConsoleColor.DarkGreen);
 
                 connected = true;
             }
@@ -79,7 +102,7 @@ namespace PDRepository.CLI
         }
 
         #region Output
-
+            
         protected void OnException(Exception ex)
         {
             OutputError(ex.Message);
@@ -87,7 +110,7 @@ namespace PDRepository.CLI
 
         protected void Output(string data)
         {
-            Output(data, ConsoleColor.White, ConsoleColor.Black);
+            Output(data, ConsoleColor.Gray, ConsoleColor.Black);
         }
 
         protected void Output(string data, ConsoleColor foregroundColor = ConsoleColor.White)
@@ -95,35 +118,52 @@ namespace PDRepository.CLI
             Output(data, foregroundColor, ConsoleColor.Black);
         }
 
-        protected void OutputTableRow<T>(string property, T value, int tabCount = 2, ConsoleColor foregroundColor = ConsoleColor.White)
-        {
-            Output($"  { property }{ new String('\t', tabCount) }{ value }", foregroundColor);
-        }
+        //protected void OutputTableRow<T>(string property, T value, int tabCount = 2, ConsoleColor foregroundColor = ConsoleColor.White)
+        //{
+        //    Output($"  { property }{ new String('\t', tabCount) }{ value }", foregroundColor);
+        //}
 
-        protected void OutputTableRowSpace<T>(string property, T value, int maxSpaces, int padding, ConsoleColor foregroundColor = ConsoleColor.White)
-        {
-            Output($"  { property }{ new String(' ', maxSpaces - property.Length + padding) }{ value }", foregroundColor);
-        }
+        //protected void OutputTableRowSpace<T>(string property, T value, int maxSpaces, int padding, ConsoleColor foregroundColor = ConsoleColor.White)
+        //{
+        //    Output($"  { property }{ new String(' ', maxSpaces - property.Length + padding) }{ value }", foregroundColor);
+        //}
 
-        protected void OutputTableRowCSV(string data, string separator, ConsoleColor foregroundColor = ConsoleColor.White)
-        {
-            Output($"  { data.Replace(separator, "\r\n  ") }", foregroundColor);
-        }
+        //protected void OutputTableRowCSV(string data, string separator, ConsoleColor foregroundColor = ConsoleColor.White)
+        //{
+        //    Output($"  { data.Replace(separator, "\r\n  ") }", foregroundColor);
+        //}
 
-        protected void OutputTableRowSeparator(char separator, int amount)
-        {
-            Output($"  { new String(separator, amount) }");
-        }
+        //protected void OutputTableRowSeparator(char separator, int amount)
+        //{
+        //    Output($"  { new String(separator, amount) }");
+        //}
 
         protected void OutputUserRightsAndGroupPermissions(Common.User user)
         {
-            Output("\r\nUser privileges:\r\n", ConsoleColor.Blue);
-            Output("  Rights\r\n  ------", ConsoleColor.DarkGreen);
-            OutputTableRowCSV(user.Rights, ";");
+            
+            
+         using (TableWriter writer = new TableWriter(_console, padding: 4))
+         {
+            Output("\r\nUser privileges:\r\n", ConsoleColor.Magenta);
+
+            writer.StartTable(1);
+            writer.StartRow(true);
+            writer.AddColumn("Rights", ConsoleColor.DarkCyan);
+            writer.EndRow();
+
+            writer.AddCSVData(user.Rights, ';');            
+            writer.WriteTable();
 
             Output("\r\nGroup memberships:\r\n", ConsoleColor.Blue);
-            Output("  Groups\r\n  ------", ConsoleColor.DarkGreen);
-            OutputTableRowCSV(user.GroupMembership, ";");
+
+            writer.StartTable(1);
+            writer.StartRow(true);
+            writer.AddColumn("Groups", ConsoleColor.DarkCyan);
+            writer.EndRow();
+
+            writer.AddCSVData(user.GroupMembership, ';');
+            writer.WriteTable();
+         }
         }
 
         protected void Output(string data, ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)

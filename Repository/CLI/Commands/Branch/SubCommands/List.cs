@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
+using PDRepository.CLI.Output;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -48,20 +49,30 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
 
                     if (branches != null)
                     {
-                        int maxLength = branches.Max(b => b.Name.Length);
-                        int padding = 3;
+                        
+                        Output("\r\nBranch details:\r\n", ConsoleColor.Magenta);
 
-                        Output("\r\nBranch details:\r\n", ConsoleColor.Blue);
-                        OutputTableRowSpace("Name", "Relative path", maxLength, padding, ConsoleColor.DarkGreen);
-                        OutputTableRowSpace("----", "-------------", maxLength, padding, ConsoleColor.DarkGreen);
+                  using (TableWriter writer = new TableWriter(_console, padding: 4))
+                  {
+                     writer.StartTable(branches);
+                     writer.AddHeaderRow(branches, ConsoleColor.DarkCyan);
+                     
+                     writer.AddRows(branches);
+                     writer.WriteTable();
+                  }
+
+
+
+                  //OutputTableRowSpace("Name", "Relative path", maxLength, padding, ConsoleColor.DarkGreen);
+                  //      OutputTableRowSpace("----", "-------------", maxLength, padding, ConsoleColor.DarkGreen);
 
                         
 
-                        branches.ForEach(b =>
-                        {
-                            OutputTableRowSpace(b.Name, b.RelativePath, maxLength, padding);
+                  //      branches.ForEach(b =>
+                  //      {
+                  //          OutputTableRowSpace(b.Name, b.RelativePath, maxLength, padding);
 
-                        });
+                  //      });
                     }
                     else
                     {

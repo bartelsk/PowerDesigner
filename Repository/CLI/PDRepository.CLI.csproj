@@ -84,7 +84,7 @@
     <Compile Include="Commands\User\SubCommands\Status.cs" />
     <Compile Include="Commands\User\SubCommands\Unblock.cs" />
     <Compile Include="Commands\User\User.cs" />
-    <Compile Include="Output\TableBuilder.cs" />
+    <Compile Include="Output\TableWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

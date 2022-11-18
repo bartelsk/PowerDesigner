@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
+using PDRepository.CLI.Output;
 using PDRepository.Common;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -73,14 +74,49 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
                         Common.User user = _client.UserClient.GetUserInfo(LoginName);
 
-                        Output("\r\nNew user details:\r\n", ConsoleColor.Blue);
-                        OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
-                        OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
+                        Output("\r\nNew user details:\r\n", ConsoleColor.Magenta);
 
-                        OutputTableRow("Full name", user.FullName);
-                        OutputTableRow("Login name", user.LoginName);
-                        OutputTableRow("Temporary password", temporaryPassword, 1);
-                        OutputTableRow("Status", user.Status);
+                  using (TableWriter writer = new TableWriter(_console, padding: 4))
+                  {
+                     writer.StartTable(2);
+
+                     writer.StartRow(true);
+                     writer.AddColumn("Property", ConsoleColor.DarkCyan);
+                     writer.AddColumn("Value", ConsoleColor.DarkCyan);                     
+                     writer.EndRow();
+
+                     writer.StartRow();                    
+                     writer.AddColumn("Full name");
+                     writer.AddColumn(user.FullName);
+                     writer.EndRow();
+
+                     writer.StartRow();
+                     writer.AddColumn("Login name");
+                     writer.AddColumn(user.LoginName);
+                     writer.EndRow();
+
+                     writer.StartRow();
+                     writer.AddColumn("Temporary password");
+                     writer.AddColumn(temporaryPassword);
+                     writer.EndRow();
+
+                     writer.StartRow();
+                     writer.AddColumn("Status");
+                     writer.AddColumn(user.Status.ToString());
+                     writer.EndRow();
+
+                     writer.WriteTable();
+                  }
+
+
+
+                  //OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
+                  //      OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
+
+                  //      OutputTableRow("Full name", user.FullName);
+                  //      OutputTableRow("Login name", user.LoginName);
+                  //      OutputTableRow("Temporary password", temporaryPassword, 1);
+                  //      OutputTableRow("Status", user.Status);
 
                         OutputUserRightsAndGroupPermissions(user);
                     }

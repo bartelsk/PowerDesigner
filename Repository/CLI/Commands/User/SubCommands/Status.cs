@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
+using PDRepository.CLI.Output;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -45,16 +46,26 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                     {
                         Common.User user = _client.UserClient.GetUserInfo(LoginName);
 
-                        Output("\r\nUser details:\r\n", ConsoleColor.Blue);   
-                        OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
-                        OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
+                        Output("\r\nUser details:\r\n", ConsoleColor.Magenta);
 
-                        OutputTableRow("Name", user.FullName, 3);
-                        OutputTableRow("Comment", (!string.IsNullOrEmpty(user.Comment) ? user.Comment : "(none)"));
-                        OutputTableRow("Status", user.Status);
-                        OutputTableRow("Blocked", user.Blocked);                        
-                        OutputTableRow("Disabled", user.Disabled);
-                        OutputTableRow("Last login date", user.LastLoginDate, 1);
+                     using (TableWriter writer = new TableWriter(_console, padding: 4))
+                     {
+                        writer.StartTable(user);
+
+                        writer.AddHeaderRow(user, ConsoleColor.DarkCyan);
+                        writer.AddRow(user);
+                        writer.WriteTable();
+                     }
+
+                        // OutputTableRow("Property", "Value", 2, ConsoleColor.DarkGreen);
+                        //OutputTableRow("--------", "-----", 2, ConsoleColor.DarkGreen);
+
+                        //OutputTableRow("Name", user.FullName, 3);
+                        //OutputTableRow("Comment", (!string.IsNullOrEmpty(user.Comment) ? user.Comment : "(none)"));
+                        //OutputTableRow("Status", user.Status);
+                        //OutputTableRow("Blocked", user.Blocked);                        
+                        //OutputTableRow("Disabled", user.Disabled);
+                        //OutputTableRow("Last login date", user.LastLoginDate, 1);
 
                         OutputUserRightsAndGroupPermissions(user);
                     }
