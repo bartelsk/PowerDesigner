@@ -44,30 +44,17 @@ namespace PDRepository.CLI
                     _client = RepositoryClient.CreateClient(connectionSettings);
                 });
 
-                //using (TableWriter writer = new TableWriter(_console, true, padding: 4))
-                //{
-                //    writer.StartTable(2);
+                Output("\r\nConnection:\r\n", ConsoleColor.Yellow);
+                using (TableWriter writer = new TableWriter(_console, true, padding: 2))
+                {
+                    writer.StartTable(2);
 
-                //    writer.StartRow();
-                //    writer.AddColumn("Status");
-                //    writer.AddColumn("Repository definition");
-                //    writer.AddColumn("Repository client library version");
-                //    writer.EndRow();
+                    WriteRow(writer, "Status", "connected", ConsoleColor.Gray, ConsoleColor.DarkGreen);
+                    WriteRow(writer, "Repository definition", $"'{(string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName)}'", ConsoleColor.Gray, ConsoleColor.DarkGreen);
+                    WriteRow(writer, "Repository client library version", _client.Version);
 
-                //    writer.StartRow();
-                //    writer.AddColumn("connected", ConsoleColor.DarkGreen);
-                //    writer.AddColumn($"'{(string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName)}'", ConsoleColor.DarkGreen);
-                //    writer.AddColumn(_client.Version);
-                //    writer.EndRow();
-
-                //    writer.WriteTable();
-                //}
-
-                Output("\r\nConnection:\r\n", ConsoleColor.Blue);
-                Output("  Status: connected", ConsoleColor.DarkGreen);
-                Output($"  Repository definition: '{ (string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName) }'", ConsoleColor.DarkGreen);
-                Output($"  Repository client library version: { _client.Version }\r\n", ConsoleColor.DarkGreen);
-
+                    writer.WriteTable();
+                }
                 connected = true;
             }
             catch (Exception ex)
