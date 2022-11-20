@@ -53,7 +53,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                             writer.StartTable(2);
                             WriteTableHeader(writer, "Property", "Value", ConsoleColor.Blue, ConsoleColor.Blue);
 
-                            WriteRow(writer, "Status", user.Status, valueColor: (user.Status.ToString().ToLowerInvariant() == "active") ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
+                            WriteRow(writer, "Status", user.Status, valueColor: (user.Status == Common.UserStatusEnum.Active) ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
                             WriteRow(writer, "Blocked", user.Blocked);
                             WriteRow(writer, "Disabled", user.Disabled);
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDRepository.CLI
 {
-    abstract class CmdBase
+   abstract class CmdBase
     {
         protected IConsole _console;
         protected RepositoryClient _client = null;
@@ -84,6 +84,21 @@ namespace PDRepository.CLI
             }
             return parsedRights;
         }
+
+      /// <summary>
+      /// Parses the specified permission into a <see cref="PermissionTypeEnum"/>.
+      /// </summary>
+      /// <param name="permission">The permission string.</param>
+      /// <returns>A <see cref="PermissionTypeEnum"/>.</returns>
+      protected PermissionTypeEnum ParsePermissionType(string permission)
+      {
+         PermissionTypeEnum parsedPermission = PermissionTypeEnum.NotSet;
+         if (Enum.TryParse(permission, true, out PermissionTypeEnum result))
+         {
+            parsedPermission = result;
+         }
+         return parsedPermission;
+      }
 
         #region Output
 

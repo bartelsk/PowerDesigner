@@ -55,7 +55,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
                             WriteRow(writer, "Name", user.FullName);
                             WriteRow(writer, "Comment", (!string.IsNullOrEmpty(user.Comment) ? user.Comment : "(none)"));
-                            WriteRow(writer, "Status", user.Status, valueColor: (user.Status.ToString().ToLowerInvariant() == "active") ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
+                            WriteRow(writer, "Status", user.Status, valueColor: (user.Status == Common.UserStatusEnum.Active) ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
                             WriteRow(writer, "Blocked", user.Blocked);
                             WriteRow(writer, "Disabled", user.Disabled);
                             WriteRow(writer, "Last login date", user.LastLoginDate);
