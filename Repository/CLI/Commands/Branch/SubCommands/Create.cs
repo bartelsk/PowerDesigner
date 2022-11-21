@@ -11,22 +11,22 @@ using System.Threading.Tasks;
 
 namespace PDRepository.CLI.Commands.Branch.SubCommands
 {
-    [Command(Name = "create", Description = "Creates a branch and assigns access rights.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Command(Name = "create", Description = "Creates a branch based on a base branch and assigns access rights.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     class Create : CmdBase
     {
         [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "sb", LongName = "source-branch", Description = "The location of the source branch folder in the repository.", ValueName = "folder name", ShowInHelpText = true)]
-        public string SourceBranchFolder { get; set; }
+        [Option(CommandOptionType.SingleValue, ShortName = "bb", LongName = "base-branch", Description = "The path of the base branch folder in the repository. The contents of the base branch will be copied into the new branch.", ValueName = "path", ShowInHelpText = true)]
+        public string BaseBranchFolder { get; set; }
 
         [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "bn", LongName = "branch-name", Description = "The name for the new branch.", ValueName = "branch name", ShowInHelpText = true)]
+        [Option(CommandOptionType.SingleValue, ShortName = "bn", LongName = "branch-name", Description = "The name for the new branch.", ValueName = "name", ShowInHelpText = true)]
         public string NewBranchName { get; set; }
 
-        [Option(CommandOptionType.SingleValue, ShortName = "ug", LongName = "user-group", Description = "The loginname of a user or a group name that is assigned branch permissions via the UserOrGroupPermission option (optional).", ValueName = "user or group", ShowInHelpText = true)]
+        [Option(CommandOptionType.SingleValue, ShortName = "ug", LongName = "user-group", Description = "Either the login name of a user or a group name that is assigned branch permissions via the UserOrGroupPermission option (optional).", ValueName = "user or group", ShowInHelpText = true)]
         public string UserOrGroup { get; set; }
 
         [Option(CommandOptionType.SingleValue, ShortName = "ugp", LongName = "user-group-permission", ValueName = "permission", ShowInHelpText = true,
-           Description = "Permission settings for the user or group for the new branch. Allowed values are: NotSet, Listable, Read, Submit, Write, Full (optional)."
+           Description = "Permissions for the user or group for the new branch. Allowed values are: NotSet, Listable, Read, Submit, Write, Full (optional)."
         )]
         public string UserOrGroupPermission { get; set; }
 
@@ -56,11 +56,11 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
 
                 if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
                 {
-                    if (!_client.BranchClient.BranchExists(SourceBranchFolder, NewBranchName))
+                    if (!_client.BranchClient.BranchExists(BaseBranchFolder, NewBranchName))
                     {
                         if (string.IsNullOrEmpty(UserOrGroup))
                         {
-                            _client.BranchClient.CreateBranch(SourceBranchFolder, NewBranchName);
+                            _client.BranchClient.CreateBranch(BaseBranchFolder, NewBranchName);
                         }
                         else
                         {
@@ -70,21 +70,9 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
                                 PermissionType = userOrGroupPermission,
                                 UserOrGroupName = UserOrGroup
                             };
-                            _client.BranchClient.CreateBranch(SourceBranchFolder, NewBranchName, branchPermission);
+                            _client.BranchClient.CreateBranch(BaseBranchFolder, NewBranchName, branchPermission);
                         }
-
-                        Output("\r\nAvailable branches:\r\n", ConsoleColor.Yellow);
-
-                        List<Common.Branch> branches = string.IsNullOrEmpty(UserOrGroup) ? _client.BranchClient.ListBranches(SourceBranchFolder) : _client.BranchClient.ListBranches(SourceBranchFolder, UserOrGroup);
-
-                        using (TableWriter writer = new TableWriter(_console, padding: 2))
-                        {
-                            writer.StartTable(branches);
-                            writer.AddHeaderRow(branches, ConsoleColor.Blue);
-
-                            writer.AddRows(branches);
-                            writer.WriteTable();
-                        }
+                        Output($"Branch created.");
                     }
                     else
                     {
