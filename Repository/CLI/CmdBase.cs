@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDRepository.CLI
 {
-   abstract class CmdBase
+    abstract class CmdBase
     {
         protected IConsole _console;
         protected RepositoryClient _client = null;
@@ -85,20 +85,20 @@ namespace PDRepository.CLI
             return parsedRights;
         }
 
-      /// <summary>
-      /// Parses the specified permission into a <see cref="PermissionTypeEnum"/>.
-      /// </summary>
-      /// <param name="permission">The permission string.</param>
-      /// <returns>A <see cref="PermissionTypeEnum"/>.</returns>
-      protected PermissionTypeEnum ParsePermissionType(string permission)
-      {
-         PermissionTypeEnum parsedPermission = PermissionTypeEnum.NotSet;
-         if (Enum.TryParse(permission, true, out PermissionTypeEnum result))
-         {
-            parsedPermission = result;
-         }
-         return parsedPermission;
-      }
+        /// <summary>
+        /// Parses the specified permission into a <see cref="PermissionTypeEnum"/>.
+        /// </summary>
+        /// <param name="permission">The permission string.</param>
+        /// <returns>A <see cref="PermissionTypeEnum"/>.</returns>
+        protected PermissionTypeEnum ParsePermissionType(string permission)
+        {
+            PermissionTypeEnum parsedPermission = PermissionTypeEnum.NotSet;
+            if (Enum.TryParse(permission, true, out PermissionTypeEnum result))
+            {
+                parsedPermission = result;
+            }
+            return parsedPermission;
+        }
 
         #region Output
 
@@ -116,14 +116,14 @@ namespace PDRepository.CLI
         {
             Output(data, foregroundColor, ConsoleColor.Black);
         }
-        
+
         protected void OutputUserRightsAndGroupPermissions(Common.User user)
         {
             Output("\r\nUser privileges:\r\n", ConsoleColor.Yellow);
             OutputCSVAsTable(user.Rights, ';', "Rights");
 
             Output("\r\nGroup memberships:\r\n", ConsoleColor.Yellow);
-            OutputCSVAsTable(user.GroupMembership, ';', "Groups");            
+            OutputCSVAsTable(user.GroupMembership, ';', "Groups");
         }
 
         protected void OutputTypeAsTable<T>(T source)
@@ -148,7 +148,7 @@ namespace PDRepository.CLI
 
                 writer.AddCSVData(csvData, separator);
 
-                writer.WriteTable();               
+                writer.WriteTable();
             }
         }
 
