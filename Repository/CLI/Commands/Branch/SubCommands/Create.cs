@@ -72,11 +72,11 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
                             };
                             _client.BranchClient.CreateBranch(BaseBranchFolder, NewBranchName, branchPermission);
                         }
-                        Output($"Branch created.");
+                        Output($"\r\nBranch created.");
                     }
                     else
                     {
-                        OutputError($"A branch called '{NewBranchName}' already exists.");
+                        OutputError($"\r\nA branch called '{NewBranchName}' already exists.");
                     }
                 }
                 return 0;
