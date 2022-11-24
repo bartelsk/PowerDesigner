@@ -22,7 +22,7 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
         [Option(CommandOptionType.SingleValue, ShortName = "bn", LongName = "branch-name", Description = "The name for the new branch.", ValueName = "name", ShowInHelpText = true)]
         public string NewBranchName { get; set; }
 
-        [Option(CommandOptionType.SingleValue, ShortName = "ug", LongName = "user-group", Description = "Either the login name of a user or a group name that is assigned branch permissions via the UserOrGroupPermission option (optional).", ValueName = "user or group", ShowInHelpText = true)]
+        [Option(CommandOptionType.SingleValue, ShortName = "ug", LongName = "user-group", Description = "Either the login name of a user or a group name that is assigned branch permissions via the 'user-group-permission' option (optional).", ValueName = "user or group", ShowInHelpText = true)]
         public string UserOrGroup { get; set; }
 
         [Option(CommandOptionType.SingleValue, ShortName = "ugp", LongName = "user-group-permission", ValueName = "permission", ShowInHelpText = true,

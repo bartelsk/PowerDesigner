@@ -180,14 +180,29 @@ The following branch commands are available:
 
 ### Create
 
-Creates a branch and and assigns access rights.
+Creates a branch based on a base branch and assigns access rights.
 
 ```bash
 pdr branch create [options]
 ``` 
 
 **Optional** 
-
+- ``-bb``, ``--base-branch``
+    - The path of the base branch folder in the repository (required). The contents of the base branch will be copied into the new branch.
+- ``-bn``, ``--branch-name``
+    - The name for the new branch (required).
+- ``-ug``, ``--user-group`` 
+    - Either the login name of a user or a group name that is assigned branch permissions via the `--user-group-permission` option (optional). 
+    - Branch permissions of the base branch will be copied to the new branch. This option allows overriding existing permissions or adding new ones.
+- ``-ugp``, ``--user-group-permission``
+    - Permissions for the user or group for the new branch (optional). Only valid in combination with the `--user-group` option.
+    - Allowed values are: 
+      - NotSet
+      - Listable
+      - Read
+      - Submit
+      - Write
+      - Full
 - ``-rd``, ``--repo-definition``
      - Specifies the repository definition used to connect to the repository (optional).
 - ``-ru``, ``--repo-user``
@@ -198,7 +213,11 @@ pdr branch create [options]
 **Examples**
 
 ```bash
-# TODO
+# Creates branch 'NewDevBranch' based on branch 'MyFolder\DevBranch' 
+$ pdr branch create --base-branch MyFolder\DevBranch --branch-name NewDevBranch --repo-user Admin --repo-password P@ssw0rd
+
+# Creates branch 'NewDevBranch' and assigns the DEV group Write access while using a repository definition and the single-dash convention
+$ pdr branch create --bb MyFolder\DevBranch -bn NewDevBranch -ug DEV -ugp Write -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
 ``` 
 
 ### List
@@ -211,6 +230,10 @@ pdr branch list [options]
 
 **Optional** 
 
+- ``-rf``, ``--root-folder``
+    - The repository folder from which to start the enumeration (required).
+- ``-ug``, ``--filter``
+    - A user login or group name used to filter branches based on access permission (optional).
 - ``-rd``, ``--repo-definition``
      - Specifies the repository definition used to connect to the repository (optional).
 - ``-ru``, ``--repo-user``
@@ -221,5 +244,9 @@ pdr branch list [options]
 **Examples**
 
 ```bash
-# TODO
+# Lists all branches in folder 'MyFolder'
+$ pdr branch list --root-folder MyFolder --repo-user Admin --repo-password P@ssw0rd
+
+# Lists the branches in folder 'MyFolder' that the DEV group has access to while using a repository definition and the single-dash convention
+$ pdr branch list -rf MyFolder -ug DEV -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
 ``` 
