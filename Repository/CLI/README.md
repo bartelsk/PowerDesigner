@@ -193,7 +193,7 @@ pdr branch create [options]
     - The name for the new branch (required).
 - ``-ug``, ``--user-group`` 
     - Either the login name of a user or a group name that is assigned branch permissions via the `--user-group-permission` option (optional). 
-    - Branch permissions of the base branch will be copied to the new branch. This option allows overriding existing permissions or adding new ones.
+    - Branch permissions for the new branch will be inherited from the base branch. This option allows overriding existing permissions or adding new ones.
 - ``-ugp``, ``--user-group-permission``
     - Permissions for the user or group for the new branch (optional). Only valid in combination with the `--user-group` option.
     - Allowed values are: 
