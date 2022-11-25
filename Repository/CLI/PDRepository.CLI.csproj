@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ED4D5095-77B9-4E89-B4C7-720975012FF4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>PDRepository</RootNamespace>
-    <AssemblyName>PDRepository</AssemblyName>
+    <ProjectGuid>{385F2086-9AA5-4CC2-97D4-2D2A117FF86D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PDRepository.CLI</RootNamespace>
+    <AssemblyName>pdr</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,8 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\PDRepository.xml</DocumentationFile>
-    <NoWarn>1701;1702</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,45 +31,42 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\PDRepository.xml</DocumentationFile>
-    <NoWarn>1701;1702</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>bin\Debug\PDRepository.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\Release\PDRepository.xml</DocumentationFile>
     <Optimize>true</Optimize>
-    <NoWarn>1701;1702</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.PdCommon, Version=16.7.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\PowerDesigner.Interop.16.7.2.66211\lib\x64\Interop.PdCommon.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.PdRMG, Version=16.7.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>packages\PowerDesigner.Interop.PdRMG.16.7.2.66211\lib\x64\Interop.PdRMG.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="McMaster.Extensions.CommandLineUtils, Version=4.0.1.0, Culture=neutral, PublicKeyToken=6f71cb76b82f055d, processorArchitecture=MSIL">
+      <HintPath>..\packages\McMaster.Extensions.CommandLineUtils.4.0.1\lib\net45\McMaster.Extensions.CommandLineUtils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,35 +75,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Branches\BranchClient.cs" />
-    <Compile Include="Branches\IBranchClient.cs" />
-    <Compile Include="Common\Enums.cs" />
-    <Compile Include="Common\Group.cs" />
-    <Compile Include="Common\Permission.cs" />
-    <Compile Include="Common\User.cs" />
-    <Compile Include="Documents\DocumentClient.cs" />
-    <Compile Include="Documents\IDocumentClient.cs" />
-    <Compile Include="Exceptions\InvalidCredentialsException.cs" />
-    <Compile Include="Exceptions\InvalidPermissionException.cs" />
-    <Compile Include="Exceptions\InvalidRightsException.cs" />
-    <Compile Include="Exceptions\NoRepositoryConnectionException.cs" />
-    <Compile Include="Common\Branch.cs" />
-    <Compile Include="Common\CheckOutEventArgs.cs" />
-    <Compile Include="Common\Document.cs" />
-    <Compile Include="Exceptions\UnknownUserOrGroupException.cs" />
-    <Compile Include="Repository.cs" />
-    <Compile Include="RepositoryConnection.cs" />
-    <Compile Include="Exceptions\RepositoryException.cs" />
-    <Compile Include="Common\ConnectionSettings.cs" />
+    <Compile Include="Cmd.cs" />
+    <Compile Include="CmdBase.cs" />
+    <Compile Include="Commands\Branch\Branch.cs" />
+    <Compile Include="Commands\Branch\SubCommands\Create.cs" />
+    <Compile Include="Commands\Branch\SubCommands\List.cs" />
+    <Compile Include="Commands\User\SubCommands\Create.cs" />
+    <Compile Include="Commands\User\SubCommands\Status.cs" />
+    <Compile Include="Commands\User\SubCommands\Unblock.cs" />
+    <Compile Include="Commands\User\User.cs" />
+    <Compile Include="Output\TableWriter.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoryClient.cs" />
-    <Compile Include="Users\IUserClient.cs" />
-    <Compile Include="Users\UserClient.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="README.md" />
-    <AdditionalFiles Include="stylecop.json" />
+    <None Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PDRepository.csproj">
+      <Project>{ed4d5095-77b9-4e89-b4c7-720975012ff4}</Project>
+      <Name>PDRepository</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

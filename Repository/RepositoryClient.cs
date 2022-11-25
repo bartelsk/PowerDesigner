@@ -6,7 +6,6 @@ using PDRepository.Common;
 using PDRepository.Documents;
 using PDRepository.Users;
 using System;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace PDRepository
@@ -81,9 +80,7 @@ namespace PDRepository
         {
             get
             {
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
-                return fileVersion.FileVersion;
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
             }
         }
 
