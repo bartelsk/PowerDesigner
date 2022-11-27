@@ -10,7 +10,7 @@
 
 <p align="center">  
   <a href="https://github.com/bartelsk/PowerDesigner/blob/main/LICENSE">
-    <img src="" alt="Apache 2 license" />
+    <img src="https://img.shields.io/github/license/bartelsk/powerdesigner" alt="Apache 2 license" />
   </a>
 </p>
 
@@ -48,7 +48,7 @@ All commands require at least two parameters: the login name of the account that
 This is necessary because the [PowerDesigner Repository Client Library](../README.md) uses an active database connection to the repository. 
 The CLI does not maintain this connection as it is stateless.
 
-Currently, the CLI supports the following commands related to:
+:point_right: Currently, the CLI supports the following commands related to:
 - [Users](#user-commands)
 - [Branches](#branch-commands)
 

@@ -10,7 +10,7 @@
 
 <p align="center">  
   <a href="https://github.com/bartelsk/PowerDesigner/blob/main/LICENSE">
-    <img src="" alt="Apache 2 license" />
+    <img src="https://img.shields.io/github/license/bartelsk/powerdesigner" alt="Apache 2 license" />
   </a>
 </p>
 
@@ -28,6 +28,7 @@ all from the comfort of .NET! :heart_eyes:
 ## Usage
 
 - Check out the [Samples](/Repository/Samples) folder for detailed usage samples demonstrating common activities.
+- The [Repository CLI](/Repository/CLI) tool allows interacting with the PowerDesigner Repository from the command line. 
 
 ## Prerequisites
 
@@ -37,7 +38,7 @@ You will need to have the following installed on your machine:
 - PowerDesigner 16.5 or higher
 - Visual Studio 2019 or higher (for build purposes)
 
-**Note:** The PowerDesigner Repository Client Library uses an active database connection to the repository through COM Interop, which means PowerDesigner needs to be installed on the machine you intend to use the Client Library.
+:exclamation: **Note:** The PowerDesigner Repository Client Library uses an active database connection to the repository through COM Interop, which means PowerDesigner needs to be installed on the machine where you intend to use the Client Library.
 
 ## Building
 
@@ -45,9 +46,11 @@ In order to build the library, you will have to add references to the following 
 - Interop.PdCommon
 - Interop.PdRMG (Repository Management)
 
-These assemblies will be available in the installation folder: `C:\Program Files\SAP\PowerDesigner 16`. Make sure the assembly versions match the version of PowerDesigner you are using.
+These assemblies will be available in the installation folder: `C:\Program Files\SAP\PowerDesigner 16`. 
 
-## NuGet package?
+:point_right: Make sure the assembly versions match the version of PowerDesigner you are using.
+
+## No NuGet package?
 
 There is no NuGet package for the PowerDesigner Repository Client Library as it needs to be built with the commercially available PowerDesigner assemblies (from your local PowerDesigner installation). 
 Also, the necessary assemblies need to match the version of PowerDesigner you are using. 
