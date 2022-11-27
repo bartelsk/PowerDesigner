@@ -5,7 +5,7 @@ and call out interesting aspects to its sample.
 
 Samples include:
 
-* [BranchSamples](/BranchSamples) these samples demonstrate how to list, create and delete branches and how to get and set branch permissions.
-* [DocumentSamples](/DocumentSamples): these samples show how to check-in and check-out files, list, create and delete documents, lock and freeze them and how to get and set permissions.
-* [UserAndGroupSamples](/UserAndGroupSamples): showcase how to work with users and groups: list, add and remove users and groups and how to get and set their permissions.
+* [BranchSamples](/Repository/Samples/BranchSamples) these samples demonstrate how to list, create and delete branches and how to get and set branch permissions.
+* [DocumentSamples](/Repository/Samples/DocumentSamples): these samples show how to check-in and check-out files, list, create and delete documents, lock and freeze them and how to get and set permissions.
+* [UserAndGroupSamples](/Repository/Samples/UserAndGroupSamples): showcase how to work with users and groups: list, add and remove users and groups and how to get and set their permissions.
 
