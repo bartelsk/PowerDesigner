@@ -108,6 +108,8 @@ namespace PDRepository.Users
         /// <param name="loginName">The name with which the user connects to the repository.</param>
         void DeleteUser(string loginName);
 
+        string ResetPassword(string loginName);
+
         /// <summary>
         /// Returns group information.
         /// </summary>

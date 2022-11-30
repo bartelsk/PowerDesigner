@@ -9,7 +9,7 @@ namespace PDRepository.Common
     public class ConnectionSettings
     {
         /// <summary>
-        /// The name of the repository user.
+        /// The login name of the repository user.
         /// </summary>
         public string User { get; set; }
 

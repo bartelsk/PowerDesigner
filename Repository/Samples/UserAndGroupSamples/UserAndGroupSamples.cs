@@ -155,6 +155,17 @@ namespace UserAndGroupSamples
             Console.WriteLine($"User '{loginName}' has been deleted.\r\n");
         }
 
+        [TestMethod]
+        public void ResetUserPassword()
+        {
+            string loginName = "UserA";
+
+            Console.WriteLine($"Resetting password of user with login name '{loginName}'...\r\n");
+            string newTemporaryPassword = client.UserClient.ResetPassword(loginName);
+
+            Console.WriteLine($"The password of user '{loginName}' has been reset. The new temporary password is '{newTemporaryPassword}'.\r\n");
+        }
+
         /// <summary>
         /// Retrieve all groups but only display the first 10 groups.
         /// </summary>

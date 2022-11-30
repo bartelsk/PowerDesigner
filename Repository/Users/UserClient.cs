@@ -193,6 +193,14 @@ namespace PDRepository.Users
             DeleteRepositoryUser(loginName);
         }
 
+        public string ResetPassword(string loginName)
+        {
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return ResetRepositoryUserPassword(loginName);
+        }
+
         /// <summary>
         /// Returns group information.
         /// </summary>
@@ -282,6 +290,6 @@ namespace PDRepository.Users
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             DeleteRepositoryGroup(groupName);
-        }
+        }        
     }
 }
