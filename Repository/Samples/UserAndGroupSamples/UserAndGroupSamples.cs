@@ -119,7 +119,7 @@ namespace UserAndGroupSamples
 
             client.UserClient.CreateUser(loginName, fullName, emailAddress, out string temporaryPassword, userRights);
 
-            Console.WriteLine($"User '{loginName}' created with temporary password '{temporaryPassword}'.\r\n");
+            Console.WriteLine($"User '{loginName}' created with temporary password '{@temporaryPassword}'.\r\n");
         }
 
         /// <summary>

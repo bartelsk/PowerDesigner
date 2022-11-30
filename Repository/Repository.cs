@@ -843,11 +843,10 @@ namespace PDRepository
         }
 
         /// <summary>
-        /// Resets the specified repository user's password. 
-        /// A new temporary password that complies with the current password policy is returned if successful.
+        /// Resets the specified repository user's password.         
         /// </summary>
         /// <param name="loginName">The login name of the user for which to reset the password.</param>
-        /// <returns>A temporary password for the user.</returns>
+        /// <returns>Returns a new (temporary) password that complies with the current password policy.</returns>
         public string ResetRepositoryUserPassword(string loginName)
         {            
             if (!RepositoryUserExists(loginName))
