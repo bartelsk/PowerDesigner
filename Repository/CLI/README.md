@@ -19,7 +19,6 @@
 ## Introduction
 
 This PowerDesigner Repository CLI enables interaction with the PowerDesigner Repository from the command line. It can:
-- Work with documents (models, extensions, et cetera)
 - Manage users and groups
 - Create and delete branches
 
@@ -59,6 +58,7 @@ More commands are expected to be added in the near future.
 
 The following user commands are available:
 - [Create](#create)
+- [Password](#password-reset)
 - [Status](#status)
 - [Unblock](#unblock)
 
@@ -114,6 +114,35 @@ $ pdr user create -ln JWilliams -fn "John Williams" -ue john@williams.com -ur Co
 $ pdr user create -ln JWilliams -fn "John Williams" -ue john@williams.com -ur Connect -ur ManageUsers -ug Developers -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
 ``` 
 
+### Password
+
+Contains sub-commands related to repository user passwords. Currently it features a password reset option only.
+
+```bash
+pdr user password reset [options]
+```
+
+**Options** 
+
+- ``-ln``, ``--login-name``
+    - Specifies the login name of the user for which to reset the password (required).
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository (required).
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository (required).
+
+**Examples**
+
+```bash
+# Resets the password of user 'UserA'
+$ pdr user password reset --login-name UserA --repo-user Admin --repo-password P@ssw0rd
+
+# Resets the password of user 'UserA' while using a repository definition and the single-dash convention
+$ pdr user password reset -ln UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+``` 
+
 ### Status
 
 Returns the user account status.
@@ -124,7 +153,7 @@ pdr user status [options]
 
 **Options** 
 
-- ``-l``, ``--login-name``
+- ``-ln``, ``--login-name``
     - Specifies the login name of the user for which to get its status (required).
 - ``-rd``, ``--repo-definition``
      - Specifies the repository definition used to connect to the repository (optional).
@@ -140,7 +169,7 @@ pdr user status [options]
 $ pdr user status --login-name UserA --repo-user Admin --repo-password P@ssw0rd
 
 # Retrieves the user status while using a repository definition and the single-dash convention
-$ pdr user status -l UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+$ pdr user status -ln UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
 ``` 
 
 ### Unblock
@@ -153,7 +182,7 @@ pdr user unblock [options]
 
 **Options** 
 
-- ``-l``, ``--login-name``
+- ``-ln``, ``--login-name``
     - Specifies the login name of the user to unblock (required).
 - ``-rd``, ``--repo-definition``
      - Specifies the repository definition used to connect to the repository (optional).
@@ -169,7 +198,7 @@ pdr user unblock [options]
 $ pdr user unblock --login-name UserA --repo-user Admin --repo-password P@ssw0rd
 
 # Unblock a user while using a repository definition and the single-dash convention
-$ pdr user unblock -l UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+$ pdr user unblock -ln UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
 ``` 
 
 ## Branch commands
