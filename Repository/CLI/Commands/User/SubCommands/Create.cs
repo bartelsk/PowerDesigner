@@ -83,7 +83,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
                             WriteRow(writer, "Full name", user.FullName);
                             WriteRow(writer, "Login name", user.LoginName);
-                            WriteRow(writer, "Temporary password", temporaryPassword);
+                            WriteRow(writer, "Temporary password", @temporaryPassword);
                             WriteRow(writer, "Status", user.Status, valueColor: (user.Status == UserStatusEnum.Active) ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
                             
                             writer.WriteTable();

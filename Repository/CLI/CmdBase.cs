@@ -180,6 +180,7 @@ namespace PDRepository.CLI
         {
             _console.BackgroundColor = ConsoleColor.Red;
             _console.ForegroundColor = ConsoleColor.White;
+            _console.Error.WriteLine(Environment.NewLine);
             _console.Error.WriteLine(message);
             _console.ResetColor();
         }

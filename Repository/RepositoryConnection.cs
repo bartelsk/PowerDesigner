@@ -130,6 +130,17 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Returns the login name of the current connected user.
+        /// </summary>
+        public string ConnectedUser
+        {
+            get
+            {
+                return _pdRepoCon != null ? _connectionSettings.User : string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Refreshes the repository connection.
         /// </summary>
         public void Refresh()

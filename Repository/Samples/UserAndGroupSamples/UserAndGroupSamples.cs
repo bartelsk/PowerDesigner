@@ -119,7 +119,7 @@ namespace UserAndGroupSamples
 
             client.UserClient.CreateUser(loginName, fullName, emailAddress, out string temporaryPassword, userRights);
 
-            Console.WriteLine($"User '{loginName}' created with temporary password '{temporaryPassword}'.\r\n");
+            Console.WriteLine($"User '{loginName}' created with temporary password '{@temporaryPassword}'.\r\n");
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace UserAndGroupSamples
 
             client.UserClient.CreateUser(loginName, fullName, emailAddress, out string temporaryPassword, userRights, groupName);
 
-            Console.WriteLine($"User '{loginName}' created with temporary password '{temporaryPassword}' in group '{groupName}'.\r\n");
+            Console.WriteLine($"User '{loginName}' created with temporary password '{@temporaryPassword}' in group '{groupName}'.\r\n");
         }
 
         /// <summary>
@@ -153,6 +153,17 @@ namespace UserAndGroupSamples
             client.UserClient.DeleteUser(loginName);
 
             Console.WriteLine($"User '{loginName}' has been deleted.\r\n");
+        }
+
+        [TestMethod]
+        public void ResetUserPassword()
+        {
+            string loginName = "UserA";
+
+            Console.WriteLine($"Resetting password of user with login name '{loginName}'...\r\n");
+            string newTemporaryPassword = client.UserClient.ResetPassword(loginName);
+
+            Console.WriteLine($"The password of user '{loginName}' has been reset. The new temporary password is '{@newTemporaryPassword}'.\r\n");
         }
 
         /// <summary>

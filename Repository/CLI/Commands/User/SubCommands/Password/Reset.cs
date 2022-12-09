@@ -7,13 +7,13 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace PDRepository.CLI.Commands.User.SubCommands
+namespace PDRepository.CLI.Commands.Password.SubCommands
 {
-    [Command(Name = "status", Description = "Returns the user account status.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-    class Status : CmdBase
+    [Command(Name = "reset", Description = "Resets a user password.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    class Reset : CmdBase
     {
         [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "ln", LongName = "login-name", Description = "Specifies the login name of the user for which to get its status.", ValueName = "login name", ShowInHelpText = true)]
+        [Option(CommandOptionType.SingleValue, ShortName = "ln", LongName = "login-name", Description = "Specifies the login name of the user for which to reset the password.", ValueName = "login name", ShowInHelpText = true)]
         public string LoginName { get; set; }
 
         [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
@@ -26,8 +26,8 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         [Required]
         [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
         public string RepoPassword { get; set; }
-       
-        public Status(IConsole console)
+
+        public Reset(IConsole console)
         {
             _console = console;
         }
@@ -36,36 +36,33 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         {
             try
             {
-                Output("Retrieving user account status", ConsoleColor.Yellow);                              
-                
+                Output("Resetting user password", ConsoleColor.Yellow);                
+
                 if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
                 {
                     if (_client.UserClient.UserExists(LoginName))
                     {
+                        string temporaryPassword = _client.UserClient.ResetPassword(LoginName);
+
                         Common.User user = _client.UserClient.GetUserInfo(LoginName);
 
-                        Output("\r\nUser details:\r\n", ConsoleColor.Yellow);
+                        Output("\r\nUpdated user details:\r\n", ConsoleColor.Yellow);
 
                         using (TableWriter writer = new TableWriter(_console, padding: 2))
                         {
-                            writer.StartTable(2);    
+                            writer.StartTable(2);
                             WriteTableHeader(writer, "Property", "Value", ConsoleColor.Blue, ConsoleColor.Blue);
 
-                            WriteRow(writer, "Name", user.FullName);
-                            WriteRow(writer, "Comment", (!string.IsNullOrEmpty(user.Comment) ? user.Comment : "(none)"));
-                            WriteRow(writer, "Status", user.Status, valueColor: (user.Status == Common.UserStatusEnum.Active) ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
-                            WriteRow(writer, "Blocked", user.Blocked);
-                            WriteRow(writer, "Disabled", user.Disabled);
-                            WriteRow(writer, "Last login date", user.LastLoginDate);
+                            WriteRow(writer, "Full name", user.FullName);
+                            WriteRow(writer, "Login name", user.LoginName);
+                            WriteRow(writer, "New (temp) password", @temporaryPassword, ConsoleColor.Gray, ConsoleColor.Green);                            
 
                             writer.WriteTable();
                         }
-
-                        OutputUserRightsAndGroupPermissions(user);
                     }
                     else
                     {
-                        OutputError($"A user with login name '{ LoginName }' does not exist.");
+                        OutputError($"A user with login name '{ LoginName }' does not exist, or repository user '{ RepoUser }' does not have permissions to perform this action.");
                     }
                 }
                 return 0;

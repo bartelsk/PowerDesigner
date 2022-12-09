@@ -23,7 +23,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Returns user information.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of the user for which to retrieve information.</param>
         /// <returns>A <see cref="User"/> type with user information.</returns>
         public User GetUserInfo(string loginName)
         {
@@ -46,7 +46,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Determines whether a user exists.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of a user.</param>
         /// <returns>True if the user exists, False if not.</returns>
         public bool UserExists(string loginName)
         {
@@ -59,7 +59,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Creates a user and assigns the specified rights.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The name with which the user will connect to the repository.</param>
         /// <param name="fullName">The real name of the user.</param>
         /// <param name="emailAddress">The email address of the user (optional).</param>
         /// <param name="temporaryPassword">Contains the temporary password of the newly created user.</param>
@@ -72,7 +72,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Creates a user and assigns the specified rights.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The name with which the user will connect to the repository.</param>
         /// <param name="fullName">The real name of the user.</param>
         /// <param name="emailAddress">The email address of the user (optional).</param>
         /// <param name="temporaryPassword">Contains the temporary password of the newly created user.</param>
@@ -90,7 +90,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Adds a user to a group.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of a user.</param>
         /// <param name="groupName">The name of the group to which to add the user.</param>
         public void AddUserToGroup(string loginName, string groupName)
         {
@@ -104,7 +104,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Removes a user from a group.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of a user.</param>
         /// <param name="groupName">The name of the group from which to remove the user.</param>
         public void RemoveUserFromGroup(string loginName, string groupName)
         {
@@ -118,7 +118,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Returns a list of <see cref="Group"/> objects of which the specified user is a member.       
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of a user.</param>
         /// <returns>A List with <see cref="Group"/> objects.</returns>
         public List<Group> GetUserGroups(string loginName)
         {
@@ -132,7 +132,7 @@ namespace PDRepository.Users
         /// Assigns the specified rights to a user.
         /// Please note this method does not affect inherited group rights (if any).
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of a user.</param>
         /// <param name="rights">A <see cref="UserOrGroupRightsEnum"/> type.</param>
         /// <param name="replaceExisting">When true, replaces the existing user rights with the specified ones. When false, the specified rights will be added to the existing user rights.</param>
         public void SetUserRights(string loginName, UserOrGroupRightsEnum rights, bool replaceExisting)
@@ -147,7 +147,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Returns the user rights as a semi-colon separated string.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of a user.</param>
         /// <returns>A string with user rights.</returns>
         public string GetUserRights(string loginName)
         {
@@ -160,7 +160,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Blocks a user.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of the user to block.</param>
         public void BlockUser(string loginName)
         {
             if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
@@ -172,7 +172,7 @@ namespace PDRepository.Users
         /// <summary>
         /// Unblocks a user.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of the user to unblock.</param>
         public void UnblockUser(string loginName)
         {
             if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
@@ -184,13 +184,26 @@ namespace PDRepository.Users
         /// <summary>
         /// Deletes a user.
         /// </summary>
-        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="loginName">The login name of the user to delete.</param>
         public void DeleteUser(string loginName)
         {
             if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             DeleteRepositoryUser(loginName);
+        }
+
+        /// <summary>
+        /// Resets a user's password.
+        /// </summary>
+        /// <param name="loginName">The login name of the user for which to reset the password.</param>
+        /// <returns>Returns a new (temporary) password that complies with the current password policy.</returns>
+        public string ResetPassword(string loginName)
+        {
+            if (string.IsNullOrEmpty(loginName)) ThrowArgumentNullException(loginName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return ResetRepositoryUserPassword(loginName);
         }
 
         /// <summary>
@@ -282,6 +295,6 @@ namespace PDRepository.Users
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             DeleteRepositoryGroup(groupName);
-        }
+        }        
     }
 }

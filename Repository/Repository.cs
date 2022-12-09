@@ -749,6 +749,18 @@ namespace PDRepository
         }
 
         /// <summary>
+        /// Checks whether the repository user has the specified right.
+        /// </summary>
+        /// <param name="loginName">The name with which the user connects to the repository.</param>
+        /// <param name="expectedRight">A <see cref="UserOrGroupRightsEnum"/> type. Allows a single value (i.e. right) only.</param>
+        /// <returns>True if the repository has the specified right, False if not.</returns>
+        public bool DoesUserHaveRight(string loginName, UserOrGroupRightsEnum expectedRight)
+        {
+            string userRights = GetRepositoryUserRights(loginName);
+            return userRights.Contains(ParseRights((int)expectedRight));            
+        }
+
+        /// <summary>
         /// Returns the repository user rights as a semi-colon separated string.
         /// </summary>
         /// <param name="loginName">The name with which the user connects to the repository.</param>
@@ -828,6 +840,27 @@ namespace PDRepository
                 throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
 
             _con.Connection.DeleteUser(loginName);
+        }
+
+        /// <summary>
+        /// Resets the specified repository user's password.         
+        /// </summary>
+        /// <param name="loginName">The login name of the user for which to reset the password.</param>
+        /// <returns>Returns a new (temporary) password that complies with the current password policy.</returns>
+        public string ResetRepositoryUserPassword(string loginName)
+        {            
+            if (!RepositoryUserExists(loginName))
+                throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
+
+            // Check whether the currently connected user account is allowed to reset the password.
+            if (!DoesUserHaveRight(_con.ConnectedUser, UserOrGroupRightsEnum.ManageUsers))
+                throw new RepositoryException($"The user with login name '{ loginName }' does not have the 'Manage Users & Permissions' right necessary to perform this action.");
+                        
+            RepositoryUser repoUser = GetUser(loginName);
+            string newPassword = _con.Connection.GeneratePassword();
+            repoUser.SetPassword(newPassword);
+            
+            return newPassword;
         }
 
         /// <summary>
