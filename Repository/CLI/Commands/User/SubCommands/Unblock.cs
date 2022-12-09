@@ -13,7 +13,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
     class Unblock : CmdBase
     {
         [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "l", LongName = "login-name", Description = "Specifies the login name of the user to unblock.", ValueName = "login name", ShowInHelpText = true)]
+        [Option(CommandOptionType.SingleValue, ShortName = "ln", LongName = "login-name", Description = "Specifies the login name of the user to unblock.", ValueName = "login name", ShowInHelpText = true)]
         public string LoginName { get; set; }
 
         [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]

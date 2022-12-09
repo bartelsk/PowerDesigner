@@ -2,21 +2,18 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
-using PDRepository.CLI.Commands.User.SubCommands;
+using PDRepository.CLI.Commands.Password.SubCommands;
 using System;
 
 namespace PDRepository.CLI.Commands.User
 {
-    [Command(Name = "user", Description = "Contains commands related to repository users.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Command(Name = "password", Description = "Contains commands related to repository user passwords.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     [Subcommand(
-       typeof(Create),
-       typeof(Password),
-       typeof(Status),
-       typeof(Unblock)
+       typeof(Reset)       
     )]
-    class User : CmdBase
+    class Password : CmdBase
     {
-        public User(IConsole console)
+        public Password(IConsole console)
         {
             _console = console;
         }
