@@ -129,6 +129,13 @@ namespace PDRepository.Users
         List<Group> ListGroups();
 
         /// <summary>
+        /// Returns a list of users that are members of a particular group.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A list with <see cref="User"/> objects.</returns>
+        List<User> GetGroupMembers(string groupName);
+
+        /// <summary>
         /// Determines whether a group exists.
         /// </summary>
         /// <param name="groupName">The name of the group.</param>

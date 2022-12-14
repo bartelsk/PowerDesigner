@@ -59,7 +59,7 @@ namespace BranchSamples
             string rootFolder = "LibManSamples";
 
             List<Branch> branches = client.BranchClient.ListBranches(rootFolder);
-            branches.ForEach(b => Console.WriteLine($"Branch: {b.Name} - Relative path: {b.RelativePath}"));
+            branches?.ForEach(b => Console.WriteLine($"Branch: {b.Name} - Relative path: {b.RelativePath}"));
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace BranchSamples
             Console.WriteLine($"Listing branches for user '{userLogIn}'...\r\n");
 
             List<Branch> branches = client.BranchClient.ListBranches(rootFolder, userLogIn);
-            branches.ForEach(b => Console.WriteLine($"Branch: {b.Name} - Relative path: {b.RelativePath} - Permission: {b.Permission}"));
+            branches?.ForEach(b => Console.WriteLine($"Branch: {b.Name} - Relative path: {b.RelativePath} - Permission: {b.Permission}"));
         }
 
         /// <summary>

@@ -60,7 +60,7 @@ namespace DocumentSamples
             bool recursive = true;
 
             List<Document> docs = client.DocumentClient.ListDocuments(rootFolder, recursive);
-            docs.ForEach(d => Console.WriteLine($"Name: {d.Name} ({d.ClassName}) - Version: {d.Version}\r\nObject type: {d.ObjectType}\r\nFrozen: {d.IsFrozen}\r\nLocked: {d.IsLocked}\r\nLocation: {d.Location}\r\nVersion comment: {d.VersionComment}\r\n\r\n"));
+            docs?.ForEach(d => Console.WriteLine($"Name: {d.Name} ({d.ClassName}) - Version: {d.Version}\r\nObject type: {d.ObjectType}\r\nFrozen: {d.IsFrozen}\r\nLocked: {d.IsLocked}\r\nLocation: {d.Location}\r\nVersion comment: {d.VersionComment}\r\n\r\n"));
 
             Assert.IsNotNull(docs);
         }

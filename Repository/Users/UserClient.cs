@@ -126,7 +126,7 @@ namespace PDRepository.Users
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             return GetRepositoryUserGroups(loginName);
-        }
+        }       
 
         /// <summary>
         /// Assigns the specified rights to a user.
@@ -228,6 +228,19 @@ namespace PDRepository.Users
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             return GetRepositoryGroups();
+        }
+
+        /// <summary>
+        /// Returns a list of users that are members of a particular group.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A list with <see cref="User"/> objects.</returns>
+        public List<User> GetGroupMembers(string groupName)
+        {
+            if (string.IsNullOrEmpty(groupName)) ThrowArgumentNullException(groupName);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            return GetRepositoryGroupMembers(groupName);
         }
 
         /// <summary>

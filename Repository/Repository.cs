@@ -609,18 +609,7 @@ namespace PDRepository
             if (repoUser == null)
                 throw new RepositoryException($"A user with login name '{ loginName }' does not exist.");
 
-            User user = ParseRepoUser(repoUser);
-            user.Rights = GetRepositoryUserRights(loginName);
-
-            // Get user group membership
-            List<Group> userGroups = GetRepositoryUserGroups(loginName);
-            if (userGroups.Count > 0)
-            {
-                StringBuilder sb = new StringBuilder();
-                userGroups.ForEach(g => sb.Append($";{g.Name}"));
-                user.GroupMembership = sb.ToString().Substring(1);
-            }            
-            return user;
+            return ParseUserDetails(repoUser);
         }
 
         /// <summary>
@@ -746,6 +735,26 @@ namespace PDRepository
                 });                
             }
             return userGroups;            
+        }
+
+        /// <summary>
+        /// Returns a list of users that are members of a particular group.
+        /// </summary>
+        /// <param name="groupName">The name of the group.</param>
+        /// <returns>A list with <see cref="User"/> objects.</returns>
+        public List<User> GetRepositoryGroupMembers(string groupName)
+        {
+            List<User> members = new List<User>();
+            RepositoryGroup repoGroup = GetGroup(groupName);
+            if (repoGroup == null)
+                throw new RepositoryException($"A group with name '{ groupName }' does not exist.");
+
+            var groupUsers = repoGroup.GroupUsers;
+            foreach (RepositoryUser repoUser in groupUsers)
+            {
+                members.Add(ParseUserDetails(repoUser));
+            }
+            return members;
         }
 
         /// <summary>
@@ -1189,6 +1198,27 @@ namespace PDRepository
                 }
             }
             return repoUser;
+        }
+
+        /// <summary>
+        /// Gets user details, access rights and group memberships.
+        /// </summary>
+        /// <param name="repoUser">A <see cref="RepositoryUser"/> type.</param>
+        /// <returns>A <see cref="User"/> type.</returns>
+        private User ParseUserDetails(RepositoryUser repoUser)
+        {
+            User user = ParseRepoUser(repoUser);
+            user.Rights = GetRepositoryUserRights(user.LoginName);
+
+            // Get user group membership
+            List<Group> userGroups = GetRepositoryUserGroups(user.LoginName);
+            if (userGroups.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                userGroups.ForEach(g => sb.Append($";{g.Name}"));
+                user.GroupMembership = sb.ToString().Substring(1);
+            }
+            return user;
         }
 
         /// <summary>
