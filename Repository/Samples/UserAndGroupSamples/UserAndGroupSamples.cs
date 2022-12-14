@@ -58,10 +58,10 @@ namespace UserAndGroupSamples
             Console.WriteLine("Retrieving users...\r\n");
 
             List<User> users = client.UserClient.ListUsers();
-
+            
             Console.WriteLine("Listing first 25 users...\r\n");
 
-            users.Take(25).ToList().ForEach(u => Console.WriteLine($"Name: {u.FullName} - Status: {u.Status} - Rights: {u.Rights} "));
+            users?.Take(25).ToList().ForEach(u => Console.WriteLine($"Name: {u.FullName} - Status: {u.Status} - Rights: {u.Rights} "));            
         }
 
         /// <summary>
@@ -155,6 +155,9 @@ namespace UserAndGroupSamples
             Console.WriteLine($"User '{loginName}' has been deleted.\r\n");
         }
 
+        /// <summary>
+        /// Resets the password of a user.
+        /// </summary>
         [TestMethod]
         public void ResetUserPassword()
         {
@@ -174,10 +177,26 @@ namespace UserAndGroupSamples
         {
             Console.WriteLine("Retrieving groups...\r\n");
 
-            List<Group> groups = client.UserClient.ListGroups();
-
+            List<Group> groups = client.UserClient.ListGroups();            
+            
             Console.WriteLine("Listing first 10 groups...\r\n");
-            groups.Take(10).ToList().ForEach(g => Console.WriteLine($"Name: {g.Name} - Description: {g.Description} - Rights: {g.Rights}"));
+            groups?.Take(10).ToList().ForEach(g => Console.WriteLine($"Name: {g.Name} - Description: {g.Description} - Rights: {g.Rights}"));            
+        }
+
+        /// <summary>
+        /// Retrieves the members of a particular group.
+        /// </summary>
+        [TestMethod]
+        public void GetGroupMembers()
+        {
+            string groupName = "HR";
+
+            Console.WriteLine($"Retrieving members of group '{groupName}'...\r\n");
+
+            List<User> users = client.UserClient.GetGroupMembers(groupName);
+                        
+            Console.WriteLine("Listing users...\r\n");
+            users?.ForEach(u => Console.WriteLine($"Login name: {u.LoginName} - Full name: {u.FullName} - Rights: {u.Rights}"));            
         }
 
         /// <summary>
@@ -296,8 +315,8 @@ namespace UserAndGroupSamples
 
             Console.WriteLine($"Listing groups of which user '{loginName}' is a member...\r\n");
 
-            List<Group> groups = client.UserClient.GetUserGroups(loginName);
-            groups.ForEach(g => Console.WriteLine($"Group name: {g.Name} - Description: {g.Description} - Rights: {g.Rights}"));
+            List<Group> groups = client.UserClient.GetUserGroups(loginName);            
+            groups?.ForEach(g => Console.WriteLine($"Group name: {g.Name} - Description: {g.Description} - Rights: {g.Rights}"));            
         }
 
         /// <summary>

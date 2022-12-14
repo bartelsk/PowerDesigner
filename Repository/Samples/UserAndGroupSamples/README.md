@@ -49,9 +49,17 @@ Creates a user and adds it to a group.
 
 Deletes a user.
 
+### ResetUserPassword
+
+Resets the password of a user. Returns a new temporary password.
+
 ### ListGroups
 
 Retrieve all groups, but only display the first 10 groups.
+
+### GetGroupMembers
+
+Returns a list of users that are members of a particular group.
 
 ### GroupExists
 
