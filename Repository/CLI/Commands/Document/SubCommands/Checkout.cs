@@ -7,16 +7,16 @@ using System;
 
 namespace PDRepository.CLI.Commands.Document
 {
-   [Command(Name = "checkout", Description = "Contains commands related to repository document checkouts.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-   [Subcommand(
+    [Command(Name = "checkout", Description = "Contains commands related to repository document checkouts.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Subcommand(
        typeof(Document),
-      typeof(Folder)
-    )]
-   class Checkout : CmdBase
-   {
-      public Checkout(IConsole console)
-      {
-         _console = console;
-      }
-   }
+       typeof(Folder)
+     )]
+    class Checkout : CmdBase
+    {
+        public Checkout(IConsole console)
+        {
+            _console = console;
+        }
+    }
 }

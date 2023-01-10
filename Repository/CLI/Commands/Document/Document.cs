@@ -7,17 +7,17 @@ using System;
 
 namespace PDRepository.CLI.Commands.Document
 {
-   [Command(Name = "document", Description = "Contains commands related to repository documents.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-   [Subcommand(
-       typeof(Checkout),
-       typeof(Info),
-       typeof(List)
-    )]
-   class Document : CmdBase
-   {
-      public Document(IConsole console)
-      {
-         _console = console;
-      }
-   }
+    [Command(Name = "document", Description = "Contains commands related to repository documents.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Subcommand(
+        typeof(Checkout),
+        typeof(Info),
+        typeof(List)
+     )]
+    class Document : CmdBase
+    {
+        public Document(IConsole console)
+        {
+            _console = console;
+        }
+    }
 }

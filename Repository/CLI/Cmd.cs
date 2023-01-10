@@ -14,9 +14,9 @@ namespace PDRepository.CLI
     [Command(Name = "pdr", Description = "PowerDesigner Repository CLI", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     [VersionOptionFromMember("--version", ShortName = "v", LongName = "version", MemberName = nameof(GetVersion), ShowInHelpText = false)]
     [Subcommand(
-       typeof(Branch),
+      typeof(Branch),
       typeof(Document),
-       typeof(User)
+      typeof(User)
     )]
     class Cmd : CmdBase
     {
