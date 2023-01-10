@@ -80,6 +80,12 @@
     <Compile Include="Commands\Branch\Branch.cs" />
     <Compile Include="Commands\Branch\SubCommands\Create.cs" />
     <Compile Include="Commands\Branch\SubCommands\List.cs" />
+    <Compile Include="Commands\Document\Document.cs" />
+    <Compile Include="Commands\Document\SubCommands\Checkout.cs" />
+    <Compile Include="Commands\Document\SubCommands\Checkout\Document.cs" />
+    <Compile Include="Commands\Document\SubCommands\Checkout\Folder.cs" />
+    <Compile Include="Commands\Document\SubCommands\Info.cs" />
+    <Compile Include="Commands\Document\SubCommands\List.cs" />
     <Compile Include="Commands\User\SubCommands\Create.cs" />
     <Compile Include="Commands\User\SubCommands\Password.cs" />
     <Compile Include="Commands\User\SubCommands\Password\Reset.cs" />

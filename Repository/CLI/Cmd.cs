@@ -3,6 +3,7 @@
 
 using McMaster.Extensions.CommandLineUtils;
 using PDRepository.CLI.Commands.Branch;
+using PDRepository.CLI.Commands.Document;
 using PDRepository.CLI.Commands.User;
 using System;
 using System.Reflection;
@@ -14,6 +15,7 @@ namespace PDRepository.CLI
     [VersionOptionFromMember("--version", ShortName = "v", LongName = "version", MemberName = nameof(GetVersion), ShowInHelpText = false)]
     [Subcommand(
        typeof(Branch),
+      typeof(Document),
        typeof(User)
     )]
     class Cmd : CmdBase

@@ -61,7 +61,7 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
                     }
                     else
                     {
-                        Output($"No branches found relative to folder '{ RootFolder} '.");
+                        Output($"No branches found relative to folder '{ RootFolder}'.");
                     }
                 }
                 return 0;
