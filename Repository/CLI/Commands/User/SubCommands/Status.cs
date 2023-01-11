@@ -52,7 +52,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                             WriteTableHeader(writer, "Property", "Value", ConsoleColor.Blue, ConsoleColor.Blue);
 
                             WriteRow(writer, "Name", user.FullName);
-                            WriteRow(writer, "Comment", (!string.IsNullOrEmpty(user.Comment) ? user.Comment : "(none)"));
+                            WriteRow(writer, "Comment", !string.IsNullOrEmpty(user.Comment) ? user.Comment : "(none)");
                             WriteRow(writer, "Status", user.Status, valueColor: (user.Status == Common.UserStatusEnum.Active) ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
                             WriteRow(writer, "Blocked", user.Blocked);
                             WriteRow(writer, "Disabled", user.Disabled);

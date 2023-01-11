@@ -53,19 +53,20 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
 
                             using (TableWriter writer = new TableWriter(_console, padding: 2))
                             {
-                                writer.StartTable(doc);
-                                writer.AddHeaderRow(doc, ConsoleColor.Blue);
+                                writer.StartTable(2);
+                                WriteTableHeader(writer, "Property", "Value", ConsoleColor.Blue, ConsoleColor.Blue);
 
-                                writer.AddRow(doc);
+                                WriteRow(writer, "Name", doc.Name);
+                                WriteRow(writer, "Class name", doc.ClassName);
+                                WriteRow(writer, "Extraction file name", doc.ExtractionFileName);
+                                WriteRow(writer, "Is frozen", doc.IsFrozen);
+                                WriteRow(writer, "Is locked", doc.IsLocked);
+                                WriteRow(writer, "Location", doc.Location);
+                                WriteRow(writer, "Object type", doc.ObjectType);
+                                WriteRow(writer, "Version", doc.Version);
+                                WriteRow(writer, "Version comment", !string.IsNullOrEmpty(doc.VersionComment) ? doc.VersionComment : "(none)");
+
                                 writer.WriteTable();
-
-                                //writer.StartTable(2);
-                                //WriteTableHeader(writer, "Property", "Value", ConsoleColor.Blue, ConsoleColor.Blue);
-
-                                //WriteRow(writer, "Name", doc.Name);
-                                //WriteRow(writer, "Class name", doc.ClassName);                        
-
-                                //writer.WriteTable();
                             }
                         }
                     }
