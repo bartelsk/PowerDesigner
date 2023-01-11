@@ -1060,6 +1060,13 @@ namespace PDRepository
                             ListFolderDocuments(folder.Location.Substring(1) + "/" + folder.Name, recursive, ref documents);
                         }
                         break;
+                    case (int)PdRMG_Classes.cls_RepositoryBranchFolder:
+                        if (recursive)
+                        {
+                            RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;
+                            ListFolderDocuments(branchFolder.Location.Substring(1) + "/" + branchFolder.Name, recursive, ref documents);
+                        }
+                        break;
                     default:
                         Document document = ParseStoredObjectInfo(item);
                         if (document != null)
