@@ -6,6 +6,7 @@ using PDRepository.CLI.Output;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PDRepository.CLI.Commands.Document.SubCommands
@@ -44,24 +45,36 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
 
                 if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
                 {
-                    List<Common.Document> documents = _client.DocumentClient.ListDocuments(FolderPath, Recursive);
-
-                    if (documents?.Count > 0)
+                    if (_client.DocumentClient.FolderExists(FolderPath))
                     {
-                        OutputNewLine("Document details:\r\n", ConsoleColor.Yellow);
+                        List<Common.Document> documents = _client.DocumentClient.ListDocuments(FolderPath, Recursive)?.OrderBy(d => d.Location).ToList();
 
-                        using (TableWriter writer = new TableWriter(_console, padding: 2))
+                        if (documents?.Count > 0)
                         {
-                            writer.StartTable(documents);
-                            writer.AddHeaderRow(documents, ConsoleColor.Blue);
+                            OutputNewLine("Document details:\r\n", ConsoleColor.Yellow);
 
-                            writer.AddRows(documents);
-                            writer.WriteTable();
+                            using (TableWriter writer = new TableWriter(_console, padding: 2))
+                            {
+                                writer.StartTable(2);
+                                WriteTableHeader(writer, "Name", "Location", ConsoleColor.Blue, ConsoleColor.Blue);
+                                foreach (var doc in documents)
+                                {
+                                    writer.StartRow();
+                                    writer.AddColumn($"{doc.Name} ({doc.ClassName})");
+                                    writer.AddColumn(doc.Location);
+                                    writer.EndRow();
+                                }
+                                writer.WriteTable();
+                            }
+                        }
+                        else
+                        {
+                            OutputNewLine($"No documents found in folder '{FolderPath}'.");
                         }
                     }
                     else
                     {
-                        OutputNewLine($"No documents found in folder '{FolderPath}'.");
+                        OutputError($"The folder '{FolderPath}' does not exist.");
                     }
                 }
                 return 0;

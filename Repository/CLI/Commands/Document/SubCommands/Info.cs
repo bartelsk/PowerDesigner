@@ -72,7 +72,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                     }
                     else
                     {
-                        OutputError($"The document '{DocumentName}' does not exist in folder '{FolderPath}'");
+                        OutputError($"The document '{DocumentName}' does not exist in folder '{FolderPath}'.");
                     }
                 }
                 return 0;
