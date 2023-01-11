@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDRepository.CLI.Commands.Document.SubCommands
 {
-    [Command(Name = "info", Description = "Returns reoository document information.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Command(Name = "info", Description = "Returns repository document information.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     class Info : CmdBase
     {
         [Required]
@@ -49,7 +49,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                         Common.Document doc = _client.DocumentClient.GetDocumentInfo(FolderPath, DocumentName);
                         if (doc != null)
                         {
-                            Output("\r\nDocument details:\r\n", ConsoleColor.Yellow);
+                            OutputNewLine("Document details:\r\n", ConsoleColor.Yellow);
 
                             using (TableWriter writer = new TableWriter(_console, padding: 2))
                             {

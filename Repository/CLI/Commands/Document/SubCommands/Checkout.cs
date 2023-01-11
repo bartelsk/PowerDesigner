@@ -7,9 +7,9 @@ using System;
 
 namespace PDRepository.CLI.Commands.Document
 {
-    [Command(Name = "checkout", Description = "Contains commands related to repository document checkouts.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Command(Name = "checkout", Description = "Contains commands related to checking out repository documents.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     [Subcommand(
-       typeof(Document),
+       typeof(File),
        typeof(Folder)
      )]
     class Checkout : CmdBase

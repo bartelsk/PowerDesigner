@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace PDRepository.CLI.Commands.Document.SubCommands
 {
-    [Command(Name = "document", Description = "Checks out a single document in a repository folder.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-    class Document : CmdBase
+    [Command(Name = "file", Description = "Checks out a single document in a repository folder.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    class File : CmdBase
     {
         [Required]
         [Option(CommandOptionType.SingleValue, ShortName = "fp", LongName = "folder-path", Description = "The repository folder from which to retrieve the document.", ValueName = "folder", ShowInHelpText = true)]
@@ -38,7 +38,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
         [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
         public string RepoPassword { get; set; }
 
-        public Document(IConsole console)
+        public File(IConsole console)
         {
             _console = console;
         }
@@ -57,12 +57,12 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                     // Check out document
                     if (DocumentVersion == 0)
                     {
-                        Output($"Checking out document '{DocumentName}' to '{TargetFolderPath}'...", ConsoleColor.Yellow);
+                        OutputNewLine($"Checking out document '{DocumentName}' to '{TargetFolderPath}'...", ConsoleColor.Yellow);
                         _client.DocumentClient.CheckOutDocument(FolderPath, DocumentName, TargetFolderPath);
                     }
                     else
                     {
-                        Output($"Checking out version '{DocumentVersion}' of document '{DocumentName}' to '{TargetFolderPath}'...");
+                        OutputNewLine($"Checking out version '{DocumentVersion}' of document '{DocumentName}' to '{TargetFolderPath}'...");
                         _client.DocumentClient.CheckOutDocument(FolderPath, DocumentName, TargetFolderPath, DocumentVersion);
                     }
                 }
@@ -77,7 +77,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
 
         private void DocumentClient_DocumentCheckedOut(object sender, CheckOutEventArgs e)
         {
-            Output($"Checked out document '{e.DocumentName}' to file '{e.CheckOutFileName}'");
+            OutputNewLine($"Checked out document '{e.DocumentName}' to file '{e.CheckOutFileName}'");
         }
     }
 }

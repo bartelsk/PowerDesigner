@@ -17,7 +17,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
         [Option(CommandOptionType.SingleValue, ShortName = "fp", LongName = "folder-path", Description = "The repository folder to query.", ValueName = "folder", ShowInHelpText = true)]
         public string FolderPath { get; set; }
 
-        [Option(CommandOptionType.SingleValue, ShortName = "r", LongName = "recursive", Description = "Indicates whether to list documents in any sub-folder of the specified repository folder (optional).", ValueName = "false", ShowInHelpText = true)]
+        [Option(CommandOptionType.SingleValue, ShortName = "r", LongName = "recursive", Description = "Indicates whether to list documents in any sub-folder of the specified repository folder (optional).", ValueName = "true/false", ShowInHelpText = true)]
         public bool Recursive { get; set; }
 
         [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
@@ -46,9 +46,9 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                 {
                     List<Common.Document> documents = _client.DocumentClient.ListDocuments(FolderPath, Recursive);
 
-                    if (documents != null)
+                    if (documents?.Count > 0)
                     {
-                        Output("\r\nDocument details:\r\n", ConsoleColor.Yellow);
+                        OutputNewLine("Document details:\r\n", ConsoleColor.Yellow);
 
                         using (TableWriter writer = new TableWriter(_console, padding: 2))
                         {
@@ -61,7 +61,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                     }
                     else
                     {
-                        Output($"No documents found in folder '{FolderPath}'.");
+                        OutputNewLine($"No documents found in folder '{FolderPath}'.");
                     }
                 }
                 return 0;

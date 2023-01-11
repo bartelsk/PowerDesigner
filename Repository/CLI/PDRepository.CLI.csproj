@@ -82,7 +82,7 @@
     <Compile Include="Commands\Branch\SubCommands\List.cs" />
     <Compile Include="Commands\Document\Document.cs" />
     <Compile Include="Commands\Document\SubCommands\Checkout.cs" />
-    <Compile Include="Commands\Document\SubCommands\Checkout\Document.cs" />
+    <Compile Include="Commands\Document\SubCommands\Checkout\File.cs" />
     <Compile Include="Commands\Document\SubCommands\Checkout\Folder.cs" />
     <Compile Include="Commands\Document\SubCommands\Info.cs" />
     <Compile Include="Commands\Document\SubCommands\List.cs" />
