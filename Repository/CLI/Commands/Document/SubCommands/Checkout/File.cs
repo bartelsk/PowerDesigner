@@ -63,6 +63,8 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                     else
                     {
                         OutputNewLine($"Checking out version '{DocumentVersion}' of document '{DocumentName}' to '{TargetFolderPath}'...");
+
+                        //TODO: Check whether the document version exists - if not, throw
                         _client.DocumentClient.CheckOutDocument(FolderPath, DocumentName, TargetFolderPath, DocumentVersion);
                     }
                 }
