@@ -57,7 +57,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                     _client.DocumentClient.DocumentCheckedOut += DocumentClient_DocumentCheckedOut;
 
                     // Check out document
-                    OutputNewLine($"Checking out all document in folder '{FolderPath}' into '{TargetFolderPath}'...");
+                    OutputNewLine($"Checking out all documents in folder '{FolderPath}' into '{TargetFolderPath}'...");
                     _client.DocumentClient.CheckOutDocuments(FolderPath, TargetFolderPath, Recursive, PreserveFolderStructure);
                 }
                 return 0;
@@ -71,7 +71,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
 
         private void DocumentClient_DocumentCheckedOut(object sender, CheckOutEventArgs e)
         {
-            OutputNewLine($"Checked out document '{e.DocumentName}' to file '{e.CheckOutFileName}'");
+            OutputNewLine($"Checked out document '{e.DocumentName}' version '{e.DocumentVersion}' to file '{e.CheckOutFileName}'.");
         }
     }
 }

@@ -417,7 +417,7 @@ namespace DocumentSamples
 
         private static void DocumentCheckedOut(object sender, CheckOutEventArgs e)
         {
-            Console.WriteLine($"Checked out document '{e.DocumentName}' to file '{e.CheckOutFileName}'");
+            Console.WriteLine($"Checked out document '{e.DocumentName}' version '{e.DocumentVersion}' to file '{e.CheckOutFileName}'.");
         }
     }
 }

@@ -16,6 +16,11 @@ namespace PDRepository.Common
         public string DocumentName { get; set; }
 
         /// <summary>
+        /// The version of the repository document.
+        /// </summary>
+        public string DocumentVersion { get; set; }
+
+        /// <summary>
         /// The target file name of the document on disc.
         /// </summary>
         public string CheckOutFileName { get; set; }
