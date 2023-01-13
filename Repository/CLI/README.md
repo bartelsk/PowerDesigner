@@ -19,6 +19,7 @@
 ## Introduction
 
 This PowerDesigner Repository CLI enables interaction with the PowerDesigner Repository from the command line. It can:
+- List and check out documents (models, extensions, et cetera) 
 - Manage users and groups
 - Create and delete branches
 
@@ -48,17 +49,162 @@ This is necessary because the [PowerDesigner Repository Client Library](../READM
 The CLI does not maintain this connection as it is stateless.
 
 :point_right: Currently, the CLI supports the following commands related to:
+- [Documents](#document-commands)
 - [Users](#user-commands)
 - [Branches](#branch-commands)
 
 More commands are expected to be added in the near future.
 <br>
 
+## Document commands
+The following document commands are available:
+- [Info](#info)
+- [List](#list)
+- [Checkout](#checkout)
+
+### Info
+
+Returns repository document information.
+
+```bash
+pdr document info [options]
+``` 
+
+**Options** 
+
+- ``-fp``, ``--folder-path``
+    - The repository folder that contains the document (required).
+- ``-dn``, ``--document-name``
+    - The name of the document (required).
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository (required).
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository (required).
+
+**Examples**
+
+```bash
+# Get details of model 'MyModel' in folder 'MyFolder'
+$ pdr document info --folder-path MyFolder --document-name MyModel --repo-user Admin --repo-password P@ssw0rd
+
+# Get details of model 'MyModel' in folder 'MyFolder' while using a repository definition and the single-dash convention
+$ pdr document info -fp MyFolder -dn MyModel -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+``` 
+
+### List
+
+Enumerates repository documents.
+
+```bash
+pdr document list [options]
+``` 
+
+**Options** 
+
+- ``-fp``, ``--folder-path``
+    - The repository folder to query (required).
+- ``-r``, ``--recursive``
+    - Indicates whether to list documents in any sub-folder of the specified repository folder (optional).
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository (required).
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository (required).
+
+**Examples**
+
+```bash
+# List all documents in folder 'MyFolder'
+$ pdr document list --folder-path MyFolder --repo-user Admin --repo-password P@ssw0rd
+
+# List all documents in folder 'MyFolder' and its subfolders while using a repository definition and the single-dash convention
+$ pdr document list -fp MyFolder -r true -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+``` 
+
+### Checkout
+
+Contains sub-commands related to checking out repository documents. The following sub-commands are available:
+- [File](#file)
+- [Folder](#folder)
+
+#### File
+
+Checks out a single document in a repository folder.
+
+```bash
+pdr document checkout file [options]
+``` 
+
+**Options** 
+
+- ``-fp``, ``--folder-path``
+    - The repository folder from which to retrieve the document (required).
+- ``-tf``, ``--target-folder``
+    - The folder on disc to use as the check-out location for the document (required).
+- ``-dn``, ``--document-name``
+    - The name of the document to check out (required). 
+- ``-dv``, ``--document-version``
+    - The document version. The latest version of the document will be checked out if the specified document version does not exist. The version must also belong to the same branch as the current object (optional).
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository (required).
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository (required).
+
+**Examples**
+
+```bash
+# Check out the latest version of model 'MyModel' in folder 'MyFolder' and save it to C:\Temp
+$ pdr document checkout file --folder-path MyFolder --document-name MyModel --target-folder C:\Temp --repo-user Admin --repo-password P@ssw0rd
+
+# # Check out the version 2 of model 'MyModel' in folder 'MyFolder' and save it to C:\Temp while using a repository definition and the single-dash convention
+$ pdr document checkout file -fp MyFolder -dn MyModel -tf C:\Temp -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+``` 
+
+#### Folder
+
+Checks out all documents in a repository folder.
+
+```bash
+pdr document checkout folder [options]
+``` 
+
+**Options** 
+
+- ``-fp``, ``--folder-path``
+    - The repository folder from which to retrieve the documents (required).
+- ``-tf``, ``--target-folder``
+    - The folder on disc to use as the check-out location for the documents (required).
+- ``-r``, ``--recursive``
+     - Indicates whether to retrieve documents in any sub-folder of the specified repository folder (optional).
+- ``-ps``, ``--preserve-structure``
+     - Indicates whether to mimic the repository folder structure on the local disc when checking out. Applies to recursive check-outs only. (optional).
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository (required).
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository (required).
+
+**Examples**
+
+```bash
+# Check out all documents in folder 'MyFolder' and save it to C:\Temp
+$ pdr document checkout folder --folder-path MyFolder --target-folder C:\Temp --repo-user Admin --repo-password P@ssw0rd
+
+# Check out all documents in folder 'MyFolder' and its subfolder and save it to C:\Temp while preserving the repository folder structure and using a repository definition and the single-dash convention
+$ pdr document checkout folder -fp MyFolder -tf C:\Temp -r true -ps true -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+``` 
+
 ## User commands
 
 The following user commands are available:
 - [Create](#create)
-- [Password](#password-reset)
+- [Password](#password)
 - [Status](#status)
 - [Unblock](#unblock)
 
@@ -116,7 +262,12 @@ $ pdr user create -ln JWilliams -fn "John Williams" -ue john@williams.com -ur Co
 
 ### Password
 
-Contains sub-commands related to repository user passwords. Currently it features a password reset option only.
+Contains sub-commands related to repository user passwords. The following sub-commands are available:
+- [Reset](#reset)
+
+#### Reset
+
+Resets a user password.
 
 ```bash
 pdr user password reset [options]
