@@ -55,15 +55,21 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
 
                             using (TableWriter writer = new TableWriter(_console, padding: 2))
                             {
-                                writer.StartTable(2);
-                                WriteTableHeader(writer, "Name", "Location", ConsoleColor.Blue, ConsoleColor.Blue);
-                                foreach (var doc in documents)
+                                writer.StartTable(3);                                
+                                writer.StartRow(true);
+                                writer.AddColumn("Name", ConsoleColor.Blue);
+                                writer.AddColumn("Type", ConsoleColor.Blue);
+                                writer.AddColumn("Location", ConsoleColor.Blue);
+                                writer.EndRow();
+
+                                documents.ForEach(doc =>
                                 {
                                     writer.StartRow();
-                                    writer.AddColumn($"{doc.Name} ({doc.ClassName})");
+                                    writer.AddColumn(doc.Name);
+                                    writer.AddColumn(doc.ClassName);
                                     writer.AddColumn(doc.Location);
                                     writer.EndRow();
-                                }
+                                });
                                 writer.WriteTable();
                             }
                         }
