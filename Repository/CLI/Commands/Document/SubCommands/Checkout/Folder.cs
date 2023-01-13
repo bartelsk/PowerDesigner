@@ -26,9 +26,6 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
         [Option(CommandOptionType.SingleValue, ShortName = "ps", LongName = "preserve-structure", Description = "Indicates whether to mimic the repository folder structure on the local disc when checking out. Applies to recursive check-outs only. (optional).", ValueName = "false", ShowInHelpText = true)]
         public bool PreserveFolderStructure { get; set; }
 
-        [Option(CommandOptionType.SingleValue, ShortName = "dn", LongName = "document-name", Description = "The name of the document.", ValueName = "user or group", ShowInHelpText = true)]
-        public string DocumentName { get; set; }
-
         [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
         public string RepoDefinition { get; set; }
 
@@ -56,8 +53,8 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                     // Register event handler
                     _client.DocumentClient.DocumentCheckedOut += DocumentClient_DocumentCheckedOut;
 
-                    // Check out document
-                    OutputNewLine($"Checking out all documents in folder '{FolderPath}' into '{TargetFolderPath}'...");
+                    // Check out documents
+                    OutputNewLine($"Checking out all documents in folder '{FolderPath}' into '{TargetFolderPath}'...\r\n");
                     _client.DocumentClient.CheckOutDocuments(FolderPath, TargetFolderPath, Recursive, PreserveFolderStructure);
                 }
                 return 0;
@@ -71,7 +68,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
 
         private void DocumentClient_DocumentCheckedOut(object sender, CheckOutEventArgs e)
         {
-            OutputNewLine($"Checked out document '{e.DocumentName}' version '{e.DocumentVersion}' to file '{e.CheckOutFileName}'.");
+            Output($"Checked out document '{e.DocumentName}' version '{e.DocumentVersion}' to file '{e.CheckOutFileName}'.");
         }
     }
 }
