@@ -3,6 +3,7 @@
 
 using McMaster.Extensions.CommandLineUtils;
 using PDRepository.CLI.Commands.Branch;
+using PDRepository.CLI.Commands.Document;
 using PDRepository.CLI.Commands.User;
 using System;
 using System.Reflection;
@@ -13,8 +14,9 @@ namespace PDRepository.CLI
     [Command(Name = "pdr", Description = "PowerDesigner Repository CLI", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     [VersionOptionFromMember("--version", ShortName = "v", LongName = "version", MemberName = nameof(GetVersion), ShowInHelpText = false)]
     [Subcommand(
-       typeof(Branch),
-       typeof(User)
+      typeof(Branch),
+      typeof(Document),
+      typeof(User)
     )]
     class Cmd : CmdBase
     {

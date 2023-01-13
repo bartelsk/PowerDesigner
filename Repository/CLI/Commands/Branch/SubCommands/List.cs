@@ -48,7 +48,7 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
 
                     if (branches != null)
                     {
-                        Output("\r\nBranch details:\r\n", ConsoleColor.Yellow);
+                        OutputNewLine("Branch details:\r\n", ConsoleColor.Yellow);
 
                         using (TableWriter writer = new TableWriter(_console, padding: 2))
                         {
@@ -61,7 +61,7 @@ namespace PDRepository.CLI.Commands.Branch.SubCommands
                     }
                     else
                     {
-                        Output($"No branches found relative to folder '{ RootFolder} '.");
+                        OutputNewLine($"No branches found relative to folder '{ RootFolder}'.");
                     }
                 }
                 return 0;

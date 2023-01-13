@@ -117,12 +117,17 @@ namespace PDRepository.CLI
             Output(data, foregroundColor, ConsoleColor.Black);
         }
 
+        protected void OutputNewLine(string data, ConsoleColor foregroundColor = ConsoleColor.White)
+        {
+            Output(string.Concat("\r\n", data), foregroundColor, ConsoleColor.Black);
+        }
+
         protected void OutputUserRightsAndGroupPermissions(Common.User user)
         {
-            Output("\r\nUser privileges:\r\n", ConsoleColor.Yellow);
+            OutputNewLine("User privileges:\r\n", ConsoleColor.Yellow);
             OutputCSVAsTable(user.Rights, ';', "Rights");
 
-            Output("\r\nGroup memberships:\r\n", ConsoleColor.Yellow);
+            OutputNewLine("Group memberships:\r\n", ConsoleColor.Yellow);
             OutputCSVAsTable(user.GroupMembership, ';', "Groups");
         }
 
@@ -180,7 +185,7 @@ namespace PDRepository.CLI
         {
             _console.BackgroundColor = ConsoleColor.Red;
             _console.ForegroundColor = ConsoleColor.White;
-            _console.Error.WriteLine(Environment.NewLine);
+            _console.Error.Write(Environment.NewLine);
             _console.Error.WriteLine(message);
             _console.ResetColor();
         }

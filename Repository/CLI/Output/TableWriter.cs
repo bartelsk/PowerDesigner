@@ -9,7 +9,7 @@ using System.Linq;
 namespace PDRepository.CLI.Output
 {
     /// <summary>
-    /// This class provides methods to output data as tables on the command line.
+    /// This class provides methods to output data in table format on the command line.
     /// </summary>
     class TableWriter : IDisposable
     {

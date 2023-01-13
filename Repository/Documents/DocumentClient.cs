@@ -170,7 +170,7 @@ namespace PDRepository.Documents
         /// <param name="repoFolderPath">The repository folder from which to retrieve the document.</param>
         /// <param name="documentName">The name of the document to check out.</param>        
         /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
-        /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
+        /// <param name="version">The document version. The latest version of the document will be checked out if the specified document version does not exist. The version must also belong to the same branch as the current object.</param>
         public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, int version)
         {
             if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
@@ -188,7 +188,7 @@ namespace PDRepository.Documents
         /// <param name="documentName">The name of the document to check out.</param>
         /// <param name="targetFolder">The folder on disc to use as the check-out location for the document.</param>
         /// <param name="targetFileName">The file name for the document.</param>
-        /// <param name="version">The document version. The version must belong to the same branch as the current object.</param>
+        /// <param name="version">The document version. The latest version of the document will be checked out if the specified document version does not exist. The version must also belong to the same branch as the current object.</param>
         public void CheckOutDocument(string repoFolderPath, string documentName, string targetFolder, string targetFileName, int version)
         {
             if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);

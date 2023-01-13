@@ -74,7 +74,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
                         Common.User user = _client.UserClient.GetUserInfo(LoginName);
 
-                        Output("\r\nNew user details:\r\n", ConsoleColor.Yellow);
+                        OutputNewLine("New user details:\r\n", ConsoleColor.Yellow);
 
                         using (TableWriter writer = new TableWriter(_console, padding: 2))
                         {

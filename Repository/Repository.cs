@@ -409,7 +409,7 @@ namespace PDRepository
             _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
 
             // Trigger checked out event
-            OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });            
+            OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name, DocumentVersion = doc.Version });            
         }
 
         /// <summary>
@@ -441,7 +441,7 @@ namespace PDRepository
             _ = doc.CheckOutOldVersionToFile(version.ToString(), fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
 
             // Trigger checked out event
-            OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });            
+            OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name, DocumentVersion = doc.Version });            
         }
 
         /// <summary>
@@ -473,7 +473,7 @@ namespace PDRepository
                         _ = doc.CheckOutToFile(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, false, out _, out _);
 
                         // Trigger checked out event
-                        OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name });
+                        OnDocumentCheckedOut(new CheckOutEventArgs() { CheckOutFileName = fileName, DocumentName = doc.Name, DocumentVersion = doc.Version });
                         break;
                 }
             }            
@@ -1058,6 +1058,13 @@ namespace PDRepository
                         {
                             RepositoryFolder folder = (RepositoryFolder)item;
                             ListFolderDocuments(folder.Location.Substring(1) + "/" + folder.Name, recursive, ref documents);
+                        }
+                        break;
+                    case (int)PdRMG_Classes.cls_RepositoryBranchFolder:
+                        if (recursive)
+                        {
+                            RepositoryBranchFolder branchFolder = (RepositoryBranchFolder)item;
+                            ListFolderDocuments(branchFolder.Location.Substring(1) + "/" + branchFolder.Name, recursive, ref documents);
                         }
                         break;
                     default:
