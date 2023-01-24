@@ -99,6 +99,7 @@ namespace UserAndGroupSamples
                 Console.WriteLine($"Comment: {user.Comment}");
                 Console.WriteLine($"Disabled: {user.Disabled}");
                 Console.WriteLine($"Last login date: {user.LastLoginDate}");
+                Console.WriteLine($"Last modified date: {user.LastModifiedDate}");
                 Console.WriteLine($"Rights: {user.Rights}");
                 Console.WriteLine($"Group membership: {user.GroupMembership}");                
             }

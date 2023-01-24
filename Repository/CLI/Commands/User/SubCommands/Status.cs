@@ -57,6 +57,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                             WriteRow(writer, "Blocked", user.Blocked);
                             WriteRow(writer, "Disabled", user.Disabled);
                             WriteRow(writer, "Last login date", user.LastLoginDate);
+                            WriteRow(writer, "Last modified date", user.LastModifiedDate);
 
                             writer.WriteTable();
                         }

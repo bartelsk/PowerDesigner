@@ -41,6 +41,11 @@ namespace PDRepository.Common
         public string LoginName { get; set; }
 
         /// <summary>
+        /// The last modified date of the user account.
+        /// </summary>
+        public DateTime LastModifiedDate { get; set; }
+
+        /// <summary>
         /// Specifies user rights.
         /// </summary>
         public string Rights { get; set; }
