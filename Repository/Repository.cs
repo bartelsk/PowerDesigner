@@ -1330,6 +1330,7 @@ namespace PDRepository
                     Disabled = repoUser.Disabled,
                     FullName = repoUser.FullName,
                     LastLoginDate = repoUser.LastLoginDate,
+                    LastModifiedDate = repoUser.ModificationDateInRepository,
                     LoginName = repoUser.LoginName,                    
                     Status = ParseUserStatus(repoUser.Status)
                 };
