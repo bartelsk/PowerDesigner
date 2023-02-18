@@ -2,17 +2,20 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
-using PDRepository.CLI.Output;
+using PDRepository.CLI.Utils;
 using PDRepository.Common;
 using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PDRepository.CLI
 {
-    abstract class CmdBase
+   abstract class CmdBase
     {
-        protected IConsole _console;
-        protected RepositoryClient _client = null;
+        protected IConsole _console;      
+      protected RepositoryClient _client = null;
+      protected ConnectionProfile _connectionProfile;
 
         protected virtual Task<int> OnExecute(CommandLineApplication app)
         {
@@ -100,9 +103,103 @@ namespace PDRepository.CLI
             return parsedPermission;
         }
 
-        #region Output
+      #region Connection profile
 
-        protected void OnException(Exception ex)
+      protected string ProfileFolder
+      {
+         get
+         {
+            return $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.Create)}\\.pdr\\";
+         }
+      }
+
+      protected string ProfileFullName
+      {
+         get
+         {
+            return $"{ProfileFolder}default";
+         }
+      }
+
+      protected bool ConnectionProfileExists
+      {
+         get
+         {
+            return File.Exists(ProfileFullName);
+         }
+      }
+
+      protected ConnectionProfile ConnectionProfile
+      {
+         get
+         {
+            if (_connectionProfile == null)
+            {
+               _connectionProfile = LoadConnectionProfile();               
+            }
+            return _connectionProfile;
+         }
+      }
+     
+      protected void CreateConnectionProfileFolder()
+      {
+         if (!Directory.Exists(ProfileFolder))
+         {
+            Directory.CreateDirectory(ProfileFolder);
+         }
+      }
+
+      protected void DeleteConnectionProfile()
+      {
+         if (File.Exists(ProfileFullName))
+         {
+            File.Delete(ProfileFullName);
+         }
+      }
+
+      protected ConnectionProfile LoadConnectionProfile()
+      {
+         ConnectionProfile profile = new ConnectionProfile();
+         if (ConnectionProfileExists)
+         {
+            using (FileStream stream = File.Open(ProfileFullName, FileMode.Open))
+            {
+               using (BinaryReader reader = new BinaryReader(stream, Encoding.UTF8, false))
+               {
+                  string profileData = Security.Decrypt(reader.ReadString());
+                  if (!string.IsNullOrEmpty(profileData))
+                  {
+                     string[] profileDataSegments = profileData.Split(';');
+                     profile.RepositoryDefinition = profileDataSegments[0];
+                     profile.User = profileDataSegments[1];
+                     profile.Password = profileDataSegments[2];                     
+                  }
+               }
+            }
+         }
+         return profile;
+      }
+
+      protected bool SaveConnectionProfile(ConnectionProfile profile)
+      {
+         bool result = false;
+         CreateConnectionProfileFolder();
+         using (FileStream stream = File.Open(ProfileFullName, FileMode.Create))
+         {
+            using (BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8, false))
+            {
+               writer.Write(Security.Encrypt($"{profile.RepositoryDefinition};{profile.User};{profile.Password}"));               
+            }
+            result = true;
+         }
+         return result;
+      }
+
+      #endregion
+
+      #region Output
+
+      protected void OnException(Exception ex)
         {
             OutputError(ex.Message);
         }
