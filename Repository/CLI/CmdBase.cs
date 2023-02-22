@@ -117,7 +117,7 @@ namespace PDRepository.CLI
         {
             get
             {
-                return $"{ProfileFolder}default";
+                return $"{ProfileFolder}default.connection";
             }
         }
 

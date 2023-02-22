@@ -19,16 +19,16 @@ namespace PDRepository.CLI.Commands.Auth.SubCommands
         {
             try
             {
-                Output("Logging out", ConsoleColor.Yellow);
+                Output("Removing connection profile", ConsoleColor.Yellow);
 
                 if (ConnectionProfileExists)
                 {
                     DeleteConnectionProfile();
-                    OutputNewLine("Successfully logged out.", ConsoleColor.Green);
+                    OutputNewLine("Successfully removed connection profile.", ConsoleColor.Green);
                 }
                 else
                 {
-                    OutputNewLine("Not logged in!", ConsoleColor.Red);
+                    OutputNewLine("No connection profile found!", ConsoleColor.Red);
                 }
                 return await Task.FromResult(0);
             }
