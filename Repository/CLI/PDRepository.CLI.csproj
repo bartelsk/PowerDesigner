@@ -77,6 +77,9 @@
   <ItemGroup>
     <Compile Include="Cmd.cs" />
     <Compile Include="CmdBase.cs" />
+    <Compile Include="Commands\Auth\Auth.cs" />
+    <Compile Include="Commands\Auth\SubCommands\LogIn.cs" />
+    <Compile Include="Commands\Auth\SubCommands\LogOut.cs" />
     <Compile Include="Commands\Branch\Branch.cs" />
     <Compile Include="Commands\Branch\SubCommands\Create.cs" />
     <Compile Include="Commands\Branch\SubCommands\List.cs" />
