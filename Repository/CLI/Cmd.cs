@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
+using PDRepository.CLI.Commands.Auth;
 using PDRepository.CLI.Commands.Branch;
 using PDRepository.CLI.Commands.Document;
 using PDRepository.CLI.Commands.User;
@@ -14,6 +15,7 @@ namespace PDRepository.CLI
     [Command(Name = "pdr", Description = "PowerDesigner Repository CLI", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     [VersionOptionFromMember("--version", ShortName = "v", LongName = "version", MemberName = nameof(GetVersion), ShowInHelpText = false)]
     [Subcommand(
+      typeof(Auth),
       typeof(Branch),
       typeof(Document),
       typeof(User)

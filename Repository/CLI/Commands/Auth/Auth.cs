@@ -7,16 +7,16 @@ using System;
 
 namespace PDRepository.CLI.Commands.Auth
 {
-   [Command(Name = "auth", Description = "Contains commands related to the repository connection.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-   [Subcommand(
-       typeof(LogIn),
-       typeof(LogOut)
-    )]
-   class Auth : CmdBase
-   {
-      public Auth(IConsole console)
-      {
-         _console = console;
-      }
-   }
+    [Command(Name = "auth", Description = "Contains commands related to the repository connection.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Subcommand(
+        typeof(LogIn),
+        typeof(LogOut)
+     )]
+    class Auth : CmdBase
+    {
+        public Auth(IConsole console)
+        {
+            _console = console;
+        }
+    }
 }

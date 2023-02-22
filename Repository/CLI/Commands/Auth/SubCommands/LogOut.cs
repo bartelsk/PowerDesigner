@@ -7,36 +7,36 @@ using System.Threading.Tasks;
 
 namespace PDRepository.CLI.Commands.Auth.SubCommands
 {
-   [Command(Name = "logout", Description = "Removes persisted repository connection information.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
-   class LogOut : CmdBase
-   {
-      public LogOut(IConsole console)
-      {
-         _console = console;
-      }
+    [Command(Name = "logout", Description = "Removes persisted repository connection information.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    class LogOut : CmdBase
+    {
+        public LogOut(IConsole console)
+        {
+            _console = console;
+        }
 
-      protected override async Task<int> OnExecute(CommandLineApplication app)
-      {
-         try
-         {
-            Output("Logging out", ConsoleColor.Yellow);
+        protected override async Task<int> OnExecute(CommandLineApplication app)
+        {
+            try
+            {
+                Output("Logging out", ConsoleColor.Yellow);
 
-            if (ConnectionProfileExists)
-            {
-               DeleteConnectionProfile();
-               OutputNewLine("Successfully logged out.", ConsoleColor.Green);
+                if (ConnectionProfileExists)
+                {
+                    DeleteConnectionProfile();
+                    OutputNewLine("Successfully logged out.", ConsoleColor.Green);
+                }
+                else
+                {
+                    OutputNewLine("Not logged in!", ConsoleColor.Red);
+                }
+                return await Task.FromResult(0);
             }
-            else
+            catch (Exception ex)
             {
-               OutputNewLine("Not logged in!", ConsoleColor.Red);
+                OnException(ex);
+                return 1;
             }
-            return await Task.FromResult(0);            
-         }
-         catch (Exception ex)
-         {
-            OnException(ex);
-            return 1;
-         }
-      }
-   }
+        }
+    }
 }
