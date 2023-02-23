@@ -21,7 +21,7 @@ namespace PDRepository.CLI.Commands.Auth.SubCommands
             {
                 Output("Removing connection profile", ConsoleColor.Yellow);
 
-                if (ConnectionProfileExists)
+                if (ConnectionSettingsExist)
                 {
                     DeleteConnectionProfile();
                     OutputNewLine("Successfully removed connection profile.", ConsoleColor.Green);

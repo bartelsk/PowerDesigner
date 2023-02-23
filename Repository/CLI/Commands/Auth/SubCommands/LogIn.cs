@@ -3,6 +3,7 @@
 
 using McMaster.Extensions.CommandLineUtils;
 using PDRepository.CLI.Utils;
+using PDRepository.Common;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -33,20 +34,20 @@ namespace PDRepository.CLI.Commands.Auth.SubCommands
             {
                 Output("Creating connection profile", ConsoleColor.Yellow);
 
-                if (ConnectionProfileExists)
+                if (ConnectionSettingsExist)
                 {
                     OutputNewLine("Connection profile already exists!", ConsoleColor.Green);
                 }
                 else
                 {
-                    ConnectionProfile connectionProfile = new ConnectionProfile()
+                    ConnectionSettings connectionSettings = new ConnectionSettings()
                     {
                         Password = string.IsNullOrEmpty(RepoPassword) ? Security.SecureStringToString(Prompt.GetPasswordAsSecureString($"Password of user '{RepoUser}':")) : RepoPassword,
                         RepositoryDefinition = RepoDefinition,
                         User = RepoUser
                     };
 
-                    if (SaveConnectionProfile(connectionProfile))
+                    if (SaveConnectionSettings(connectionSettings))
                     {
                         OutputNewLine($"Connection profile successfully created.", ConsoleColor.Green);
                     }

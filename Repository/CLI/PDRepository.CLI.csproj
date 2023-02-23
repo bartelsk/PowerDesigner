@@ -95,7 +95,6 @@
     <Compile Include="Commands\User\SubCommands\Status.cs" />
     <Compile Include="Commands\User\SubCommands\Unblock.cs" />
     <Compile Include="Commands\User\User.cs" />
-    <Compile Include="ConnectionProfile.cs" />
     <Compile Include="Utils\Security.cs" />
     <Compile Include="Utils\TableWriter.cs" />
     <Compile Include="Program.cs" />
