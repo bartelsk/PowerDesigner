@@ -50,9 +50,11 @@ namespace PDRepository.CLI.Utils
                     using (MemoryStream msEncrypt = new MemoryStream())
                     {
                         using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
                         {
-                            swEncrypt.Write(text);
+                            using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                            {
+                                swEncrypt.Write(text);
+                            }
                         }
                         byte[] iv = aesAlg.IV;
                         byte[] decryptedContent = msEncrypt.ToArray();

@@ -23,7 +23,7 @@ namespace PDRepository.CLI.Commands.Auth.SubCommands
 
                 if (ConnectionSettingsExist)
                 {
-                    DeleteConnectionProfile();
+                    DeleteConnectionSettingsProfile();
                     OutputNewLine("Successfully removed connection profile.", ConsoleColor.Green);
                 }
                 else

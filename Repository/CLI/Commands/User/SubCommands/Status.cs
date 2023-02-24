@@ -16,17 +16,6 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         [Option(CommandOptionType.SingleValue, ShortName = "ln", LongName = "login-name", Description = "Specifies the login name of the user for which to get its status.", ValueName = "login name", ShowInHelpText = true)]
         public string LoginName { get; set; }
 
-        [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
-        public string RepoDefinition { get; set; }
-
-        [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "ru", LongName = "repo-user", Description = "The login name of the account that is used to connect to the repository.", ValueName = "login name", ShowInHelpText = true)]
-        public string RepoUser { get; set; }
-
-        [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
-        public string RepoPassword { get; set; }
-       
         public Status(IConsole console)
         {
             _console = console;
@@ -36,9 +25,9 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         {
             try
             {
-                Output("Retrieving user account status", ConsoleColor.Yellow);                              
-                
-                if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
+                Output("Retrieving user account status", ConsoleColor.Yellow);
+
+                if (await ConnectAsync())
                 {
                     if (_client.UserClient.UserExists(LoginName))
                     {
@@ -48,7 +37,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
                         using (TableWriter writer = new TableWriter(_console, padding: 2))
                         {
-                            writer.StartTable(2);    
+                            writer.StartTable(2);
                             WriteTableHeader(writer, "Property", "Value", ConsoleColor.Blue, ConsoleColor.Blue);
 
                             WriteRow(writer, "Name", user.FullName);
