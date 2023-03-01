@@ -21,7 +21,7 @@
 This PowerDesigner Repository CLI enables interaction with the PowerDesigner Repository from the command line. It can:
 - List and check out documents (models, extensions, et cetera) 
 - Manage users and groups
-- Create and delete branches
+- Create and list branches
 
 ## Prerequisites
 Please refer to the prerequisites and build instructions in the [README](../README.md#prerequisites) file in the root of this repository.
@@ -44,17 +44,69 @@ The following section lists the available commands in more detail.
 
 Work seamlessly with the PowerDesigner repository from the command line.
  
-All commands require at least two parameters: the login name of the account that is used to connect to the repository and its password.
-This is necessary because the [PowerDesigner Repository Client Library](../README.md) uses an active database connection to the repository. 
-The CLI does not maintain this connection as it is stateless.
-
-:point_right: Currently, the CLI supports the following commands related to:
+:point_right: Currently, the CLI supports commands related to:
+- [Authentication]()
 - [Documents](#document-commands)
 - [Users](#user-commands)
 - [Branches](#branch-commands)
 
 More commands are expected to be added in the near future.
 <br>
+
+## Authentication
+In order to run CLI commands, you must first set up a connection profile. The connection profile stores the login details of the account that is used to connect to the repository.
+This information is stored securely in the `UserProfile` folder on the machine you run the command on.
+
+The connection profile cannot be used on a different machine or transferred to another user, as it is encrypted with a private key that considers machine and user details.
+
+Under the hood, the [PowerDesigner Repository Client Library](../README.md) uses an active database connection to the repository. 
+The actual 'authentication' (database login) is performed by the CLI when you run a command. The CLI does not maintain the database connection as it is stateless.
+
+The following authentication commands are available:
+- [LogIn](#login)
+- [LogOut](#logout)
+
+### LogIn
+
+Persists repository connection information.
+
+```bash
+pdr auth login [options]
+``` 
+
+**Options** 
+
+- ``-rd``, ``--repo-definition``
+     - Specifies the repository definition used to connect to the repository (optional).
+- ``-ru``, ``--repo-user``
+    - The login name of the account that is used to connect to the repository (required).
+- ``-rp``, ``--repo-password``
+    - The password of the account used to connect to the repository (optional). If omitted, a secure prompt will appear to enter the password.
+
+**Examples**
+
+```bash
+# Create connection profile for user 'Admin' and prompt for the password
+$ pdr auth login --repo-user Admin
+
+# Create connection profile for user 'Admin' and repository definition 'MyRepoDefinition' while using the single-dash convention
+$ pdr auth login -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+``` 
+
+### LogOut
+
+Removes persisted repository connection information.
+
+```bash
+pdr auth logout
+``` 
+
+**Examples**
+
+```bash
+# Delete connection profile
+$ pdr auth logout
+``` 
 
 ## Document commands
 The following document commands are available:
@@ -76,21 +128,15 @@ pdr document info [options]
     - The repository folder that contains the document (required).
 - ``-dn``, ``--document-name``
     - The name of the document (required).
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # Get details of model 'MyModel' in folder 'MyFolder'
-$ pdr document info --folder-path MyFolder --document-name MyModel --repo-user Admin --repo-password P@ssw0rd
+$ pdr document info --folder-path MyFolder --document-name MyModel
 
-# Get details of model 'MyModel' in folder 'MyFolder' while using a repository definition and the single-dash convention
-$ pdr document info -fp MyFolder -dn MyModel -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# Get details of model 'MyModel' in folder 'MyFolder' while using the single-dash convention
+$ pdr document info -fp MyFolder -dn MyModel
 ``` 
 
 ### List
@@ -107,21 +153,15 @@ pdr document list [options]
     - The repository folder to query (required).
 - ``-r``, ``--recursive``
     - Indicates whether to list documents in any sub-folder of the specified repository folder (optional).
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # List all documents in folder 'MyFolder'
-$ pdr document list --folder-path MyFolder --repo-user Admin --repo-password P@ssw0rd
+$ pdr document list --folder-path MyFolder
 
-# List all documents in folder 'MyFolder' and its subfolders while using a repository definition and the single-dash convention
-$ pdr document list -fp MyFolder -r true -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# List all documents in folder 'MyFolder' and its subfolders while using the single-dash convention
+$ pdr document list -fp MyFolder -r true 
 ``` 
 
 ### Checkout
@@ -148,21 +188,15 @@ pdr document checkout file [options]
     - The name of the document to check out (required). 
 - ``-dv``, ``--document-version``
     - The document version. The latest version of the document will be checked out if the specified document version does not exist. The version must also belong to the same branch as the current object (optional).
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # Check out the latest version of model 'MyModel' in folder 'MyFolder' and save it to C:\Temp
-$ pdr document checkout file --folder-path MyFolder --document-name MyModel --target-folder C:\Temp --repo-user Admin --repo-password P@ssw0rd
+$ pdr document checkout file --folder-path MyFolder --document-name MyModel --target-folder C:\Temp
 
-# # Check out the version 2 of model 'MyModel' in folder 'MyFolder' and save it to C:\Temp while using a repository definition and the single-dash convention
-$ pdr document checkout file -fp MyFolder -dn MyModel -tf C:\Temp -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# # Check out the version 2 of model 'MyModel' in folder 'MyFolder' and save it to C:\Temp while using the single-dash convention
+$ pdr document checkout file -fp MyFolder -dn MyModel -tf C:\Temp
 ``` 
 
 #### Folder
@@ -183,21 +217,15 @@ pdr document checkout folder [options]
      - Indicates whether to retrieve documents in any sub-folder of the specified repository folder (optional).
 - ``-ps``, ``--preserve-structure``
      - Indicates whether to mimic the repository folder structure on the local disc when checking out. Applies to recursive check-outs only. (optional).
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # Check out all documents in folder 'MyFolder' and save it to C:\Temp
-$ pdr document checkout folder --folder-path MyFolder --target-folder C:\Temp --repo-user Admin --repo-password P@ssw0rd
+$ pdr document checkout folder --folder-path MyFolder --target-folder C:\Temp
 
-# Check out all documents in folder 'MyFolder' and its subfolder and save it to C:\Temp while preserving the repository folder structure and using a repository definition and the single-dash convention
-$ pdr document checkout folder -fp MyFolder -tf C:\Temp -r true -ps true -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# Check out all documents in folder 'MyFolder' and its subfolder and save it to C:\Temp while preserving the repository folder structure and using the single-dash convention
+$ pdr document checkout folder -fp MyFolder -tf C:\Temp -r true -ps true
 ``` 
 
 ## User commands
@@ -240,24 +268,18 @@ pdr user create [options]
       - EditPortalExtensions
 - ``-ug``, ``--group``
     - The name of the group to which to add the user (optional). Group rights will be inherited by the new user.
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # Create a user with 'Connect' rights
-$ pdr user create --login-name JWilliams --full-name "John Williams" --email-address john@williams.com --user-right Connect --repo-user Admin --repo-password P@ssw0rd
+$ pdr user create --login-name JWilliams --full-name "John Williams" --email-address john@williams.com --user-right Connect
 
 # Create a user with 'Connect' and 'ManageUsers' rights using the single-dash convention
-$ pdr user create -ln JWilliams -fn "John Williams" -ue john@williams.com -ur Connect -ur ManageUsers -ru Admin -rp P@ssw0rd
+$ pdr user create -ln JWilliams -fn "John Williams" -ue john@williams.com -ur Connect -ur ManageUsers
 
-# Create a user with 'Connect' and 'ManageUsers' rights and add him to the 'Developers' groups while using a repository definition and the single-dash convention
-$ pdr user create -ln JWilliams -fn "John Williams" -ue john@williams.com -ur Connect -ur ManageUsers -ug Developers -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# Create a user with 'Connect' and 'ManageUsers' rights and add him to the 'Developers' groups while using the single-dash convention
+$ pdr user create -ln JWilliams -fn "John Williams" -ue john@williams.com -ur Connect -ur ManageUsers -ug Developers
 ``` 
 
 ### Password
@@ -277,21 +299,15 @@ pdr user password reset [options]
 
 - ``-ln``, ``--login-name``
     - Specifies the login name of the user for which to reset the password (required).
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # Resets the password of user 'UserA'
-$ pdr user password reset --login-name UserA --repo-user Admin --repo-password P@ssw0rd
+$ pdr user password reset --login-name UserA
 
-# Resets the password of user 'UserA' while using a repository definition and the single-dash convention
-$ pdr user password reset -ln UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# Resets the password of user 'UserA' while using the single-dash convention
+$ pdr user password reset -ln UserA
 ``` 
 
 ### Status
@@ -306,21 +322,15 @@ pdr user status [options]
 
 - ``-ln``, ``--login-name``
     - Specifies the login name of the user for which to get its status (required).
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # Retrieves the status for user 'UserA'
-$ pdr user status --login-name UserA --repo-user Admin --repo-password P@ssw0rd
+$ pdr user status --login-name UserA
 
-# Retrieves the user status while using a repository definition and the single-dash convention
-$ pdr user status -ln UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# Retrieves the user status while using the single-dash convention
+$ pdr user status -ln UserA
 ``` 
 
 ### Unblock
@@ -335,21 +345,15 @@ pdr user unblock [options]
 
 - ``-ln``, ``--login-name``
     - Specifies the login name of the user to unblock (required).
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # Unblocks user 'UserA'
-$ pdr user unblock --login-name UserA --repo-user Admin --repo-password P@ssw0rd
+$ pdr user unblock --login-name UserA
 
-# Unblock a user while using a repository definition and the single-dash convention
-$ pdr user unblock -ln UserA -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# Unblock a user while using the single-dash convention
+$ pdr user unblock -ln UserA
 ``` 
 
 ## Branch commands
@@ -383,21 +387,15 @@ pdr branch create [options]
       - Submit
       - Write
       - Full
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # Creates branch 'NewDevBranch' based on branch 'MyFolder\DevBranch' 
-$ pdr branch create --base-branch MyFolder\DevBranch --branch-name NewDevBranch --repo-user Admin --repo-password P@ssw0rd
+$ pdr branch create --base-branch MyFolder\DevBranch --branch-name NewDevBranch
 
-# Creates branch 'NewDevBranch' and assigns the DEV group Write access while using a repository definition and the single-dash convention
-$ pdr branch create --bb MyFolder\DevBranch -bn NewDevBranch -ug DEV -ugp Write -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# Creates branch 'NewDevBranch' and assigns the DEV group Write access while the single-dash convention
+$ pdr branch create --bb MyFolder\DevBranch -bn NewDevBranch -ug DEV -ugp Write
 ``` 
 
 ### List
@@ -414,19 +412,13 @@ pdr branch list [options]
     - The repository folder from which to start the enumeration (required).
 - ``-ug``, ``--filter``
     - A user login or group name used to filter branches based on access permission (optional).
-- ``-rd``, ``--repo-definition``
-     - Specifies the repository definition used to connect to the repository (optional).
-- ``-ru``, ``--repo-user``
-    - The login name of the account that is used to connect to the repository (required).
-- ``-rp``, ``--repo-password``
-    - The password of the account used to connect to the repository (required).
 
 **Examples**
 
 ```bash
 # Lists all branches in folder 'MyFolder'
-$ pdr branch list --root-folder MyFolder --repo-user Admin --repo-password P@ssw0rd
+$ pdr branch list --root-folder MyFolder
 
-# Lists the branches in folder 'MyFolder' that the DEV group has access to while using a repository definition and the single-dash convention
-$ pdr branch list -rf MyFolder -ug DEV -rd MyRepoDefinition -ru Admin -rp P@ssw0rd
+# Lists the branches in folder 'MyFolder' that the DEV group has access to while using the single-dash convention
+$ pdr branch list -rf MyFolder -ug DEV
 ``` 

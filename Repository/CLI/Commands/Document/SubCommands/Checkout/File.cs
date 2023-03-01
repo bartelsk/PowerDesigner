@@ -27,17 +27,6 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
         [Option(CommandOptionType.SingleValue, ShortName = "dv", LongName = "document-version", Description = "The document version. The latest version of the document will be checked out if the specified document version does not exist. The version must also belong to the same branch as the current object (optional).", ValueName = "version", ShowInHelpText = true)]
         public int DocumentVersion { get; set; }
 
-        [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
-        public string RepoDefinition { get; set; }
-
-        [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "ru", LongName = "repo-user", Description = "The login name of the account that is used to connect to the repository.", ValueName = "login name", ShowInHelpText = true)]
-        public string RepoUser { get; set; }
-
-        [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
-        public string RepoPassword { get; set; }
-
         public File(IConsole console)
         {
             _console = console;
@@ -49,7 +38,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
             {
                 Output("Checkout document", ConsoleColor.Yellow);
 
-                if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
+                if (await ConnectAsync())
                 {
                     // Register event handler
                     _client.DocumentClient.DocumentCheckedOut += DocumentClient_DocumentCheckedOut;
@@ -62,7 +51,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                     }
                     else
                     {
-                        OutputNewLine($"Attempting to check out version '{DocumentVersion}' of document '{DocumentName}' to '{TargetFolderPath}'...");                        
+                        OutputNewLine($"Attempting to check out version '{DocumentVersion}' of document '{DocumentName}' to '{TargetFolderPath}'...");
                         _client.DocumentClient.CheckOutDocument(FolderPath, DocumentName, TargetFolderPath, DocumentVersion);
                     }
                 }

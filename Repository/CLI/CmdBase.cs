@@ -2,9 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
-using PDRepository.CLI.Output;
+using PDRepository.CLI.Utils;
 using PDRepository.Common;
 using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PDRepository.CLI
@@ -13,6 +16,7 @@ namespace PDRepository.CLI
     {
         protected IConsole _console;
         protected RepositoryClient _client = null;
+        protected ConnectionSettings _connectionSettings;
 
         protected virtual Task<int> OnExecute(CommandLineApplication app)
         {
@@ -20,42 +24,40 @@ namespace PDRepository.CLI
         }
 
         /// <summary>
-        /// Creates a connection to the repository.
-        /// </summary>
-        /// <param name="repoDefinition">The name of the repository definition.</param>
-        /// <param name="repoUser">The name of the repository user.</param>
-        /// <param name="repoPassword">The password of the repository user.</param>
-        /// <returns></returns>
-        protected async Task<bool> ConnectAsync(string repoDefinition, string repoUser, string repoPassword)
+        /// Creates a connection to the repository based on persisted repository connection information.
+        /// </summary>      
+        protected async Task<bool> ConnectAsync()
         {
             bool connected = false;
             try
             {
-                ConnectionSettings connectionSettings = new ConnectionSettings()
+                if (ConnectionSettingsExist)
                 {
-                    Password = repoPassword,
-                    RepositoryDefinition = repoDefinition,
-                    User = repoUser
-                };
+                    Output("\r\nConnecting...");
+                                        
+                    await Task.Run(() =>
+                    {
+                        LoadConnectionSettings();
+                        _client = RepositoryClient.CreateClient(_connectionSettings);
+                    });
 
-                Output("\r\nConnecting...");
-                await Task.Run(() =>
-                {
-                    _client = RepositoryClient.CreateClient(connectionSettings);
-                });
+                    Output("\r\nConnection:\r\n", ConsoleColor.Yellow);
+                    using (TableWriter writer = new TableWriter(_console, true, padding: 2))
+                    {
+                        writer.StartTable(2);
 
-                Output("\r\nConnection:\r\n", ConsoleColor.Yellow);
-                using (TableWriter writer = new TableWriter(_console, true, padding: 2))
-                {
-                    writer.StartTable(2);
+                        WriteRow(writer, "Status", "connected", ConsoleColor.Gray, ConsoleColor.DarkGreen);
+                        WriteRow(writer, "Repository definition", $"'{(string.IsNullOrEmpty(_client.RepositoryDefinitionName) ? "(none)" : _client.RepositoryDefinitionName)}'", ConsoleColor.Gray, ConsoleColor.DarkGreen);
+                        WriteRow(writer, "Repository client library version", _client.Version);
 
-                    WriteRow(writer, "Status", "connected", ConsoleColor.Gray, ConsoleColor.DarkGreen);
-                    WriteRow(writer, "Repository definition", $"'{(string.IsNullOrEmpty(repoDefinition) ? "(none)" : _client.RepositoryDefinitionName)}'", ConsoleColor.Gray, ConsoleColor.DarkGreen);
-                    WriteRow(writer, "Repository client library version", _client.Version);
-
-                    writer.WriteTable();
+                        writer.WriteTable();
+                    }
+                    connected = true;
                 }
-                connected = true;
+                else
+                {
+                    OutputError("Not authorized, create a connection profile using the Auth LogIn command.");
+                }
             }
             catch (Exception ex)
             {
@@ -99,6 +101,84 @@ namespace PDRepository.CLI
             }
             return parsedPermission;
         }
+
+        #region Connection settings profile
+
+        protected string SettingsFolder
+        {
+            get { return $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.Create)}\\.pdr\\"; }
+        }
+
+        protected string SettingsFileName
+        {
+            get { return $"{SettingsFolder}connection.profile"; }
+        }
+
+        protected bool ConnectionSettingsExist
+        {
+            get { return File.Exists(SettingsFileName); }
+        }
+
+        protected void CreateConnectionSettingsFolder()
+        {
+            if (!Directory.Exists(SettingsFolder))
+            {
+                Directory.CreateDirectory(SettingsFolder);
+            }
+        }
+
+        protected void DeleteConnectionSettingsProfile()
+        {
+            if (File.Exists(SettingsFileName))
+            {
+                File.Delete(SettingsFileName);
+            }
+        }
+
+        protected void LoadConnectionSettings()
+        {
+            try
+            {
+                using (FileStream stream = File.Open(SettingsFileName, FileMode.Open))
+                {
+                    using (BinaryReader reader = new BinaryReader(stream, Encoding.UTF8, false))
+                    {
+                        string profileData = Security.Decrypt(reader.ReadString());
+                        if (!string.IsNullOrEmpty(profileData))
+                        {
+                            string[] profileDataSegments = profileData.Split(';');
+                            _connectionSettings = new ConnectionSettings()
+                            {
+                                RepositoryDefinition = profileDataSegments[0],
+                                User = profileDataSegments[1],
+                                Password = profileDataSegments[2]
+                            };
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                throw new CryptographicException("Invalid connection profile. It may have been compromised: re-create the connection profile by running the Auth LogOut and LogIn commands.");
+            }
+        }
+
+        protected bool SaveConnectionSettings(ConnectionSettings settings)
+        {
+            bool result = false;
+            CreateConnectionSettingsFolder();
+            using (FileStream stream = File.Open(SettingsFileName, FileMode.Create))
+            {
+                using (BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8, false))
+                {
+                    writer.Write(Security.Encrypt($"{settings.RepositoryDefinition};{settings.User};{settings.Password}"));
+                }
+                result = true;
+            }
+            return result;
+        }
+
+        #endregion
 
         #region Output
 

@@ -77,6 +77,9 @@
   <ItemGroup>
     <Compile Include="Cmd.cs" />
     <Compile Include="CmdBase.cs" />
+    <Compile Include="Commands\Auth\Auth.cs" />
+    <Compile Include="Commands\Auth\SubCommands\LogIn.cs" />
+    <Compile Include="Commands\Auth\SubCommands\LogOut.cs" />
     <Compile Include="Commands\Branch\Branch.cs" />
     <Compile Include="Commands\Branch\SubCommands\Create.cs" />
     <Compile Include="Commands\Branch\SubCommands\List.cs" />
@@ -92,7 +95,8 @@
     <Compile Include="Commands\User\SubCommands\Status.cs" />
     <Compile Include="Commands\User\SubCommands\Unblock.cs" />
     <Compile Include="Commands\User\User.cs" />
-    <Compile Include="Output\TableWriter.cs" />
+    <Compile Include="Utils\Security.cs" />
+    <Compile Include="Utils\TableWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

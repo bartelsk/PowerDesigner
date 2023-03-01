@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
-using PDRepository.CLI.Output;
+using PDRepository.CLI.Utils;
 using PDRepository.Common;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -34,17 +34,6 @@ namespace PDRepository.CLI.Commands.User.SubCommands
         [Option(CommandOptionType.SingleValue, ShortName = "ug", LongName = "group", Description = "The name of the group to which to add the user (optional).", ValueName = "group", ShowInHelpText = true)]
         public string Group { get; set; }
 
-        [Option(CommandOptionType.SingleValue, ShortName = "rd", LongName = "repo-definition", Description = "Specifies the repository definition used to connect to the repository (optional).", ValueName = "name", ShowInHelpText = true)]
-        public string RepoDefinition { get; set; }
-
-        [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "ru", LongName = "repo-user", Description = "The login name of the account that is used to connect to the repository.", ValueName = "login name", ShowInHelpText = true)]
-        public string RepoUser { get; set; }
-
-        [Required]
-        [Option(CommandOptionType.SingleValue, ShortName = "rp", LongName = "repo-password", Description = "The password of the account used to connect to the repository.", ValueName = "password", ShowInHelpText = true)]
-        public string RepoPassword { get; set; }
-
         public Create(IConsole console)
         {
             _console = console;
@@ -58,7 +47,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
 
                 UserOrGroupRightsEnum userRights = ParseUserOrGroupRights(UserRights);
 
-                if (await ConnectAsync(RepoDefinition, RepoUser, RepoPassword))
+                if (await ConnectAsync())
                 {
                     if (!_client.UserClient.UserExists(LoginName))
                     {
@@ -85,7 +74,7 @@ namespace PDRepository.CLI.Commands.User.SubCommands
                             WriteRow(writer, "Login name", user.LoginName);
                             WriteRow(writer, "Temporary password", @temporaryPassword);
                             WriteRow(writer, "Status", user.Status, valueColor: (user.Status == UserStatusEnum.Active) ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed);
-                            
+
                             writer.WriteTable();
                         }
 

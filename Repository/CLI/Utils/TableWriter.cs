@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PDRepository.CLI.Output
+namespace PDRepository.CLI.Utils
 {
     /// <summary>
     /// This class provides methods to output data in table format on the command line.
     /// </summary>
-    class TableWriter : IDisposable
+    internal class TableWriter : IDisposable
     {
         Row _row;
         List<Row> _rows;
