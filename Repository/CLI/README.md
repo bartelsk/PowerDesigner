@@ -21,7 +21,7 @@
 This PowerDesigner Repository CLI enables interaction with the PowerDesigner Repository from the command line. It can:
 - List and check out documents (models, extensions, et cetera) 
 - Manage users and groups
-- Create and delete branches
+- Create and list branches
 
 ## Prerequisites
 Please refer to the prerequisites and build instructions in the [README](../README.md#prerequisites) file in the root of this repository.
@@ -44,17 +44,31 @@ The following section lists the available commands in more detail.
 
 Work seamlessly with the PowerDesigner repository from the command line.
  
-All commands require at least two parameters: the login name of the account that is used to connect to the repository and its password.
-This is necessary because the [PowerDesigner Repository Client Library](../README.md) uses an active database connection to the repository. 
-The CLI does not maintain this connection as it is stateless.
-
 :point_right: Currently, the CLI supports the following commands related to:
+- [Authentication]()
 - [Documents](#document-commands)
 - [Users](#user-commands)
 - [Branches](#branch-commands)
 
 More commands are expected to be added in the near future.
 <br>
+
+## Authentication
+In order to run CLI commands, you must first set up a connection profile. The connection profile stores the login details of the account that is used to connect to the repository.
+This information is stored securely in the `UserProfile` folder on the machine you run the command on.
+
+The connection profile cannot be used on a different machine or by another user, as it is encrypted with a private key that considers machine and user details.
+
+Under the hood, the [PowerDesigner Repository Client Library](../README.md) uses an active database connection to the repository. 
+The actual 'authentication' (database login) is performed by the CLI when you run a command. The CLI does not maintain the database connection as it is stateless.
+
+The following authentication commands are available:
+- [LogIn](#login)
+- [LogOut](#logout)
+
+### LogIn
+
+r
 
 ## Document commands
 The following document commands are available:

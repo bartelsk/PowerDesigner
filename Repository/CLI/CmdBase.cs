@@ -56,7 +56,7 @@ namespace PDRepository.CLI
                 }
                 else
                 {
-                    OutputError("Not authorized, please create a connection profile using the Auth LogIn command.");
+                    OutputError("Not authorized, create a connection profile using the Auth LogIn command.");
                 }
             }
             catch (Exception ex)
@@ -159,7 +159,7 @@ namespace PDRepository.CLI
             }
             catch
             {
-                throw new CryptographicException("Invalid connection profile. It may have been compromised: re-create the connection profile by using the Auth LogOut and LogIn commands respectively.");
+                throw new CryptographicException("Invalid connection profile. It may have been compromised: re-create the connection profile by running the Auth LogOut and LogIn commands.");
             }
         }
 
