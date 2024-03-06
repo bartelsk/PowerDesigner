@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="Branches\BranchClient.cs" />
     <Compile Include="Branches\IBranchClient.cs" />
+    <Compile Include="Common\CheckInEventArgs.cs" />
     <Compile Include="Common\Enums.cs" />
     <Compile Include="Common\Group.cs" />
     <Compile Include="Common\Permission.cs" />

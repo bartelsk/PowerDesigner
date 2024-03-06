@@ -80,10 +80,14 @@
     <Compile Include="Commands\Auth\Auth.cs" />
     <Compile Include="Commands\Auth\SubCommands\LogIn.cs" />
     <Compile Include="Commands\Auth\SubCommands\LogOut.cs" />
+    <Compile Include="Commands\Auth\SubCommands\Status.cs" />
     <Compile Include="Commands\Branch\Branch.cs" />
     <Compile Include="Commands\Branch\SubCommands\Create.cs" />
     <Compile Include="Commands\Branch\SubCommands\List.cs" />
     <Compile Include="Commands\Document\Document.cs" />
+    <Compile Include="Commands\Document\SubCommands\Checkin.cs" />
+    <Compile Include="Commands\Document\SubCommands\Checkin\File.cs" />
+    <Compile Include="Commands\Document\SubCommands\Checkin\Folder.cs" />
     <Compile Include="Commands\Document\SubCommands\Checkout.cs" />
     <Compile Include="Commands\Document\SubCommands\Checkout\File.cs" />
     <Compile Include="Commands\Document\SubCommands\Checkout\Folder.cs" />

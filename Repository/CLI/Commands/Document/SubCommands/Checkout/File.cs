@@ -7,7 +7,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace PDRepository.CLI.Commands.Document.SubCommands
+namespace PDRepository.CLI.Commands.Document.SubCommands.Checkout
 {
     [Command(Name = "file", Description = "Checks out a single document in a repository folder.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     class File : CmdBase

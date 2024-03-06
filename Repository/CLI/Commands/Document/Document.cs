@@ -9,6 +9,7 @@ namespace PDRepository.CLI.Commands.Document
 {
     [Command(Name = "document", Description = "Contains commands related to repository documents.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     [Subcommand(
+        typeof(Checkin),
         typeof(Checkout),
         typeof(Info),
         typeof(List)

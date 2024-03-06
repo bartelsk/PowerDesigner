@@ -19,7 +19,8 @@
 ## Introduction
 
 This PowerDesigner Repository CLI enables interaction with the PowerDesigner Repository from the command line. It can:
-- List and check out documents (models, extensions, et cetera) 
+- List documents (models, extensions, et cetera) 
+- Check in and check out documents
 - Manage users and groups
 - Create and list branches
 
@@ -45,12 +46,12 @@ The following section lists the available commands in more detail.
 Work seamlessly with the PowerDesigner repository from the command line.
  
 :point_right: Currently, the CLI supports commands related to:
-- [Authentication]()
+- [Authentication](#authentication)
 - [Documents](#document-commands)
 - [Users](#user-commands)
 - [Branches](#branch-commands)
 
-More commands are expected to be added in the near future.
+More commands are expected to be added.
 <br>
 
 ## Authentication
@@ -65,6 +66,7 @@ The actual 'authentication' (database login) is performed by the CLI when you ru
 The following authentication commands are available:
 - [LogIn](#login)
 - [LogOut](#logout)
+- [Status](#status)
 
 ### LogIn
 
@@ -108,10 +110,26 @@ pdr auth logout
 $ pdr auth logout
 ``` 
 
+### Status
+
+Displays repository connection information.
+
+```bash
+pdr auth status
+``` 
+
+**Examples**
+
+```bash
+# Show current connection profile details
+$ pdr auth status
+``` 
+
 ## Document commands
 The following document commands are available:
 - [Info](#info)
 - [List](#list)
+- [Checkin](#checkin)
 - [Checkout](#checkout)
 
 ### Info
@@ -164,6 +182,62 @@ $ pdr document list --folder-path MyFolder
 $ pdr document list -fp MyFolder -r true 
 ``` 
 
+### Checkin
+
+Contains sub-commands related to checking in repository documents. The following sub-commands are available:
+- [File](#file)
+- [Folder](#folder)
+
+#### File
+
+Checks in a single document to a repository folder.
+
+```bash
+pdr document checkin file [options]
+``` 
+
+**Options** 
+
+- ``-fp``, ``--folder-path``
+    - The repository folder in which to add the document (required).
+- ``-fn``, ``--file-name``
+    - The fully-qualified name of the file to check in (required).
+
+**Examples**
+
+```bash
+# Check in model 'MyModel' from C:\Temp into folder 'MyFolder'
+$ pdr document checkin file --folder-path MyFolder --file-name C:\Temp\MyModel.pdm
+
+# Check in model 'MyModel' from C:\Temp into folder 'MyFolder' while using the single-dash convention
+$ pdr document checkin file -fp MyFolder -fn C:\Temp\MyModel.pdm
+``` 
+
+#### Folder
+
+Checks in multiple documents into a repository folder.
+
+```bash
+pdr document checkin folder [options]
+``` 
+
+**Options** 
+
+- ``-fp``, ``--folder-path``
+    - The repository folder in which to add the document (required).
+- ``-sf``, ``--source-folder``
+    - The folder on disc that contains the files to check in (required).
+
+**Examples**
+
+```bash
+# Check in all files in folder 'C:\Temp' and add them to 'MyFolder'
+$ pdr document checkin folder --folder-path MyFolder --source-folder C:\Temp
+
+# Check in all files in folder 'C:\Temp' and add them to 'MyFolder' while using the single-dash convention
+$ pdr document checkin folder -fp MyFolder -sf C:\Temp
+``` 
+
 ### Checkout
 
 Contains sub-commands related to checking out repository documents. The following sub-commands are available:
@@ -195,7 +269,7 @@ pdr document checkout file [options]
 # Check out the latest version of model 'MyModel' in folder 'MyFolder' and save it to C:\Temp
 $ pdr document checkout file --folder-path MyFolder --document-name MyModel --target-folder C:\Temp
 
-# # Check out the version 2 of model 'MyModel' in folder 'MyFolder' and save it to C:\Temp while using the single-dash convention
+# Check out the version 2 of model 'MyModel' in folder 'MyFolder' and save it to C:\Temp while using the single-dash convention
 $ pdr document checkout file -fp MyFolder -dn MyModel -tf C:\Temp
 ``` 
 

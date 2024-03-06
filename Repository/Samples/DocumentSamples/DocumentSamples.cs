@@ -133,7 +133,7 @@ namespace DocumentSamples
         [TestMethod]
         public void DeleteDocumentFolder()
         {
-            string folder = "LibManSamples/Development/ResourcesNew";
+            string folder = "LibManSamples/Development/Resource";
 
             Console.WriteLine($"Deleting folder '{folder}'...\r\n");
             bool success = client.DocumentClient.DeleteFolder(folder);
@@ -143,18 +143,45 @@ namespace DocumentSamples
         }
 
         /// <summary>
-        /// Adds a file to the repository.
+        /// Adds a file to the repository. Overwrites the existing document (if any) and freezes it.
         /// </summary>
         [TestMethod]
         public void CheckInFile()
         {
-            string folder = "LibManSamples/Development/ResourcesNew";
+            string folder = "LibManSamples/Development/Resources";
             string fileName = @"C:\Temp\old.txt";
+            string fileInExistingBranch = @"C:\Temp\MyModel.pdm";
 
+            // Register event handler
+            client.DocumentClient.DocumentCheckedIn += DocumentCheckedIn;
+
+            // Check in single file
             Console.WriteLine($"Checking-in file '{fileName}' in folder '{folder}'...");
-            client.DocumentClient.CheckInDocument(folder, fileName, out string newDocumentVersion);
+            client.DocumentClient.CheckInDocument(folder, fileName, out _);
 
-            Console.WriteLine($"File checked in. Document version updated to: {newDocumentVersion}.");
+            // Check in single file that was already part of a repository branch            
+            Console.WriteLine($"Checking-in file '{fileInExistingBranch}' in folder '{folder}'...");
+            client.DocumentClient.CheckInDocument(folder, fileInExistingBranch, out _);
+
+            Console.WriteLine("Check-in complete.");
+        }
+
+        /// <summary>
+        /// Adds files to the repository. Overwrites the existing documents (if any) and freezes them.
+        /// </summary>
+        [TestMethod]
+        public void CheckInFiles()
+        {
+            string repoFolder = "LibManSamples/Development/Resources";
+            string sourceFolder = @"C:\Temp\test";
+
+            // Register event handler
+            client.DocumentClient.DocumentCheckedIn += DocumentCheckedIn;
+                        
+            Console.WriteLine($"Checking files in from folder '{sourceFolder}' into repo folder '{repoFolder}'...");
+            client.DocumentClient.CheckInDocuments(repoFolder, sourceFolder);
+
+            Console.WriteLine("Check-in complete.");
         }
 
         /// <summary>
@@ -413,6 +440,11 @@ namespace DocumentSamples
 
             bool success = client.DocumentClient.DeletePermission(folder, documentName, permission);
             Console.WriteLine($"The permission for user or group '{permission.UserOrGroupName}' on document '{documentName}' was {(!success ? "NOT " : string.Empty)}removed successfully.");
+        }
+
+        private static void DocumentCheckedIn(object sender, CheckInEventArgs e)
+        {
+            Console.WriteLine($"Checked in document '{e.DocumentName}' version '{e.DocumentVersion}' from file '{e.CheckInFileName}' into folder '{e.DocumentFolder}'.");
         }
 
         private static void DocumentCheckedOut(object sender, CheckOutEventArgs e)

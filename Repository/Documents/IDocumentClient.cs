@@ -13,6 +13,11 @@ namespace PDRepository.Documents
     public interface IDocumentClient : IDisposable
     {
         /// <summary>
+        /// Signals a document has been checked in.
+        /// </summary>
+        event EventHandler<CheckInEventArgs> DocumentCheckedIn;
+
+        /// <summary>
         /// Signals a document has been checked out.
         /// </summary>
         event EventHandler<CheckOutEventArgs> DocumentCheckedOut;
@@ -70,10 +75,17 @@ namespace PDRepository.Documents
         /// <summary>
         /// Adds a file to the specified repository folder. Overwrites the existing document (if any) and freezes it.
         /// </summary>
-        /// <param name="repoFolderPath">The repository folder in which to add the file.</param>
+        /// <param name="repoFolderPath">The repository folder in which to add the files. Will get overridden if the model was part of a repository branch already.</param>
         /// <param name="fileName">The fully-qualified name of the file.</param>
         /// <param name="documentVersion">Contains the current document version number if the check-in was successful.</param>
         void CheckInDocument(string repoFolderPath, string fileName, out string documentVersion);
+
+        /// <summary>
+        /// Adds files to the specified repository folder. Overwrites the existing documents (if any) and freezes them.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder in which to add the files. Will get overridden if the model was part of a repository branch already.</param>
+        /// <param name="sourceFolder">The folder on disc that contains the files you want to add.</param>        
+        void CheckInDocuments(string repoFolderPath, string sourceFolder);
 
         /// <summary>
         /// Checks out the document in the specified repository folder and saves it to disc. Overwrites the local document (if any).

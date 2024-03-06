@@ -2,19 +2,19 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE file in the project root for full license information.
 
 using McMaster.Extensions.CommandLineUtils;
-using PDRepository.CLI.Commands.Document.SubCommands.Checkout;
+using PDRepository.CLI.Commands.Document.SubCommands.Checkin;
 using System;
 
 namespace PDRepository.CLI.Commands.Document
 {
-    [Command(Name = "checkout", Description = "Contains commands related to checking out repository documents.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
+    [Command(Name = "checkin", Description = "Contains commands related to checking in repository documents.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     [Subcommand(
        typeof(File),
        typeof(Folder)
      )]
-    class Checkout : CmdBase
+    class Checkin : CmdBase
     {
-        public Checkout(IConsole console)
+        public Checkin(IConsole console)
         {
             _console = console;
         }
