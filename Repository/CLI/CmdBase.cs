@@ -67,6 +67,17 @@ namespace PDRepository.CLI
         }
 
         /// <summary>
+        /// Validates a connection to the repository based on the specified connection settings.
+        /// </summary>
+        /// <param name="connectionSettings">A <see cref="ConnectionSettings"/> instance.</param>
+        /// <returns>True if a connection could be made successfully, False if not.</returns>
+        protected bool TryConnect(ConnectionSettings connectionSettings)
+        {
+            _client = RepositoryClient.CreateClient(connectionSettings);
+            return true;
+        }
+
+        /// <summary>
         /// Parses the specified array with user or group rights into a <see cref="UserOrGroupRightsEnum"/>.
         /// </summary>
         /// <param name="rights">An array containing user or group rights.</param>

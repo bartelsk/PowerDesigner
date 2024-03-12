@@ -47,13 +47,17 @@ namespace PDRepository.CLI.Commands.Auth.SubCommands
                         User = RepoUser
                     };
 
-                    if (SaveConnectionSettings(connectionSettings))
+                    OutputNewLine("Validating credentials...");
+                    if (TryConnect(connectionSettings))
                     {
-                        OutputNewLine($"Connection profile successfully created.", ConsoleColor.Green);
-                    }
-                    else
-                    {
-                        OutputError("An error occurred while creating a connection profile.");
+                        if (SaveConnectionSettings(connectionSettings))
+                        {
+                            OutputNewLine($"Connection profile successfully created.", ConsoleColor.Green);
+                        }
+                        else
+                        {
+                            OutputError("An error occurred while creating a connection profile.");
+                        }
                     }
                 }
                 return await Task.FromResult(0);

@@ -44,10 +44,11 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
 
                             using (TableWriter writer = new TableWriter(_console, padding: 2))
                             {
-                                writer.StartTable(3);
+                                writer.StartTable(4);
                                 writer.StartRow(true);
                                 writer.AddColumn("Name", ConsoleColor.Blue);
                                 writer.AddColumn("Type", ConsoleColor.Blue);
+                                writer.AddColumn("Version", ConsoleColor.Blue);
                                 writer.AddColumn("Location", ConsoleColor.Blue);
                                 writer.EndRow();
 
@@ -56,6 +57,7 @@ namespace PDRepository.CLI.Commands.Document.SubCommands
                                     writer.StartRow();
                                     writer.AddColumn(doc.Name);
                                     writer.AddColumn(doc.ClassName);
+                                    writer.AddColumn(doc.Version);
                                     writer.AddColumn(doc.Location);
                                     writer.EndRow();
                                 });
