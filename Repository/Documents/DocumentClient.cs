@@ -3,6 +3,7 @@
 
 using PDRepository.Common;
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace PDRepository.Documents
@@ -12,6 +13,11 @@ namespace PDRepository.Documents
     /// </summary>
     public class DocumentClient : Repository, IDocumentClient
     {
+        /// <summary>
+        /// Signals a document has been checked in.
+        /// </summary>
+        public event EventHandler<CheckInEventArgs> DocumentCheckedIn;
+
         /// <summary>
         /// Signals a document has been checked out.
         /// </summary>
@@ -118,16 +124,31 @@ namespace PDRepository.Documents
         /// <summary>
         /// Adds a file to the specified repository folder. Overwrites the existing document (if any) and freezes it.
         /// </summary>
-        /// <param name="repoFolderPath">The repository folder in which to add the file.</param>
+        /// <param name="repoFolderPath">The repository folder in which to add the files. Will get overridden if the model was part of a repository branch already.</param>
         /// <param name="fileName">The fully-qualified name of the file.</param>
         /// <param name="documentVersion">Contains the current document version number if the check-in was successful.</param>
         public void CheckInDocument(string repoFolderPath, string fileName, out string documentVersion)
         {
             if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
             if (string.IsNullOrEmpty(fileName)) ThrowArgumentNullException(fileName);
+            if (!File.Exists(fileName)) ThrowFileNotFoundException(fileName);
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             CheckInFolderDocument(repoFolderPath, fileName, out documentVersion);
+        }
+
+        /// <summary>
+        /// Adds files to the specified repository folder. Overwrites the existing documents (if any) and freezes them.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder in which to add the files. Will get overridden if the model was part of a repository branch already.</param>
+        /// <param name="sourceFolder">The folder on disc that contains the files you want to add.</param>        
+        public void CheckInDocuments(string repoFolderPath, string sourceFolder)
+        {
+            if (string.IsNullOrEmpty(repoFolderPath)) ThrowArgumentNullException(repoFolderPath);
+            if (!Directory.Exists(sourceFolder)) ThrowDirectoryNotFoundException(sourceFolder);
+            if (!IsConnected) ThrowNoRepositoryConnectionException();
+
+            CheckInFolderDocuments(repoFolderPath, sourceFolder);
         }
 
         /// <summary>
@@ -357,6 +378,11 @@ namespace PDRepository.Documents
             if (!IsConnected) ThrowNoRepositoryConnectionException();
 
             return DeleteDocumentPermission(repoFolderPath, documentName, permission);
+        }
+
+        protected override void OnDocumentCheckedIn(CheckInEventArgs args)
+        {
+            DocumentCheckedIn?.Invoke(this, args);
         }
 
         /// <summary>

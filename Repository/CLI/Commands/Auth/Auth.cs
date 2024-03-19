@@ -10,7 +10,8 @@ namespace PDRepository.CLI.Commands.Auth
     [Command(Name = "auth", Description = "Contains commands related to the repository connection.", OptionsComparison = StringComparison.InvariantCultureIgnoreCase)]
     [Subcommand(
         typeof(LogIn),
-        typeof(LogOut)
+        typeof(LogOut),
+        typeof(Status)
      )]
     class Auth : CmdBase
     {

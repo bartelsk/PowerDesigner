@@ -20,7 +20,7 @@ namespace PDRepository
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositoryClient"/> class.
         /// </summary>
-        /// <param name="settings">A RepositorySettings instance.</param>
+        /// <param name="settings">A <see cref="ConnectionSettings"/> instance.</param>
         protected RepositoryClient(ConnectionSettings settings)
         {
             _currentConnectionSettings = settings;
@@ -41,7 +41,7 @@ namespace PDRepository
         /// Creates a PowerDesigner client and connects to the repository with the specified repository <see cref="ConnectionSettings"/>.
         /// Please note: this can take a few seconds depending on the speed and health of the repository.
         /// </summary>
-        /// <param name="settings">A RepositorySettings instance.</param>      
+        /// <param name="settings">A <see cref="ConnectionSettings"/> instance.</param>      
         public static RepositoryClient CreateClient(ConnectionSettings settings)
         {            
             return new RepositoryClient(settings);

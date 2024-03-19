@@ -20,6 +20,7 @@ namespace PDRepository
     {
         private bool disposedValue;
         internal readonly RepositoryConnection _con;
+        public event EventHandler<CheckInEventArgs> RepoDocumentCheckedIn;
         public event EventHandler<CheckOutEventArgs> RepoDocumentCheckedOut;
 
         #region Constructor / Destructor
@@ -68,6 +69,16 @@ namespace PDRepository
         protected static void ThrowArgumentNullException(string argumentName)
         {
             throw new ArgumentNullException(argumentName, $"Parameter '{ argumentName }' cannot be null or empty.");
+        }
+
+        protected static void ThrowFileNotFoundException(string fileName)
+        {
+            throw new FileNotFoundException($"The file '{ fileName }' does not exist.");
+        }
+
+        protected static void ThrowDirectoryNotFoundException(string directoryName)
+        {
+            throw new DirectoryNotFoundException($"The directory '{ directoryName }' does not exist.");
         }
 
         protected static void ThrowFolderNotFoundException(string documentFolder)
@@ -377,9 +388,29 @@ namespace PDRepository
             RepositoryFolder folder = (RepositoryFolder)item;
             BaseObject obj = folder.CheckInDocument(fileName, (int)SRmgMergeMode.SRmgMergeOverwrite, out _, out _, string.Empty, out _);
 
+            if (obj == null)
+                throw new RepositoryException($"Failed to check in file '{ fileName }'.");
+
             StoredObject newDocument = (StoredObject)obj;
             Document document = ParseStoredObjectInfo(newDocument);
             documentVersion = document.Version;
+
+            // Trigger checked in event
+            OnDocumentCheckedIn(new CheckInEventArgs() { CheckInFileName = fileName, DocumentFolder = document.Location, DocumentName = document.Name, DocumentVersion = document.Version });
+        }
+
+        /// <summary>
+        /// Adds files to the specified repository folder. Overwrites the existing documents (if any) and freezes them.
+        /// </summary>
+        /// <param name="repoFolderPath">The repository folder in which to add the files. Will get overridden if the model was part of a repository branch already.</param>
+        /// <param name="sourceFolder">The folder on disc that contains the files you want to add.</param>        
+        public void CheckInFolderDocuments(string repoFolderPath, string sourceFolder)
+        {
+            string[] folderFiles = Directory.GetFiles(sourceFolder, "*.*").Where(file => Path.GetExtension(file).ToLower() != ".pdb").ToArray(); 
+            foreach (string file in folderFiles)
+            {
+                CheckInFolderDocument(repoFolderPath, file, out _);
+            }
         }
 
         /// <summary>
@@ -1425,6 +1456,11 @@ namespace PDRepository
         #endregion
 
         #region Events
+
+        protected virtual void OnDocumentCheckedIn(CheckInEventArgs args)
+        {
+            RepoDocumentCheckedIn?.Invoke(this, args);
+        }
 
         protected virtual void OnDocumentCheckedOut(CheckOutEventArgs args)
         {

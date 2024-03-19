@@ -2,7 +2,7 @@
 
 These samples show how to work with repository documents. 
 
-The `RepositoryDocument` is the class for managing the storage of any file (except the file storing design model) in the repository.
+The `RepositoryDocument` class manages the storage of any file (except the file storing design model) in the repository.
 The `Document` object does not own any sub-object. The whole file content is stored in a binary format.
 
 
@@ -54,7 +54,11 @@ Deletes a repository document folder.
 
 ### CheckInFile
 
-Adds a file to the repository.
+Adds a file to the repository. Also demonstrates the use of the `DocumentCheckedIn` event handler to display check-in progress.
+
+### CheckInFiles
+
+Adds multiple files in one go to the repository. Also demonstrates the use of the `DocumentCheckedIn` event handler to display check-in progress.
 
 ### CheckOutDocument
 
