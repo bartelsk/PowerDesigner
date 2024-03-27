@@ -24,11 +24,7 @@ namespace PDRepository
 
         private RepositoryConnection()
         {
-            // Called only once, starts PdShell16.exe         
-            _app = new PdCommon.Application
-            {
-                InteractiveMode = PdCommon.InteractiveModeValue.im_Batch    // Suppress dialogs
-            };
+            StartPD();
         }
 
         ~RepositoryConnection()
@@ -69,6 +65,14 @@ namespace PDRepository
             GC.SuppressFinalize(this);
         }
 
+        private void StartPD()
+        {
+            _app = new PdCommon.Application
+            {
+                InteractiveMode = PdCommon.InteractiveModeValue.im_Batch    // Suppress dialogs
+            };
+        }
+
         #endregion
 
         /// <summary>
@@ -89,10 +93,7 @@ namespace PDRepository
         {
             set
             {
-                if (_connectionSettings == null)
-                {
-                    _connectionSettings = value;
-                }
+                _connectionSettings = value;
             }
         }
 
@@ -101,13 +102,15 @@ namespace PDRepository
         /// </summary>
         public void Connect()
         {
-            if (_app != null)
+            if (_app == null)
             {
-                _pdRepoCon = (PdRMG.RepositoryConnection)_app.RepositoryConnection;
-                if (!_pdRepoCon.Open(_connectionSettings.RepositoryDefinition, _connectionSettings.User, _connectionSettings.Password))
-                {
-                    throw new InvalidCredentialsException("Could not connect to the repository: invalid credentials.");
-                }                
+                StartPD();
+            }
+
+            _pdRepoCon = (PdRMG.RepositoryConnection)_app.RepositoryConnection;
+            if (!_pdRepoCon.Open(_connectionSettings.RepositoryDefinition, _connectionSettings.User, _connectionSettings.Password))
+            {
+                throw new InvalidCredentialsException("Could not connect to the repository: invalid credentials.");
             }
         }
 
